@@ -121,6 +121,33 @@ int GetTimeWithOffset(float offset = 0) {
     return -1;
 }
 
+
+void updateTimes(){
+
+    // We get the 1st, 10th, 100th and 1000th leaderboard time
+    array<CutoffTime@> cutoffArrayTmp;
+    int i = 0;
+    bool continueLoop = true;
+
+    while(continueLoop){
+        float offset = Math::Pow(10,i);
+        CutoffTime@ cutoff = CutoffTime();
+        cutoff.time = GetTimeWithOffset(offset-1);
+        cutoff.position = offset;
+        if(cutoff.time != -1){
+            cutoffArrayTmp.InsertLast(cutoff);
+        }else{
+            continueLoop = false;
+        }
+        if(i == 4){
+            //we can't ask for the leadereboard above 10k so we stop.
+            continueLoop = false;
+        }
+        i++;
+    }
+    cutoffArray = cutoffArrayTmp;
+}
+
 void Main(){
 #if TMNEXT
 
@@ -135,32 +162,26 @@ void Main(){
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
+    string currentMapUid = "";
+
     while(true){
         if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-            // We get the 1st, 10th, 100th and 1000th leaderboard time
-            array<CutoffTime@> cutoffArrayTmp;
-            int i = 0;
-            bool continueLoop = true;
-
-            while(continueLoop){
-                float offset = Math::Pow(10,i);
-                CutoffTime@ cutoff = CutoffTime();
-                cutoff.time = GetTimeWithOffset(offset-1);
-                cutoff.position = offset;
-                if(cutoff.time != -1){
-                    cutoffArrayTmp.InsertLast(cutoff);
-                }else{
-                    continueLoop = false;
-                }
-                if(i == 4){
-                    continueLoop = false;
-                }
-                i++;
+            
+            
+            if(currentMapUid == "")
+            {
+                currentMapUid = app.RootMap.MapInfo.MapUid;
+                updateTimes();
             }
-            cutoffArray = cutoffArrayTmp;
+            else if(currentMapUid != app.RootMap.MapInfo.MapUid)
+            {
+                currentMapUid = app.RootMap.MapInfo.MapUid;
+                updateTimes();
 
-            //wait 5min
-            sleep(300*1000);
+            }else{
+                //we don't need to update the leaderboard
+                yield();
+            }
         }else{
             yield();
         }
