@@ -2,14 +2,76 @@
 // ### Settings ###
 // ################
 
-[Setting category="Display Settings" name="Window visible" description="To move the table, click and drag while the Openplanet overlay is visible."]
+[Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
 
-void RenderMenu()
-{
+const array<string> medals = {
+    "\\$071" + Icons::Trophy, // author trophy
+    "\\$db4" + Icons::Trophy, // gold trophy
+    "\\$899" + Icons::Trophy, // silver trophy
+    "\\$964" + Icons::Trophy, // bronze trophy
+	"\\$444" + Icons::Trophy, // no trophy	
+};
+
+const string resetColor = "\\$z";
+
+
+class CutoffTime{
+
+    int time;
+    float position;
+
+    void DrawText(){
+        UI::Text("" + position + ": " + time);
+    }
+}
+
+
+array<CutoffTime@> cutoffArray;
+
+
+void RenderMenu() {
     if (UI::MenuItem("LeaderBoard Cutoff")) {
         print("You clicked me!!");
+    }
+}
+
+void Render() {
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+
+    int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
+
+    if (!UI::IsOverlayShown()) {
+        windowFlags |= UI::WindowFlags::NoInputs;
+    }
+
+
+    if(windowVisible && app.CurrentPlayground !is null){
+        UI::Begin("Leaderboard Cutoff", windowFlags);
+
+        UI::BeginGroup();
+
+        UI::BeginTable("Main", 2);
+        UI::TableNextRow();
+        UI::TableNextColumn();
+        UI::Text("Cutoff");
+
+
+        for(uint i = 0; i < cutoffArray.Length; i++){
+            UI::TableNextRow();
+            UI::TableNextColumn();
+            UI::Text("" + cutoffArray[i].position);
+            UI::TableNextColumn();
+            UI::Text(TimeString(cutoffArray[i].time));
+        }
+
+        UI::EndTable();
+
+        UI::EndGroup();
+
+        UI::End();
     }
 }
 
@@ -61,10 +123,11 @@ void Main(){
 
     // We get the 1st, 10th, 100th and 1000th leaderboard time
     for(int i = 0; i < 4; i++) {
-
-        float offset = Math::Pow(10,i)-1;
-        print( (offset+1) + " Place has a time of : " + TimeString(GetTimeWithOffset(offset)));
-
+        float offset = Math::Pow(10,i);
+        CutoffTime@ cutoff = CutoffTime();
+        cutoff.time = GetTimeWithOffset(offset-1);
+        cutoff.position = offset;
+        cutoffArray.InsertLast(cutoff);
     }
 
 #endif
