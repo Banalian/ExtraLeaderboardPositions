@@ -1,8 +1,8 @@
 [meta]
-name     = "Leaderboard cutoff"
+name     = "Extra Leaderboard Positions"
 author   = "Banalian"
 category = "Race"
-version  = "0.1"
+version  = "1.0"
 
 perms = "paid"
 

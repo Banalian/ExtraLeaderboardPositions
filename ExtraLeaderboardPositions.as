@@ -5,6 +5,8 @@
 [Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
+string pluginName = "Extra Leaderboard positions";
+
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // author trophy
@@ -32,8 +34,8 @@ array<CutoffTime@> cutoffArray;
 
 
 void RenderMenu() {
-    if (UI::MenuItem("LeaderBoard Cutoff")) {
-        print("You clicked me!!");
+    if (UI::MenuItem(pluginName)) {
+        windowVisible = !windowVisible;
     }
 }
 
@@ -49,14 +51,13 @@ void Render() {
 
 
     if(windowVisible && app.CurrentPlayground !is null){
-        UI::Begin("Leaderboard Cutoff", windowFlags);
+        UI::Begin(pluginName, windowFlags);
 
         UI::BeginGroup();
 
-        UI::BeginTable("Main", 3);
-        UI::TableNextRow();
-        UI::TableNextColumn();
-        UI::Text("Cutoff");
+        UI::Text("Extra leaderboard positions");
+        
+        UI::BeginTable("Main", 3);        
 
         UI::TableNextRow();
         UI::TableNextColumn();
