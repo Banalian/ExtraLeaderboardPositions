@@ -1,0 +1,11 @@
+[meta]
+name     = "Leaderboard cutoff"
+author   = "Banalian"
+category = "Race"
+version  = "0.1"
+
+perms = "paid"
+
+[script]
+dependencies = [ "NadeoServices" ]
+imports = [ "Icons.as", "Time.as"]
