@@ -6,12 +6,12 @@
 bool windowVisible = true;
 
 
-const array<string> medals = {
-    "\\$071" + Icons::Trophy, // author trophy
-    "\\$db4" + Icons::Trophy, // gold trophy
-    "\\$899" + Icons::Trophy, // silver trophy
-    "\\$964" + Icons::Trophy, // bronze trophy
-	"\\$444" + Icons::Trophy, // no trophy	
+const array<string> podiumIcon = {
+    "\\$071" + Icons::Kenney::PodiumAlt, // author trophy
+    "\\$db4" + Icons::Kenney::PodiumAlt, // gold trophy
+    "\\$899" + Icons::Kenney::PodiumAlt, // silver trophy
+    "\\$964" + Icons::Kenney::PodiumAlt, // bronze trophy
+	"\\$444" + Icons::Kenney::PodiumAlt, // no trophy	
 };
 
 const string resetColor = "\\$z";
@@ -53,14 +53,23 @@ void Render() {
 
         UI::BeginGroup();
 
-        UI::BeginTable("Main", 2);
+        UI::BeginTable("Main", 3);
         UI::TableNextRow();
         UI::TableNextColumn();
         UI::Text("Cutoff");
 
+        UI::TableNextRow();
+        UI::TableNextColumn();
+        UI::TableNextColumn();
+        UI::Text("Position");
+        UI::TableNextColumn();
+        UI::Text("Time");
+
 
         for(uint i = 0; i < cutoffArray.Length; i++){
             UI::TableNextRow();
+            UI::TableNextColumn();
+            UI::Text(podiumIcon[i]);
             UI::TableNextColumn();
             UI::Text("" + cutoffArray[i].position);
             UI::TableNextColumn();
@@ -101,10 +110,12 @@ int GetTimeWithOffset(float offset = 0) {
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/top?length=1&offset="+offset+"&onlyWorld=true");
     
         if(info.GetType() != Json::Type::Null) {
-            int infoTop = info["tops"][0]["top"][0]["score"];
-            return infoTop;
+            auto top = info["tops"][0]["top"];
+            if(top.Length > 0) {
+                int infoTop = top[0]["score"];
+                return infoTop;
+            }
         }
-        return -1;
     }
 
     return -1;
@@ -121,13 +132,39 @@ void Main(){
       yield();
     }
 
-    // We get the 1st, 10th, 100th and 1000th leaderboard time
-    for(int i = 0; i < 4; i++) {
-        float offset = Math::Pow(10,i);
-        CutoffTime@ cutoff = CutoffTime();
-        cutoff.time = GetTimeWithOffset(offset-1);
-        cutoff.position = offset;
-        cutoffArray.InsertLast(cutoff);
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+
+    while(true){
+        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+            // We get the 1st, 10th, 100th and 1000th leaderboard time
+            array<CutoffTime@> cutoffArrayTmp;
+            int i = 0;
+            bool continueLoop = true;
+
+            while(continueLoop){
+                float offset = Math::Pow(10,i);
+                CutoffTime@ cutoff = CutoffTime();
+                cutoff.time = GetTimeWithOffset(offset-1);
+                cutoff.position = offset;
+                if(cutoff.time != -1){
+                    cutoffArrayTmp.InsertLast(cutoff);
+                }else{
+                    continueLoop = false;
+                }
+                if(i == 4){
+                    continueLoop = false;
+                }
+                i++;
+            }
+            cutoffArray = cutoffArrayTmp;
+
+            //wait 5min
+            sleep(300*1000);
+        }else{
+            yield();
+        }
+
     }
 
 #endif
