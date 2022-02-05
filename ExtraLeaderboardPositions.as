@@ -6,11 +6,11 @@
 bool windowVisible = true;
 
 const array<string> podiumIcon = {
-    "\\$071" + Icons::Kenney::PodiumAlt, // author trophy
-    "\\$db4" + Icons::Kenney::PodiumAlt, // gold trophy
-    "\\$899" + Icons::Kenney::PodiumAlt, // silver trophy
-    "\\$964" + Icons::Kenney::PodiumAlt, // bronze trophy
-	"\\$444" + Icons::Kenney::PodiumAlt, // no trophy	
+    "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
+    "\\$db4" + Icons::Kenney::PodiumAlt, // 10th : gold
+    "\\$899" + Icons::Kenney::PodiumAlt, // 100th : silver
+    "\\$964" + Icons::Kenney::PodiumAlt, // 1000th : bronze
+	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th : nothing	
 };
 
 const string resetColor = "\\$z";
@@ -29,8 +29,12 @@ bool refreshPosition = false;
 class CutoffTime{
 
     int time;
-    float position;
+    int position;
+    bool pb = false;
 
+    int opCmp(CutoffTime@ other){
+        return position - other.position;
+    }
 }
 
 
@@ -61,7 +65,7 @@ void Render() {
 
         UI::Text("Extra leaderboard positions");
         
-        UI::BeginTable("Main", 3);        
+        UI::BeginTable("Main", 4);        
 
         UI::TableNextRow();
         UI::TableNextColumn();
@@ -70,8 +74,40 @@ void Render() {
         UI::TableNextColumn();
         UI::Text("Time");
 
+        int i = 0;
+        int offsetPod = 0;
+        while(i < cutoffArray.Length){
+            UI::TableNextRow();
+            UI::TableNextColumn();
+            if(cutoffArray[i].pb){
+                offsetPod++;
+                UI::Text(podiumIcon[i]);
+            }else{
+                UI::Text(podiumIcon[i-offsetPod]);
+            }
+            
+            UI::TableNextColumn();
+            if(cutoffArray[i].position > 10000){
+                UI::Text("<" + cutoffArray[i].position);
+            }else{
+                UI::Text(""+ cutoffArray[i].position);
+            }
+            
+            UI::TableNextColumn();
+            UI::Text("" + cutoffArray[i].time);
 
-        for(uint i = 0; i < cutoffArray.Length; i++){
+            if(cutoffArray[i].pb){
+                UI::TableNextColumn();
+                UI::Text("PB");
+            }
+
+            i++;
+            
+        }
+
+
+
+        /*for(uint i = 0; i < cutoffArray.Length; i++){
             UI::TableNextRow();
             UI::TableNextColumn();
             UI::Text(podiumIcon[i]);
@@ -79,7 +115,7 @@ void Render() {
             UI::Text("" + cutoffArray[i].position);
             UI::TableNextColumn();
             UI::Text(TimeString(cutoffArray[i].time));
-        }
+        }*/
 
         UI::EndTable();
 
@@ -99,7 +135,6 @@ void Update(float dt) {
     if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
         if (mapIdChanged || timer > updateFrequency) {
-            print("Map changed or timer reached");
             currentMapUid = app.RootMap.MapInfo.MapUid;
             refreshPosition = true;
             timer = 0;
@@ -156,39 +191,45 @@ int GetTimeWithOffset(float offset = 0) {
     return -1;
 }
 
-/*CutoffTime@ GetPersonalBest() {
+CutoffTime@ GetPersonalBest() {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
     CutoffTime@ best = CutoffTime();
-	best.time = network.ClientManiaAppPlayground.ScoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+    best.time = -1;
+    best.position = -1;
+    best.pb = true;
 
-    //TODO : adapt to pb endpoint
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
         
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
     
         if(info.GetType() != Json::Type::Null) {
-            auto top = info["tops"][0]["top"];
-            if(top.Length > 0) {
-                int infoTop = top[0]["score"];
+            auto tops = info["tops"];
+            if(tops.GetType() == Json::Type::Array) {
+                auto top = tops[0]["top"];
+                if(top.Length > 0) {
+                    best.time = top[0]["score"];
+                    best.position = top[0]["position"];
+                }
             }
         }
     }
 
     return best;
-}*/
+}
 
 
 void updateTimes(){
-
-    // We get the 1st, 10th, 100th and 1000th leaderboard time
+    // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     array<CutoffTime@> cutoffArrayTmp;
     int i = 0;
     bool continueLoop = true;
 
+    cutoffArrayTmp.InsertLast(GetPersonalBest());
+
     while(continueLoop){
-        float offset = Math::Pow(10,i);
+        int offset = int(Math::Pow(10,i));
         CutoffTime@ cutoff = CutoffTime();
         cutoff.time = GetTimeWithOffset(offset-1);
         cutoff.position = offset;
@@ -203,6 +244,10 @@ void updateTimes(){
         }
         i++;
     }
+
+    //sort the array
+    cutoffArrayTmp.SortAsc();
+
     cutoffArray = cutoffArrayTmp;
 }
 
