@@ -7,10 +7,10 @@ bool windowVisible = true;
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
-    "\\$db4" + Icons::Kenney::PodiumAlt, // 10th : gold
-    "\\$899" + Icons::Kenney::PodiumAlt, // 100th : silver
-    "\\$964" + Icons::Kenney::PodiumAlt, // 1000th : bronze
-	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th : nothing	
+    "\\$db4" + Icons::Kenney::PodiumAlt, // 10th and below : gold
+    "\\$899" + Icons::Kenney::PodiumAlt, // 100th and below : silver
+    "\\$964" + Icons::Kenney::PodiumAlt, // 1000th and below : bronze
+	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th and below : nothing	
 };
 
 const string resetColor = "\\$z";
@@ -77,6 +77,12 @@ void Render() {
         int i = 0;
         int offsetPod = 0;
         while(i < cutoffArray.Length){
+            //We skip the pb if there's none
+            if(cutoffArray[i].pb && cutoffArray[i].time == -1){
+                i++;
+                offsetPod++;
+            }
+
             UI::TableNextRow();
             UI::TableNextColumn();
 
@@ -96,7 +102,7 @@ void Render() {
             }
             
             UI::TableNextColumn();
-            UI::Text("" + cutoffArray[i].time);
+            UI::Text(TimeString(cutoffArray[i].time));
 
             //If it's the pb, display it
             if(cutoffArray[i].pb){
