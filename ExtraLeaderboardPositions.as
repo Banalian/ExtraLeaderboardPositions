@@ -79,6 +79,8 @@ void Render() {
         while(i < cutoffArray.Length){
             UI::TableNextRow();
             UI::TableNextColumn();
+
+            //Make an offset for the podium icons so that the pb icon is the same as the one below it (or blank if there's nothing below it)
             if(cutoffArray[i].pb){
                 offsetPod++;
                 UI::Text(podiumIcon[i]);
@@ -96,6 +98,7 @@ void Render() {
             UI::TableNextColumn();
             UI::Text("" + cutoffArray[i].time);
 
+            //If it's the pb, display it
             if(cutoffArray[i].pb){
                 UI::TableNextColumn();
                 UI::Text("PB");
@@ -104,18 +107,6 @@ void Render() {
             i++;
             
         }
-
-
-
-        /*for(uint i = 0; i < cutoffArray.Length; i++){
-            UI::TableNextRow();
-            UI::TableNextColumn();
-            UI::Text(podiumIcon[i]);
-            UI::TableNextColumn();
-            UI::Text("" + cutoffArray[i].position);
-            UI::TableNextColumn();
-            UI::Text(TimeString(cutoffArray[i].time));
-        }*/
 
         UI::EndTable();
 
@@ -129,8 +120,6 @@ void Update(float dt) {
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-
-    //TODO: maybe only check when network.ServerInfo.CurGameModeStr = "TM_Campaign_Local" or "TM_TimeAttack_Online"
 
     if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
@@ -267,6 +256,7 @@ void Main(){
 
     while(true){
 
+        //if we're on a new map or the timer is over, we update the times
         if(refreshPosition){
             updateTimes();
             refreshPosition = false;
