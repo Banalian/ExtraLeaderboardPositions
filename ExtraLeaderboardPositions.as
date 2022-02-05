@@ -138,14 +138,15 @@ void Update(float dt) {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
     
-
+    //check if we're in a map
     if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
         auto scoreMgr = network.ClientManiaAppPlayground.ScoreMgr;
+
+        //get the current map pb
         int timePbLocal = scoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
 		
-        
-
+        // if the map change, or the timer is over or a new pb is found, we refresh the positions
         if (mapIdChanged || timer > updateFrequency || timePbLocal != currentPbTime) {
             currentMapUid = app.RootMap.MapInfo.MapUid;
             refreshPosition = true;
@@ -183,8 +184,8 @@ int GetTimeWithOffset(float offset = 0) {
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    auto server_info = cast<CTrackManiaNetworkServerInfo>(network.ServerInfo);
 
+    //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
     
@@ -211,6 +212,7 @@ CutoffTime@ GetPersonalBest() {
     best.position = -1;
     best.pb = true;
 
+    //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
         
@@ -249,6 +251,7 @@ void updateTimes(){
         if(cutoff.time != -1){
             cutoffArrayTmp.InsertLast(cutoff);
         }else{
+            //We reached the end of the leaderboard
             continueLoop = false;
         }
         if(i == 4){
