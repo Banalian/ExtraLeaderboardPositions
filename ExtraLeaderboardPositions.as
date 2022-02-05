@@ -5,9 +5,6 @@
 [Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
-string pluginName = "Extra Leaderboard positions";
-string currentMapUid = "";
-
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // author trophy
     "\\$db4" + Icons::Kenney::PodiumAlt, // gold trophy
@@ -18,15 +15,22 @@ const array<string> podiumIcon = {
 
 const string resetColor = "\\$z";
 
+const string pluginName = "Extra Leaderboard positions";
+
+string currentMapUid = "";
+
+float timer = 0;
+float updateFrequency = 300*1000;
+bool refreshPosition = false;
+
+
+
 
 class CutoffTime{
 
     int time;
     float position;
 
-    void DrawText(){
-        UI::Text("" + position + ": " + time);
-    }
 }
 
 
@@ -85,10 +89,6 @@ void Render() {
     }
 }
 
-//TODO: make this work
-float timer = 0;
-float updateFrequency = 300*1000;
-bool refreshPosition = false;
 void Update(float dt) {
 
     auto app = cast<CTrackMania>(GetApp());
@@ -137,8 +137,6 @@ int GetTimeWithOffset(float offset = 0) {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
     auto server_info = cast<CTrackManiaNetworkServerInfo>(network.ServerInfo);
-
-    print("Server mode: " + server_info.CurGameModeStr);
 
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
