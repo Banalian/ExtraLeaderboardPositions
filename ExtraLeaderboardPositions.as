@@ -6,7 +6,7 @@
 bool windowVisible = true;
 
 string pluginName = "Extra Leaderboard positions";
-
+string currentMapUid = "";
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // author trophy
@@ -50,7 +50,7 @@ void Render() {
     }
 
 
-    if(windowVisible && app.CurrentPlayground !is null){
+    if(windowVisible && app.CurrentPlayground !is null && cutoffArray.Length > 0){
         UI::Begin(pluginName, windowFlags);
 
         UI::BeginGroup();
@@ -85,8 +85,40 @@ void Render() {
     }
 }
 
+//TODO: make this work
+float timer = 0;
+float updateFrequency = 300*1000;
+bool refreshPosition = false;
+void Update(float dt) {
+
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+
+    //TODO: maybe only check when network.ServerInfo.CurGameModeStr = "TM_Campaign_Local" or "TM_TimeAttack_Online"
+
+    if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
+        if (mapIdChanged || timer > updateFrequency) {
+            print("Map changed or timer reached");
+            currentMapUid = app.RootMap.MapInfo.MapUid;
+            refreshPosition = true;
+            timer = 0;
+        } else {
+            timer += dt;
+        }
+    }else{
+        timer = 0;
+    }
+    
+}
+
+
+
 
 Json::Value FetchEndpoint(const string &in route) {
+    while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
+        yield();
+    }
     auto req = NadeoServices::Get("NadeoLiveServices", route);
     req.Start();
     while(!req.Finished()) {
@@ -104,7 +136,35 @@ int GetTimeWithOffset(float offset = 0) {
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
+    auto server_info = cast<CTrackManiaNetworkServerInfo>(network.ServerInfo);
 
+    print("Server mode: " + server_info.CurGameModeStr);
+
+    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+    
+        if(info.GetType() != Json::Type::Null) {
+            auto tops = info["tops"];
+            if(tops.GetType() == Json::Type::Array) {
+                auto top = tops[0]["top"];
+                if(top.Length > 0) {
+                    int infoTop = top[0]["score"];
+                    return infoTop;
+                }
+            }            
+        }
+    }
+
+    return -1;
+}
+
+/*CutoffTime@ GetPersonalBest() {
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+    CutoffTime@ best = CutoffTime();
+	best.time = network.ClientManiaAppPlayground.ScoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+
+    //TODO : adapt to pb endpoint
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
         
@@ -114,13 +174,12 @@ int GetTimeWithOffset(float offset = 0) {
             auto top = info["tops"][0]["top"];
             if(top.Length > 0) {
                 int infoTop = top[0]["score"];
-                return infoTop;
             }
         }
     }
 
-    return -1;
-}
+    return best;
+}*/
 
 
 void updateTimes(){
@@ -163,29 +222,13 @@ void Main(){
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
-    string currentMapUid = "";
-
     while(true){
-        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-            
-            
-            if(currentMapUid == "")
-            {
-                currentMapUid = app.RootMap.MapInfo.MapUid;
-                updateTimes();
-            }
-            else if(currentMapUid != app.RootMap.MapInfo.MapUid)
-            {
-                currentMapUid = app.RootMap.MapInfo.MapUid;
-                updateTimes();
 
-            }else{
-                //we don't need to update the leaderboard
-                yield();
-            }
-        }else{
-            yield();
+        if(refreshPosition){
+            updateTimes();
+            refreshPosition = false;
         }
+        yield();
 
     }
 

@@ -3,6 +3,7 @@ name     = "Extra Leaderboard Positions"
 author   = "Banalian"
 category = "Race"
 version  = "1.0"
+siteid = 169
 
 perms = "paid"
 
