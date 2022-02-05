@@ -39,6 +39,7 @@ class CutoffTime{
 
 
 array<CutoffTime@> cutoffArray;
+int currentPbTime = -1;
 
 
 void RenderMenu() {
@@ -136,10 +137,16 @@ void Update(float dt) {
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
+    
 
     if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
-        if (mapIdChanged || timer > updateFrequency) {
+        auto scoreMgr = network.ClientManiaAppPlayground.ScoreMgr;
+        int timePbLocal = scoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+		
+        
+
+        if (mapIdChanged || timer > updateFrequency || timePbLocal != currentPbTime) {
             currentMapUid = app.RootMap.MapInfo.MapUid;
             refreshPosition = true;
             timer = 0;
@@ -215,6 +222,7 @@ CutoffTime@ GetPersonalBest() {
                 auto top = tops[0]["top"];
                 if(top.Length > 0) {
                     best.time = top[0]["score"];
+                    currentPbTime = best.time;
                     best.position = top[0]["position"];
                 }
             }
