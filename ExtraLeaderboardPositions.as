@@ -57,8 +57,17 @@ void Render() {
         windowFlags |= UI::WindowFlags::NoInputs;
     }
 
+    if(cutoffArray.Length == 0){
+        return;
+    }
 
-    if(windowVisible && app.CurrentPlayground !is null && cutoffArray.Length > 0){
+    //if this is true, we're probably on a map not uploaded to nadeo's server. we don't want to show the window
+    if(cutoffArray.Length == 1 && cutoffArray[0].position == -1){
+        return;
+    }
+        
+
+    if(windowVisible && app.CurrentPlayground !is null){
         UI::Begin(pluginName, windowFlags);
 
         UI::BeginGroup();
@@ -81,6 +90,7 @@ void Render() {
             if(cutoffArray[i].pb && cutoffArray[i].time == -1){
                 i++;
                 offsetPod++;
+                continue;
             }
 
             UI::TableNextRow();
