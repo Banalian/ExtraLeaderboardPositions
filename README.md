@@ -4,6 +4,6 @@ Trackmania Next plugin that allows you to see the times of more key positions (1
 
 This can be used to see how far you are from getting a better trophy reward in a TOTD for example.
 
-I plan to add more features, like seeing where your current PB is or have more customization.
+I plan to add more features, like more customization.
 
 Please open an issue if you see any trouble.
