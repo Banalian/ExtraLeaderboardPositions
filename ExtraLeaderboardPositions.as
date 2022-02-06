@@ -5,12 +5,20 @@
 [Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
+[Setting category="Customization" name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
+int refreshTimer = 5;
+
+// #######################
+// ### Consts and vars ###
+// #######################
+
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
     "\\$db4" + Icons::Kenney::PodiumAlt, // 10th and below : gold
     "\\$899" + Icons::Kenney::PodiumAlt, // 100th and below : silver
     "\\$964" + Icons::Kenney::PodiumAlt, // 1000th and below : bronze
-	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th and below : nothing	
+	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th and below : grey
+    ""                                   // above 10k : No icon
 };
 
 const string resetColor = "\\$z";
@@ -20,18 +28,24 @@ const string pluginName = "Extra Leaderboard positions";
 string currentMapUid = "";
 
 float timer = 0;
-float updateFrequency = 300*1000;
+float updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
 bool refreshPosition = false;
 
 
 
-
+// Class used to store the data of a position in the leaderboard
 class CutoffTime{
 
+    // the time of the player
     int time;
+
+    // the position of the player in the leaderboard
     int position;
+
+    // true if it's a personal best, false otherwise
     bool pb = false;
 
+    // Comparaison operator
     int opCmp(CutoffTime@ other){
         return position - other.position;
     }
@@ -41,12 +55,35 @@ class CutoffTime{
 array<CutoffTime@> cutoffArray;
 int currentPbTime = -1;
 
+// ############################## SETTINGS #############################
+
+void OnSettingsChanged(){
+    if(refreshTimer < 1){
+        refreshTimer = 1;
+    }
+    updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
+}
+
+void OnSettingsSave(Settings::Section& section){
+    section.SetInt("refreshTimer", refreshTimer);
+}
+
+void OnSettingsLoad(Settings::Section& section){
+    refreshTimer = section.GetInt("refreshTimer");
+    OnSettingsChanged();
+}
+
+
+// ############################## MENU #############################
 
 void RenderMenu() {
     if (UI::MenuItem(pluginName)) {
         windowVisible = !windowVisible;
     }
 }
+
+
+// ############################## WINDOW RENDER #############################
 
 void Render() {
     auto app = cast<CTrackMania>(GetApp());
@@ -133,6 +170,8 @@ void Render() {
     }
 }
 
+// ############################## TICK UPDATE #############################
+
 void Update(float dt) {
 
     auto app = cast<CTrackMania>(GetApp());
@@ -161,7 +200,7 @@ void Update(float dt) {
 }
 
 
-
+// ############################## FUNCTIONS #############################
 
 Json::Value FetchEndpoint(const string &in route) {
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
@@ -266,6 +305,10 @@ void updateTimes(){
 
     cutoffArray = cutoffArrayTmp;
 }
+
+
+// ############################## MAIN #############################
+
 
 void Main(){
 #if TMNEXT
