@@ -5,30 +5,37 @@
 [Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
-[Setting category="Timer" name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
+[Setting hidden name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
+
 
 [Setting hidden]
 int nbSizePositionToGetArray = 1;
 
 [Setting hidden]
-array<string> allPositionToGet = {"1"};
+string allPositionToGetStringSave = "";
+
+//also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
+array<string> allPositionToGet = {};
 
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
-    
-    UI::Text("Customization");
+    UI::Text("Timer");
+
+    refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
+
+    UI::Text("Positions customizations");
 
     for(int i = 0; i < nbSizePositionToGetArray; i++){
-        UI::InputText("Position " + i, allPositionToGet[i]);
+        allPositionToGet[i] = UI::InputText("Position " + (i+1), allPositionToGet[i]);
     }
 
 
-    if(UI::Button("+")){
+    if(UI::Button("+ : Add a position")){
         nbSizePositionToGetArray++;
         allPositionToGet.InsertLast("");
     }
-    if(UI::Button("-")){
+    if(UI::Button("- : Remove a position")){
         if(nbSizePositionToGetArray > 1){
             nbSizePositionToGetArray--;
             allPositionToGet.RemoveAt(nbSizePositionToGetArray);
@@ -94,10 +101,44 @@ void OnSettingsChanged(){
 
 void OnSettingsSave(Settings::Section& section){
     section.SetInt("refreshTimer", refreshTimer);
+
+    //save the array in the string
+    allPositionToGetStringSave = "";
+    for(int i = 0; i < nbSizePositionToGetArray; i++){
+        allPositionToGetStringSave += allPositionToGet[i];
+        if(i < nbSizePositionToGetArray - 1){
+            allPositionToGetStringSave += ",";
+        }
+    }
+    section.SetString("allPositionToGetStringSave", allPositionToGetStringSave);
 }
 
 void OnSettingsLoad(Settings::Section& section){
     refreshTimer = section.GetInt("refreshTimer");
+
+    //load the array from the string
+    allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
+
+    if(allPositionToGetStringSave != ""){
+        array<string> allPositionToGetTmp = allPositionToGetStringSave.Split(",");
+        nbSizePositionToGetArray = allPositionToGetTmp.Length;
+
+        for(int i = 0; i < nbSizePositionToGetArray; i++){
+            allPositionToGet.InsertLast(allPositionToGetTmp[i]);
+        }
+    }else{
+        allPositionToGetStringSave = "1,10,100,1000,10000";
+        nbSizePositionToGetArray = 5;
+        allPositionToGet.InsertLast("1");
+        allPositionToGet.InsertLast("10");
+        allPositionToGet.InsertLast("100");
+        allPositionToGet.InsertLast("1000");
+        allPositionToGet.InsertLast("10000");
+    }
+
+    
+
+
     OnSettingsChanged();
 }
 
