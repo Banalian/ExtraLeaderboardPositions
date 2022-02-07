@@ -8,8 +8,10 @@ bool windowVisible = true;
 [Setting category="Timer" name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
 
-
+[Setting hidden]
 int nbSizePositionToGetArray = 1;
+
+[Setting hidden]
 array<string> allPositionToGet = {"1"};
 
 [SettingsTab name="Customization"]
