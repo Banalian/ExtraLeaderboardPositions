@@ -8,12 +8,15 @@ bool windowVisible = true;
 [Setting hidden name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
 
+[Setting hidden]
+bool showPb = true;
 
 [Setting hidden]
 int nbSizePositionToGetArray = 1;
 
 [Setting hidden]
 string allPositionToGetStringSave = "";
+
 
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
@@ -24,7 +27,11 @@ void RenderSettingsCustomization(){
 
     refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
 
-    UI::Text("Positions customizations");
+    UI::Text("\nPersonal best");
+
+    showPb = UI::Checkbox("Show personal best", showPb);
+
+    UI::Text("\nPositions customizations");
 
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
@@ -208,7 +215,7 @@ void Render() {
         int i = 0;
         while(i < int(cutoffArray.Length)){
             //We skip the pb if there's none
-            if(cutoffArray[i].pb && cutoffArray[i].time == -1){
+            if( (cutoffArray[i].pb && cutoffArray[i].time == -1) || (!showPb && cutoffArray[i].pb) ){
                 i++;
                 continue;
             }
@@ -370,27 +377,25 @@ CutoffTime@ GetPersonalBest() {
 void updateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     array<CutoffTime@> cutoffArrayTmp;
-    int i = 0;
-    bool continueLoop = true;
 
     cutoffArrayTmp.InsertLast(GetPersonalBest());
 
-    while(continueLoop){
-        int offset = int(Math::Pow(10,i));
-        CutoffTime@ cutoff = CutoffTime();
-        cutoff.time = GetTimeWithOffset(offset-1);
-        cutoff.position = offset;
-        if(cutoff.time != -1){
-            cutoffArrayTmp.InsertLast(cutoff);
-        }else{
-            //We reached the end of the leaderboard
-            continueLoop = false;
+    for(uint i = 0; i< allPositionToGet.Length; i++){
+        CutoffTime@ best = CutoffTime();
+        best.time = -1;
+        best.position = -1;
+        best.pb = false;
+
+        int position = allPositionToGet[i];
+        int offset = position - 1;
+
+        best.position = position;
+
+        best.time = GetTimeWithOffset(offset);
+
+        if(best.time != -1){
+            cutoffArrayTmp.InsertLast(best);
         }
-        if(i == 4){
-            //we can't ask for the leadereboard above 10k so we stop.
-            continueLoop = false;
-        }
-        i++;
     }
 
     //sort the array
