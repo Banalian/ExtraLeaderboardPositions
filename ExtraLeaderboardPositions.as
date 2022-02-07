@@ -33,7 +33,7 @@ void RenderSettingsCustomization(){
 
     UI::Text("\nPositions customizations");
 
-    UI::Text("It will update the UI when the usual conditions are met (see Explaination).");
+    UI::Text("It will update the UI when the usual conditions are met (see Explanation).");
 
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
