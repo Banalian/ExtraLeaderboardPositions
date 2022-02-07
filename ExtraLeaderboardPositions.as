@@ -16,7 +16,7 @@ int nbSizePositionToGetArray = 1;
 string allPositionToGetStringSave = "";
 
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
-array<string> allPositionToGet = {};
+array<int> allPositionToGet = {};
 
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
@@ -27,13 +27,17 @@ void RenderSettingsCustomization(){
     UI::Text("Positions customizations");
 
     for(int i = 0; i < nbSizePositionToGetArray; i++){
-        allPositionToGet[i] = UI::InputText("Position " + (i+1), allPositionToGet[i]);
+        int tmp = UI::InputInt("Position " + (i+1), allPositionToGet[i]);
+        if(tmp != allPositionToGet[i]){
+            allPositionToGet[i] = tmp;
+            OnSettingsChanged();
+        }
     }
 
 
     if(UI::Button("+ : Add a position")){
         nbSizePositionToGetArray++;
-        allPositionToGet.InsertLast("");
+        allPositionToGet.InsertLast(1);
     }
     if(UI::Button("- : Remove a position")){
         if(nbSizePositionToGetArray > 1){
@@ -97,6 +101,13 @@ void OnSettingsChanged(){
         refreshTimer = 1;
     }
     updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
+    
+    for(int i = 0; i < nbSizePositionToGetArray; i++){
+        if(allPositionToGet[i] < 1){
+            allPositionToGet[i] = 1;
+        }
+    }
+
 }
 
 void OnSettingsSave(Settings::Section& section){
@@ -105,7 +116,7 @@ void OnSettingsSave(Settings::Section& section){
     //save the array in the string
     allPositionToGetStringSave = "";
     for(int i = 0; i < nbSizePositionToGetArray; i++){
-        allPositionToGetStringSave += allPositionToGet[i];
+        allPositionToGetStringSave += "" + allPositionToGet[i];
         if(i < nbSizePositionToGetArray - 1){
             allPositionToGetStringSave += ",";
         }
@@ -124,20 +135,18 @@ void OnSettingsLoad(Settings::Section& section){
         nbSizePositionToGetArray = allPositionToGetTmp.Length;
 
         for(int i = 0; i < nbSizePositionToGetArray; i++){
-            allPositionToGet.InsertLast(allPositionToGetTmp[i]);
+            allPositionToGet.InsertLast(Text::ParseInt(allPositionToGetTmp[i]));
         }
+
     }else{
         allPositionToGetStringSave = "1,10,100,1000,10000";
         nbSizePositionToGetArray = 5;
-        allPositionToGet.InsertLast("1");
-        allPositionToGet.InsertLast("10");
-        allPositionToGet.InsertLast("100");
-        allPositionToGet.InsertLast("1000");
-        allPositionToGet.InsertLast("10000");
+        allPositionToGet.InsertLast(1);
+        allPositionToGet.InsertLast(10);
+        allPositionToGet.InsertLast(100);
+        allPositionToGet.InsertLast(1000);
+        allPositionToGet.InsertLast(10000);
     }
-
-    
-
 
     OnSettingsChanged();
 }
