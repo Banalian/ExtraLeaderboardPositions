@@ -26,6 +26,12 @@ void RenderSettingsCustomization(){
 
     UI::Text("Positions customizations");
 
+    if(UI::Button("Reset to default")){
+        allPositionToGet = {1,10,100,1000,10000};
+        allPositionToGetStringSave = "1,10,100,1000,10000";
+        nbSizePositionToGetArray = 5;
+    }
+
     for(int i = 0; i < nbSizePositionToGetArray; i++){
         int tmp = UI::InputInt("Position " + (i+1), allPositionToGet[i]);
         if(tmp != allPositionToGet[i]){
@@ -200,25 +206,17 @@ void Render() {
         UI::Text("Time");
 
         int i = 0;
-        int offsetPod = 0;
         while(i < int(cutoffArray.Length)){
             //We skip the pb if there's none
             if(cutoffArray[i].pb && cutoffArray[i].time == -1){
                 i++;
-                offsetPod++;
                 continue;
             }
 
             UI::TableNextRow();
             UI::TableNextColumn();
 
-            //Make an offset for the podium icons so that the pb icon is the same as the one below it (or blank if there's nothing below it)
-            if(cutoffArray[i].pb){
-                offsetPod++;
-                UI::Text(podiumIcon[i]);
-            }else{
-                UI::Text(podiumIcon[i-offsetPod]);
-            }
+            UI::Text(GetIconForPosition(cutoffArray[i].position));
             
             UI::TableNextColumn();
             if(cutoffArray[i].position > 10000){
@@ -279,6 +277,23 @@ void Update(float dt) {
 
 
 // ############################## FUNCTIONS #############################
+
+string GetIconForPosition(int position){
+    if(position == 1){
+        return podiumIcon[0];
+    }else if(position > 1 && position <= 10){
+        return podiumIcon[1];
+    }else if(position > 10 && position <= 100){
+        return podiumIcon[2];
+    }else if(position > 100 && position <= 1000){
+        return podiumIcon[3];
+    }else if(position > 1000 && position <= 10000){
+        return podiumIcon[4];
+    }else{
+        return "";
+    }
+}
+
 
 Json::Value FetchEndpoint(const string &in route) {
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
