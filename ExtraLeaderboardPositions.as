@@ -5,8 +5,34 @@
 [Setting category="Display Settings" name="Window visible" description="To move the windows, click and drag while the Openplanet overlay is visible."]
 bool windowVisible = true;
 
-[Setting category="Customization" name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
+[Setting category="Timer" name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
+
+
+int nbSizePositionToGetArray = 1;
+array<string> allPositionToGet = {"1"};
+
+[SettingsTab name="Customization"]
+void RenderSettingsCustomization(){
+    
+    UI::Text("Customization");
+
+    for(int i = 0; i < nbSizePositionToGetArray; i++){
+        UI::InputText("Position " + i, allPositionToGet[i]);
+    }
+
+
+    if(UI::Button("+")){
+        nbSizePositionToGetArray++;
+        allPositionToGet.InsertLast("");
+    }
+    if(UI::Button("-")){
+        if(nbSizePositionToGetArray > 1){
+            nbSizePositionToGetArray--;
+            allPositionToGet.RemoveAt(nbSizePositionToGetArray);
+        }
+    }
+}
 
 // #######################
 // ### Consts and vars ###
@@ -123,7 +149,7 @@ void Render() {
 
         int i = 0;
         int offsetPod = 0;
-        while(i < cutoffArray.Length){
+        while(i < int(cutoffArray.Length)){
             //We skip the pb if there's none
             if(cutoffArray[i].pb && cutoffArray[i].time == -1){
                 i++;
