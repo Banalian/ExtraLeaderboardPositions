@@ -33,6 +33,8 @@ void RenderSettingsCustomization(){
 
     UI::Text("\nPositions customizations");
 
+    UI::Text("It will update the UI when the usual conditions are met (see Explaination).");
+
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
         allPositionToGetStringSave = "1,10,100,1000,10000";
@@ -59,6 +61,19 @@ void RenderSettingsCustomization(){
         }
     }
 }
+
+[SettingsTab name="Explanation"]
+void RenderSettingsExplanation(){
+    UI::Text("This plugin allows you to see more leaderbaord position.\n\n");
+    UI::Text("The default positions are 1st, 10th, 100th, 1000th and 10000th");
+    UI::Text("but you can change it in the \"Customization\" tab.\n\n");
+    UI::Text("The leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
+    UI::Text("That timer resets when you leave the map.");
+    UI::Text("\nIt is also automatically refreshed when you join a map, or if you set a new pb on a map.");
+    UI::Dummy(vec2(0,150));
+    UI::Text("Made by Banalian.\nContact me on discord if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
+}
+
 
 // #######################
 // ### Consts and vars ###
@@ -118,6 +133,10 @@ void OnSettingsChanged(){
     for(int i = 0; i < nbSizePositionToGetArray; i++){
         if(allPositionToGet[i] < 1){
             allPositionToGet[i] = 1;
+        }
+
+        if(allPositionToGet[i] > 10000){
+            allPositionToGet[i] = 10000;
         }
     }
 
@@ -278,6 +297,7 @@ void Update(float dt) {
         }
     }else{
         timer = 0;
+        currentMapUid = "";
     }
     
 }
