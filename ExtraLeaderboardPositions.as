@@ -23,6 +23,13 @@ array<int> allPositionToGet = {};
 
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
+
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You need at least the standard edition.");
+        return;
+    }
+
+
     UI::Text("Timer");
 
     refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
@@ -191,6 +198,13 @@ void RenderMenu() {
 // ############################## WINDOW RENDER #############################
 
 void Render() {
+
+    if(!UserCanUseThePlugin()){
+        warn("You don't have the permissions to use this plugin, you at least need the standard edition");
+        return;
+    }
+
+
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
@@ -300,6 +314,11 @@ void Update(float dt) {
 
 // ############################## FUNCTIONS #############################
 
+//Since this plugin request the leaderboard, we need to check if the user's current subscription has those permissions
+bool UserCanUseThePlugin(){
+    return (Permissions::ViewRecords());
+}
+
 string GetIconForPosition(int position){
     if(position == 1){
         return podiumIcon[0];
@@ -389,7 +408,7 @@ CutoffTime@ GetPersonalBest() {
 }
 
 
-void updateTimes(){
+void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     array<CutoffTime@> cutoffArrayTmp;
 
@@ -426,6 +445,11 @@ void updateTimes(){
 void Main(){
 #if TMNEXT
 
+    if(!UserCanUseThePlugin()){
+        warn("You don't have the permissions to use this plugin, you at least need the standard edition");
+        return;
+    }
+
     // Add the audiences you need
     NadeoServices::AddAudience("NadeoLiveServices");
  
@@ -441,7 +465,7 @@ void Main(){
 
         //if we're on a new map or the timer is over, we update the times
         if(refreshPosition){
-            updateTimes();
+            UpdateTimes();
             refreshPosition = false;
         }
         yield();

@@ -9,4 +9,4 @@ perms = "paid"
 
 [script]
 dependencies = [ "NadeoServices" ]
-imports = [ "Icons.as", "Time.as"]
+imports = [ "Icons.as", "Time.as", "Permissions.as"]
