@@ -17,6 +17,8 @@ int nbSizePositionToGetArray = 1;
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
+[Setting hidden]
+bool showTimeDifference = true;
 
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
@@ -37,6 +39,10 @@ void RenderSettingsCustomization(){
     UI::Text("\nPersonal best");
 
     showPb = UI::Checkbox("Show personal best", showPb);
+
+    UI::Text("\tTime difference");
+
+    showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
 
     UI::Text("\nPositions customizations");
 
@@ -231,7 +237,7 @@ void Render() {
 
         UI::Text("Extra leaderboard positions");
         
-        UI::BeginTable("Main", 4);        
+        UI::BeginTable("Main", 5);        
 
         UI::TableNextRow();
         UI::TableNextColumn();
@@ -248,11 +254,12 @@ void Render() {
                 continue;
             }
 
+            //------------POSITION ICON--------
             UI::TableNextRow();
             UI::TableNextColumn();
-
             UI::Text(GetIconForPosition(cutoffArray[i].position));
             
+            //------------POSITION-------------
             UI::TableNextColumn();
             if(cutoffArray[i].position > 10000){
                 UI::Text("<" + cutoffArray[i].position);
@@ -260,10 +267,24 @@ void Render() {
                 UI::Text(""+ cutoffArray[i].position);
             }
             
+            //------------TIME-----------------
             UI::TableNextColumn();
             UI::Text(TimeString(cutoffArray[i].time));
 
-            //If it's the pb, display it
+            //------------TIME DIFFERENCE------
+            UI::TableNextColumn();
+            if(i > 0 && showTimeDifference){
+                int timeDifference = cutoffArray[i].time - cutoffArray[0].time;
+                if(timeDifference < 0){
+                    UI::Text("-" + TimeString(timeDifference));
+                }else{
+                    UI::Text("+" + TimeString(timeDifference));
+                }
+            }
+                
+
+
+            //------------IS THE PB-------------
             if(cutoffArray[i].pb){
                 UI::TableNextColumn();
                 UI::Text("PB");
