@@ -65,13 +65,12 @@ void RenderSettingsCustomization(){
 [SettingsTab name="Explanation"]
 void RenderSettingsExplanation(){
     UI::Text("This plugin allows you to see more leaderbaord position.\n\n");
-    UI::Text("The default positions are 1st, 10th, 100th, 1000th and 10000th");
-    UI::Text("but you can change it in the \"Customization\" tab.\n\n");
+    UI::Text("You can modify the positions in the \"Customization tab\"\n");
     UI::Text("The leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
-    UI::Text("That timer resets when you leave the map.");
-    UI::Text("\nIt is also automatically refreshed when you join a map, or if you set a new pb on a map.");
+    UI::Text("This timer resets when you leave the map.");
+    UI::Text("It is also automatically refreshed when you join a map, or if you set a new pb on a map.");
     UI::Dummy(vec2(0,150));
-    UI::Text("Made by Banalian.\nContact me on discord if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
+    UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
 }
 
 
@@ -122,7 +121,7 @@ class CutoffTime{
 array<CutoffTime@> cutoffArray;
 int currentPbTime = -1;
 
-// ############################## SETTINGS #############################
+// ############################## SETTINGS CALLBACKS #############################
 
 void OnSettingsChanged(){
     if(refreshTimer < 1){
@@ -143,8 +142,6 @@ void OnSettingsChanged(){
 }
 
 void OnSettingsSave(Settings::Section& section){
-    section.SetInt("refreshTimer", refreshTimer);
-
     //save the array in the string
     allPositionToGetStringSave = "";
     for(int i = 0; i < nbSizePositionToGetArray; i++){
@@ -157,8 +154,6 @@ void OnSettingsSave(Settings::Section& section){
 }
 
 void OnSettingsLoad(Settings::Section& section){
-    refreshTimer = section.GetInt("refreshTimer");
-
     //load the array from the string
     allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
 
