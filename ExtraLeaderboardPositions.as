@@ -40,9 +40,11 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
-    UI::Text("\tTime difference");
-
-    showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
+    if(showPb){
+        UI::Text("\tTime difference");
+        showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
+    }
+    
 
     UI::Text("\nPositions customizations");
 
@@ -132,6 +134,7 @@ class CutoffTime{
 
 
 array<CutoffTime@> cutoffArray;
+CutoffTime@ pbTime = CutoffTime();
 int currentPbTime = -1;
 
 // ############################## SETTINGS CALLBACKS #############################
@@ -237,7 +240,7 @@ void Render() {
 
         UI::Text("Extra leaderboard positions");
         
-        UI::BeginTable("Main", 5);        
+        UI::BeginTable("Main", 4);        
 
         UI::TableNextRow();
         UI::TableNextColumn();
@@ -271,24 +274,21 @@ void Render() {
             UI::TableNextColumn();
             UI::Text(TimeString(cutoffArray[i].time));
 
-            //------------TIME DIFFERENCE------
+            //------------TIME DIFFERENCE && IS PB------
             UI::TableNextColumn();
-            if(i > 0 && showTimeDifference){
-                int timeDifference = cutoffArray[i].time - cutoffArray[0].time;
-                if(timeDifference < 0){
-                    UI::Text("-" + TimeString(timeDifference));
-                }else{
-                    UI::Text("+" + TimeString(timeDifference));
+            if(showPb){
+                if(!cutoffArray[i].pb && showTimeDifference){
+                    int timeDifference = cutoffArray[i].time - pbTime.time;
+                    if(timeDifference < 0){
+                        UI::Text("-" + TimeString(Math::Abs(timeDifference)));
+                    }else{
+                        UI::Text("+" + TimeString(timeDifference));
+                    }
+                }else if(cutoffArray[i].pb){
+                    UI::Text("PB");
                 }
             }
-                
-
-
-            //------------IS THE PB-------------
-            if(cutoffArray[i].pb){
-                UI::TableNextColumn();
-                UI::Text("PB");
-            }
+            
 
             i++;
             
@@ -401,10 +401,10 @@ int GetTimeWithOffset(float offset = 0) {
 CutoffTime@ GetPersonalBest() {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    CutoffTime@ best = CutoffTime();
-    best.time = -1;
-    best.position = -1;
-    best.pb = true;
+    pbTime = CutoffTime();
+    pbTime.time = -1;
+    pbTime.position = -1;
+    pbTime.pb = true;
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
@@ -417,15 +417,15 @@ CutoffTime@ GetPersonalBest() {
             if(tops.GetType() == Json::Type::Array) {
                 auto top = tops[0]["top"];
                 if(top.Length > 0) {
-                    best.time = top[0]["score"];
-                    currentPbTime = best.time;
-                    best.position = top[0]["position"];
+                    pbTime.time = top[0]["score"];
+                    currentPbTime = pbTime.time;
+                    pbTime.position = top[0]["position"];
                 }
             }
         }
     }
 
-    return best;
+    return pbTime;
 }
 
 
