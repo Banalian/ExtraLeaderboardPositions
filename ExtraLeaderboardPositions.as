@@ -277,7 +277,7 @@ void Render() {
             //------------TIME DIFFERENCE && IS PB------
             UI::TableNextColumn();
             if(showPb){
-                if(!cutoffArray[i].pb && showTimeDifference){
+                if(!cutoffArray[i].pb && showTimeDifference && pbTime.time != -1){
                     int timeDifference = cutoffArray[i].time - pbTime.time;
                     if(timeDifference < 0){
                         UI::Text("-" + TimeString(Math::Abs(timeDifference)));
