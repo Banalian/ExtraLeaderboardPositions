@@ -401,10 +401,10 @@ int GetTimeWithOffset(float offset = 0) {
 CutoffTime@ GetPersonalBest() {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    pbTime = CutoffTime();
-    pbTime.time = -1;
-    pbTime.position = -1;
-    pbTime.pb = true;
+    CutoffTime@ pbTimeTmp = CutoffTime();
+    pbTimeTmp.time = -1;
+    pbTimeTmp.position = -1;
+    pbTimeTmp.pb = true;
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
@@ -417,15 +417,15 @@ CutoffTime@ GetPersonalBest() {
             if(tops.GetType() == Json::Type::Array) {
                 auto top = tops[0]["top"];
                 if(top.Length > 0) {
-                    pbTime.time = top[0]["score"];
-                    currentPbTime = pbTime.time;
-                    pbTime.position = top[0]["position"];
+                    pbTimeTmp.time = top[0]["score"];
+                    currentPbTime = pbTimeTmp.time;
+                    pbTimeTmp.position = top[0]["position"];
                 }
             }
         }
     }
 
-    return pbTime;
+    return pbTimeTmp;
 }
 
 
@@ -453,9 +453,9 @@ void UpdateTimes(){
         }
     }
 
+    pbTime = cutoffArrayTmp[0];
     //sort the array
     cutoffArrayTmp.SortAsc();
-
     cutoffArray = cutoffArrayTmp;
 }
 
