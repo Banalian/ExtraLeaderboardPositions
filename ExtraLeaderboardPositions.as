@@ -20,6 +20,9 @@ string allPositionToGetStringSave = "";
 [Setting hidden]
 bool showTimeDifference = true;
 
+[Setting hidden]
+bool inverseTimeDiffSign = false;
+
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
 
@@ -43,6 +46,9 @@ void RenderSettingsCustomization(){
     if(showPb){
         UI::Text("\tTime difference");
         showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
+        if(showTimeDifference){
+            inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
+        }
     }
     
 
@@ -279,11 +285,20 @@ void Render() {
             if(showPb){
                 if(!cutoffArray[i].pb && showTimeDifference && pbTime.time != -1){
                     int timeDifference = cutoffArray[i].time - pbTime.time;
-                    if(timeDifference < 0){
-                        UI::Text("-" + TimeString(Math::Abs(timeDifference)));
+                    if(inverseTimeDiffSign){
+                        if(timeDifference < 0){
+                            UI::Text("+" + TimeString(Math::Abs(timeDifference)));
+                        }else{
+                            UI::Text("-" + TimeString(timeDifference));
+                        }
                     }else{
-                        UI::Text("+" + TimeString(timeDifference));
+                        if(timeDifference < 0){
+                            UI::Text("-" + TimeString(Math::Abs(timeDifference)));
+                        }else{
+                            UI::Text("+" + TimeString(timeDifference));
+                        }
                     }
+                    
                 }else if(cutoffArray[i].pb){
                     UI::Text("PB");
                 }
@@ -370,8 +385,19 @@ Json::Value FetchEndpoint(const string &in route) {
 }
 
 
-string TimeString(int scoreTime) {
-    return Time::Format(scoreTime);
+string TimeString(int scoreTime, showSign = false){) {
+    string timeString = "";
+    if(showSign){
+        if(scoreTime < 0){
+            timeString += "-";
+        }else{
+            timeString += "+";
+        }
+    }
+    
+    timeString += Time::Format(Math::Abs(scoreTime));
+
+    return timeString;
 }
 
 int GetTimeWithOffset(float offset = 0) {
