@@ -385,7 +385,7 @@ Json::Value FetchEndpoint(const string &in route) {
 }
 
 
-string TimeString(int scoreTime, showSign = false){) {
+string TimeString(int scoreTime, bool showSign = false) {
     string timeString = "";
     if(showSign){
         if(scoreTime < 0){
