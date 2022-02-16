@@ -272,7 +272,7 @@ void Render() {
 
         UI::Text("Extra leaderboard positions");
         
-        UI::BeginTable("Main", 4);        
+        UI::BeginTable("Main", 5);        
 
         UI::TableNextRow();
         UI::TableNextColumn();
@@ -306,11 +306,23 @@ void Render() {
             UI::TableNextColumn();
             UI::Text(TimeString(cutoffArray[i].time));
 
-            //------------TIME DIFFERENCE && IS PB------
+            //------------IS PB----------------
             UI::TableNextColumn();
-            if(showPb){
-                if(!cutoffArray[i].pb && showTimeDifference && pbTime.time != -1){
-                    int timeDifference = cutoffArray[i].time - pbTime.time;
+            if(cutoffArray[i].pb){
+                UI::Text("PB");
+            }
+            
+            //------------TIME DIFFERENCE------
+            UI::TableNextColumn();
+
+            if(showTimeDifference){
+                if(cutoffArray[i].time == -1 || timeDifferenceCutoff.time == -1){
+                    //Nothing here, no time to compare to
+                }else if(cutoffArray[i].position == timeDifferenceCutoff.position){
+                    //Nothing here, the position is the same, it's the same time
+                    //still keeping the if in case we want to print/add something here
+                }else{
+                    int timeDifference = cutoffArray[i].time - timeDifferenceCutoff.time;
                     if(inverseTimeDiffSign){
                         if(timeDifference < 0){
                             UI::Text("+" + TimeString(Math::Abs(timeDifference)));
@@ -324,10 +336,8 @@ void Render() {
                             UI::Text("+" + TimeString(timeDifference));
                         }
                     }
-                    
-                }else if(cutoffArray[i].pb){
-                    UI::Text("PB");
                 }
+
             }
             
 
