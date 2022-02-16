@@ -102,11 +102,13 @@ void RenderSettingsCustomization(){
     if(UI::Button("+ : Add a position")){
         nbSizePositionToGetArray++;
         allPositionToGet.InsertLast(1);
+        OnSettingsChanged();
     }
     if(UI::Button("- : Remove a position")){
         if(nbSizePositionToGetArray > 1){
             nbSizePositionToGetArray--;
             allPositionToGet.RemoveAt(nbSizePositionToGetArray);
+            OnSettingsChanged();
         }
     }
 }
