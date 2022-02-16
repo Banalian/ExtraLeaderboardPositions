@@ -26,6 +26,8 @@ bool inverseTimeDiffSign = false;
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
 
+string currentComboChoice = "PB";
+
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
 
@@ -39,7 +41,7 @@ void RenderSettingsCustomization(){
 
     refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
 
-    UI::Text("\nPersonal best");
+    UI::Text("\n\tPersonal best");
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
@@ -48,6 +50,23 @@ void RenderSettingsCustomization(){
         showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
         if(showTimeDifference){
             inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
+
+            UI::Text("\n\t\tFrom which position should the time difference be shown?");
+            if(UI::BeginCombo("Time Diff position", currentComboChoice)){
+                if(UI::Selectable("PB", currentComboChoice == "PB")){
+                    currentComboChoice = "PB";
+                    UI::SetItemDefaultFocus();
+                }
+                for(int i = 0; i < allPositionToGet.Length; i++){
+                    string text = "Position " + allPositionToGet[i];
+                    if(UI::Selectable(text, currentComboChoice == text)){
+                        currentComboChoice = text;
+                    }
+                }
+                UI::EndCombo();
+            }
+            
+
         }
     }
     
