@@ -26,6 +26,7 @@ bool inverseTimeDiffSign = false;
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
 
+[Setting hidden]
 string currentComboChoice = "PB";
 
 [SettingsTab name="Customization"]
@@ -37,7 +38,7 @@ void RenderSettingsCustomization(){
     }
 
 
-    UI::Text("Timer");
+    UI::Text("\tTimer");
 
     refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
 
@@ -51,16 +52,23 @@ void RenderSettingsCustomization(){
         if(showTimeDifference){
             inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
 
-            UI::Text("\n\t\tFrom which position should the time difference be shown?");
-            if(UI::BeginCombo("Time Diff position", currentComboChoice)){
-                if(UI::Selectable("PB", currentComboChoice == "PB")){
+            UI::Text("\t\tFrom which position should the time difference be shown?");
+            string comboText = "";
+            if(currentComboChoice == "PB"){
+                comboText = "Personal best";
+            }else{
+                comboText = "Position " + currentComboChoice;
+            }
+
+            if(UI::BeginCombo("Time Diff position", comboText)){
+                if(UI::Selectable("Personal best", currentComboChoice == "PB")){
                     currentComboChoice = "PB";
                     UI::SetItemDefaultFocus();
                 }
                 for(int i = 0; i < allPositionToGet.Length; i++){
                     string text = "Position " + allPositionToGet[i];
-                    if(UI::Selectable(text, currentComboChoice == text)){
-                        currentComboChoice = text;
+                    if(UI::Selectable(text, currentComboChoice == "" + allPositionToGet[i])){
+                        currentComboChoice = "" + allPositionToGet[i];
                     }
                 }
                 UI::EndCombo();
@@ -71,7 +79,7 @@ void RenderSettingsCustomization(){
     }
     
 
-    UI::Text("\nPositions customizations");
+    UI::Text("\n\tPositions customizations");
 
     UI::Text("It will update the UI when the usual conditions are met (see Explanation).");
 
