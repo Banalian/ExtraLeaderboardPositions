@@ -129,7 +129,7 @@ void UpdateTimes(){
         }
     }
 
-    pbTime = cutoffArrayTmp[0];
+    
     if(currentComboChoice == -1){
         timeDifferenceCutoff = cutoffArrayTmp[0];
     }else{
