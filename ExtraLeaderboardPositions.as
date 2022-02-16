@@ -17,17 +17,17 @@ int nbSizePositionToGetArray = 1;
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
+//also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
+array<int> allPositionToGet = {};
+
 [Setting hidden]
 bool showTimeDifference = true;
 
 [Setting hidden]
 bool inverseTimeDiffSign = false;
 
-//also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
-array<int> allPositionToGet = {};
-
 [Setting hidden]
-string currentComboChoice = "PB";
+int currentComboChoice = -1;
 
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
@@ -46,36 +46,34 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
-    if(showPb){
-        UI::Text("\tTime difference");
-        showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
-        if(showTimeDifference){
-            inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
+    UI::Text("\tTime difference");
+    showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
+    if(showTimeDifference){
+        inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
 
-            UI::Text("\t\tFrom which position should the time difference be shown?");
-            string comboText = "";
-            if(currentComboChoice == "PB"){
-                comboText = "Personal best";
-            }else{
-                comboText = "Position " + currentComboChoice;
-            }
+        UI::Text("\t\tFrom which position should the time difference be shown?");
+        string comboText = "";
+        if(currentComboChoice == -1){
+            comboText = "Personal best";
+        }else{
+            comboText = "Position " + currentComboChoice;
+        }
 
-            if(UI::BeginCombo("Time Diff position", comboText)){
-                if(UI::Selectable("Personal best", currentComboChoice == "PB")){
-                    currentComboChoice = "PB";
-                    UI::SetItemDefaultFocus();
-                }
-                for(int i = 0; i < allPositionToGet.Length; i++){
-                    string text = "Position " + allPositionToGet[i];
-                    if(UI::Selectable(text, currentComboChoice == "" + allPositionToGet[i])){
-                        currentComboChoice = "" + allPositionToGet[i];
-                    }
-                }
-                UI::EndCombo();
+        if(UI::BeginCombo("Time Diff position", comboText)){
+            if(UI::Selectable("Personal best", currentComboChoice == -1)){
+                currentComboChoice = -1;
+                UI::SetItemDefaultFocus();
             }
+            for(int i = 0; i < int(allPositionToGet.Length); i++){
+                string text = "Position " + allPositionToGet[i];
+                if(UI::Selectable(text, currentComboChoice == allPositionToGet[i])){
+                    currentComboChoice = allPositionToGet[i];
+                }
+            }
+            UI::EndCombo();
+        }
             
 
-        }
     }
     
 
@@ -168,6 +166,7 @@ class CutoffTime{
 
 array<CutoffTime@> cutoffArray;
 CutoffTime@ pbTime = CutoffTime();
+CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
 
 // ############################## SETTINGS CALLBACKS #############################
@@ -507,6 +506,19 @@ void UpdateTimes(){
     }
 
     pbTime = cutoffArrayTmp[0];
+    if(currentComboChoice == -1){
+        timeDifferenceCutoff = cutoffArrayTmp[0];
+    }else{
+        timeDifferenceCutoff.time = -1;
+        timeDifferenceCutoff.position = -1;
+        timeDifferenceCutoff.pb = false;
+        for(uint i = 1; i< cutoffArrayTmp.Length; i++){
+            if(cutoffArrayTmp[i].position == currentComboChoice){
+                timeDifferenceCutoff = cutoffArrayTmp[i];
+                break;
+            }
+        }
+    }
     //sort the array
     cutoffArrayTmp.SortAsc();
     cutoffArray = cutoffArrayTmp;
