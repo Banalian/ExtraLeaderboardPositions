@@ -19,7 +19,7 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
-    UI::Text("\tTime difference");
+    UI::Text("\n\tTime difference");
     showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
     if(showTimeDifference){
         inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
