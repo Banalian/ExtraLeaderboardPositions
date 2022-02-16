@@ -37,6 +37,10 @@ void RenderSettingsCustomization(){
         return;
     }
 
+    UI::Text("\tRefresh");
+    if(UI::Button("Refresh now")){
+        refreshPosition = true;
+    }
 
     UI::Text("\tTimer");
 
@@ -79,7 +83,7 @@ void RenderSettingsCustomization(){
 
     UI::Text("\n\tPositions customizations");
 
-    UI::Text("It will update the UI when the usual conditions are met (see Explanation).");
+    UI::Text("It will update the UI when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
@@ -119,7 +123,8 @@ void RenderSettingsExplanation(){
     UI::Text("You can modify the positions in the \"Customization tab\"\n");
     UI::Text("The leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
     UI::Text("This timer resets when you leave the map.");
-    UI::Text("It is also automatically refreshed when you join a map, or if you set a new pb on a map.");
+    UI::Text("It is also automatically refreshed when you join a map, or if you set a new pb on a map.");;
+    UI::Text("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
     UI::Dummy(vec2(0,150));
     UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
 }
@@ -302,6 +307,11 @@ void Render() {
         UI::Text("Position");
         UI::TableNextColumn();
         UI::Text("Time");
+        if(refreshPosition){
+            UI::TableNextColumn();
+            UI::TableNextColumn();
+            UI::Text("Refresing...");
+        }
 
         int i = 0;
         while(i < int(cutoffArray.Length)){
