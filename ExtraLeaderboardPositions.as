@@ -88,8 +88,11 @@ void RenderSettingsCustomization(){
     }
 
     for(int i = 0; i < nbSizePositionToGetArray; i++){
-        int tmp = UI::InputInt("Position " + (i+1), allPositionToGet[i]);
+        int tmp = UI::InputInt("Custom position " + (i+1), allPositionToGet[i]);
         if(tmp != allPositionToGet[i]){
+            if(currentComboChoice == allPositionToGet[i]){
+                currentComboChoice = tmp;
+            }
             allPositionToGet[i] = tmp;
             OnSettingsChanged();
         }
@@ -177,14 +180,31 @@ void OnSettingsChanged(){
     }
     updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
     
+    bool foundCombo = false;
     for(int i = 0; i < nbSizePositionToGetArray; i++){
         if(allPositionToGet[i] < 1){
             allPositionToGet[i] = 1;
         }
 
+        if(allPositionToGet[i] == currentComboChoice){
+            if(currentComboChoice < 1 && currentComboChoice != -1){
+                currentComboChoice = 1;
+            }
+
+            if(currentComboChoice > 10000){
+                currentComboChoice = 10000;
+            }
+
+            foundCombo = true;
+        }
+
         if(allPositionToGet[i] > 10000){
             allPositionToGet[i] = 10000;
-        }
+        } 
+    }
+
+    if(!foundCombo){
+        currentComboChoice = -1;
     }
 
 }
