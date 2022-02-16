@@ -14,7 +14,7 @@ void Update(float dt) {
         int timePbLocal = scoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
 		
         // if the map change, or the timer is over or a new pb is found, we refresh the positions
-        if (mapIdChanged || timer > updateFrequency || timePbLocal != currentPbTime) {
+        if (mapIdChanged || timer > updateFrequency || (timePbLocal != currentPbTime && timePbLocal < currentPbTime && timePbLocal != -1)) {
             currentMapUid = app.RootMap.MapInfo.MapUid;
             refreshPosition = true;
             timer = 0;
