@@ -11,7 +11,6 @@ void RenderMenu() {
 void Render() {
 
     if(!UserCanUseThePlugin()){
-        warn("You don't have the permissions to use this plugin, you at least need the standard edition");
         return;
     }
 
