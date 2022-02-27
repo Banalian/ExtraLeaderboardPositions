@@ -4,11 +4,14 @@ Trackmania Next (2020) plugin that allows you to see the times of more key posit
 
 This can be used to see how far approximatly you are from getting a better trophy reward in a TOTD for example.
 
-If you have any ideas for features, i'd be happy to hear them !
+If you have any ideas for features, i'd be happy to hear them ! (you can use the issues or discord, in the OpenPlanet server)
 
 Please open an issue if you see any trouble.
 
 # Changelog
+## 1.3.1
+- Added and option to color the time difference (blue if negative, red otherwise)
+
 ## 1.3
 More customization !
 - Time difference : Show the time difference between a given time and all the other ones
