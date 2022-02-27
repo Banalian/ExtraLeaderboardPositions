@@ -23,6 +23,9 @@ string allPositionToGetStringSave = "";
 bool showTimeDifference = true;
 
 [Setting hidden]
+bool showColoredTimeDifference = true;
+
+[Setting hidden]
 bool inverseTimeDiffSign = false;
 
 [Setting hidden]

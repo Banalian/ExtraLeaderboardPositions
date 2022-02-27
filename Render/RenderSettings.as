@@ -24,6 +24,8 @@ void RenderSettingsCustomization(){
     if(showTimeDifference){
         inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
 
+        showColoredTimeDifference = UI::Checkbox("Color the time difference (blue if negative, red otherwise)", showColoredTimeDifference);
+
         UI::Text("\t\tFrom which position should the time difference be shown?");
         string comboText = "";
         if(currentComboChoice == -1){
