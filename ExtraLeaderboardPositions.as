@@ -12,6 +12,8 @@ const array<string> podiumIcon = {
 };
 
 const string resetColor = "\\$z";
+const string blueColor = "\\$77f";
+const string redColor = "\\$f77";
 
 const string pluginName = "Extra Leaderboard positions";
 

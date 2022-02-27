@@ -97,17 +97,19 @@ void Render() {
                     //still keeping the if in case we want to print/add something here
                 }else{
                     int timeDifference = cutoffArray[i].time - timeDifferenceCutoff.time;
+                    string timeDifferenceString = TimeString(Math::Abs(timeDifference));
+                    
                     if(inverseTimeDiffSign){
                         if(timeDifference < 0){
-                            UI::Text("+" + TimeString(Math::Abs(timeDifference)));
+                            UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
                         }else{
-                            UI::Text("-" + TimeString(timeDifference));
+                            UI::Text((showColoredTimeDifference ? blueColor : "") + "-" + timeDifferenceString);
                         }
                     }else{
                         if(timeDifference < 0){
-                            UI::Text("-" + TimeString(Math::Abs(timeDifference)));
+                            UI::Text((showColoredTimeDifference ? blueColor : "") + "-" + timeDifferenceString);
                         }else{
-                            UI::Text("+" + TimeString(timeDifference));
+                            UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
                         }
                     }
                 }
