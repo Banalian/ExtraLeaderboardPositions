@@ -9,6 +9,9 @@ If you have any ideas for features, i'd be happy to hear them ! (you can use the
 Please open an issue if you see any trouble.
 
 # Changelog
+## 1.3.2
+- Hotfix for new game update : Checks for permissions every 30 seconds if you don't have them yet
+
 ## 1.3.1
 - Added and option to color the time difference (blue if negative, red otherwise)
 
