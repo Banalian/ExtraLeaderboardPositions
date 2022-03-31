@@ -10,6 +10,9 @@ Please open an issue if you see any trouble.
 
 # Changelog
 ## 1.3.2
+- Hotfix 2 Electric boogaloo : Fixed the getter for the local pb and slightly improved the first hotfix
+
+## 1.3.2
 - Hotfix for new game update : Checks for permissions every 30 seconds if you don't have them yet
 
 ## 1.3.1

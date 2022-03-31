@@ -32,6 +32,7 @@ CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
 
 float timerStartDelay = 30 *1000; // 30 seconds
+bool startupEnded = false;
 
 // ############################## MAIN #############################
 
@@ -60,7 +61,7 @@ void Main(){
         }
         print("Permission granted!");
     }
-
+    startupEnded = true;
     // Add the audiences you need
     NadeoServices::AddAudience("NadeoLiveServices");
  

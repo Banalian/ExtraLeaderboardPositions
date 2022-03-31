@@ -4,7 +4,9 @@ void Update(float dt) {
 
     if(timerStartDelay > 0){
         timerStartDelay -= dt;
-        return;
+        if(!startupEnded){
+            return;
+        }
     }
 
     auto app = cast<CTrackMania>(GetApp());
@@ -15,8 +17,15 @@ void Update(float dt) {
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
         auto scoreMgr = network.ClientManiaAppPlayground.ScoreMgr;
 
-        //get the current map pb
-        int timePbLocal = scoreMgr.Map_GetRecord_v2(network.PlayerInfo.Id, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+        int timePbLocal = -1;
+
+        //get the user id
+        if(network.ClientManiaAppPlayground.UserMgr.Users.Length != 0){
+            auto userId = network.ClientManiaAppPlayground.UserMgr.Users[0].Id;
+            //get the current map pb
+            timePbLocal = scoreMgr.Map_GetRecord_v2(userId, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+        }
+
 		
         // if the map change, or the timer is over or a new pb is found, we refresh the positions
         if (mapIdChanged || timer > updateFrequency || newPBSet(timePbLocal)) {
