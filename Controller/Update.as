@@ -2,6 +2,11 @@
 
 void Update(float dt) {
 
+    if(timerStartDelay > 0){
+        timerStartDelay -= dt;
+        return;
+    }
+
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
     

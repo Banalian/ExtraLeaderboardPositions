@@ -31,6 +31,8 @@ array<CutoffTime@> cutoffArray;
 CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
 
+float timerStartDelay = 30 *1000; // 30 seconds
+
 // ############################## MAIN #############################
 
 
@@ -38,8 +40,16 @@ void Main(){
 #if TMNEXT
 
     if(!UserCanUseThePlugin()){
-        warn("You don't have the permissions to use this plugin, you at least need the standard edition");
-        return;
+        print("Waiting 30 more seconds for permissions...");
+        while(timerStartDelay > 0){
+            yield();
+        }
+        if(!UserCanUseThePlugin()){
+            warn("You currently don't have the permissions to use this plugin, you at least need the standard edition");
+            warn("If you do have the permissions, please wait a few more seconds and restart the plugin when you have finished loading into the main menu");
+            return;
+        }
+        print("Permission granted!");
     }
 
     // Add the audiences you need
