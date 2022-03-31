@@ -46,8 +46,17 @@ void Main(){
         }
         if(!UserCanUseThePlugin()){
             warn("You currently don't have the permissions to use this plugin, you at least need the standard edition");
-            warn("If you do have the permissions, please wait a few more seconds and restart the plugin when you have finished loading into the main menu");
-            return;
+            warn("If you do have the permissions, the plugin checks every 30 seconds and should work when you finished loading into the main menu");
+            timerStartDelay = 30 *1000;
+            while(true){
+                yield();
+                if(timerStartDelay < 0){
+                    if(UserCanUseThePlugin()){
+                        break;
+                    }
+                    timerStartDelay = 30 *1000;
+                }
+            }
         }
         print("Permission granted!");
     }
