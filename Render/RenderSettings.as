@@ -6,10 +6,14 @@ void RenderSettingsCustomization(){
         return;
     }
 
-    UI::Text("\tRefresh");
     if(UI::Button("Refresh now")){
-        refreshPosition = true;
+        if(!refreshPosition){
+            refreshPosition = true;
+        }
     }
+
+    showRefreshButtonSetting = UI::Checkbox("Add refresh button to UI (only appears when OP Overlay is on)", showRefreshButtonSetting);
+
 
     UI::Text("\tTimer");
 

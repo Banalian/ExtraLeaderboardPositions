@@ -29,7 +29,10 @@ void Update(float dt) {
 		
         // if the map change, or the timer is over or a new pb is found, we refresh the positions
         if (mapIdChanged || timer > updateFrequency || newPBSet(timePbLocal)) {
-            currentMapUid = app.RootMap.MapInfo.MapUid;
+            if(mapIdChanged){
+                currentMapUid = app.RootMap.MapInfo.MapUid;
+                currentPbTime = -1;
+            }
             refreshPosition = true;
             timer = 0;
         } else {

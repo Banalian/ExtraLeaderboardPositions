@@ -12,6 +12,9 @@ int refreshTimer = 5;
 bool showPb = true;
 
 [Setting hidden]
+bool showRefreshButtonSetting = true;
+
+[Setting hidden]
 int nbSizePositionToGetArray = 1;
 
 [Setting hidden]

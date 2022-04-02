@@ -11,6 +11,8 @@ const array<string> podiumIcon = {
     ""                                   // above 10k : No icon
 };
 
+const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; // blue icon
+
 const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";

@@ -1,8 +1,21 @@
 // ############################## MENU #############################
 
 void RenderMenu() {
-    if (UI::MenuItem(pluginName)) {
-        windowVisible = !windowVisible;
+    if(UI::BeginMenu(podiumIconBlue + " " +pluginName)) {
+        if(windowVisible) {
+            if(UI::MenuItem("Hide")) {
+                windowVisible = false;
+            }
+            if(UI::MenuItem("Force refresh")) {
+                refreshPosition = true;
+            }
+        } else {
+            if(UI::MenuItem("Show")) {
+                windowVisible = true;
+            }
+        }
+
+        UI::EndMenu();
     }
 }
 
@@ -19,9 +32,13 @@ void Render() {
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
+    bool showRefreshButton = false;
 
     if (!UI::IsOverlayShown()) {
         windowFlags |= UI::WindowFlags::NoInputs;
+    }else{
+        // we had a force refresh button
+        showRefreshButton = true;
     }
 
     if(cutoffArray.Length == 0){
@@ -122,6 +139,14 @@ void Render() {
         }
 
         UI::EndTable();
+
+        if(showRefreshButton && showRefreshButtonSetting){
+            if(UI::Button("Refresh")){
+                if(!refreshPosition){
+                    refreshPosition = true;
+                }
+            }
+        }
 
         UI::EndGroup();
 

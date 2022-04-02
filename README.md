@@ -9,7 +9,12 @@ If you have any ideas for features, i'd be happy to hear them ! (you can use the
 Please open an issue if you see any trouble.
 
 # Changelog
-## 1.3.2
+## 1.3.4
+- Remade the menu to add a Hide/Show button and a force refresh button
+- Added an option for a refresh button on the UI
+- Fixed a bug linked to the leaderboard not refreshing when playing new maps
+
+## 1.3.3
 - Hotfix 2 Electric boogaloo : Fixed the getter for the local pb and slightly improved the first hotfix
 
 ## 1.3.2
