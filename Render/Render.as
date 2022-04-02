@@ -69,7 +69,7 @@ void Render() {
         if(refreshPosition){
             UI::TableNextColumn();
             UI::TableNextColumn();
-            UI::Text("Refresing...");
+            UI::Text("Refreshing...");
         }
 
         int i = 0;
