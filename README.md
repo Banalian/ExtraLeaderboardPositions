@@ -10,7 +10,7 @@ Please open an issue if you see any trouble.
 
 # Changelog
 ## 1.4.1
-- Fixed a typo (Thanks to D0mm4S for seeing it !)
+- Fixed a few typos (Thanks you D0mm4S for the help !)
 
 ## 1.4
 - Remade the menu to add a Hide/Show button and a force refresh button
