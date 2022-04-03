@@ -4,15 +4,18 @@ Trackmania Next (2020) plugin that allows you to see the times of more key posit
 
 This can be used to see how far approximatly you are from getting a better trophy reward in a TOTD for example.
 
-If you have any ideas for features, i'd be happy to hear them ! (you can use the issues or discord, in the OpenPlanet server)
+If you have any ideas for features, I'd be happy to hear them ! (you can use the issues or discord, in the OpenPlanet server)
 
 Please open an issue if you see any trouble.
 
 # Changelog
+## 1.4.1
+- Fixed a typo (Thanks to D0mm4S for seeing it !)
+
 ## 1.4
 - Remade the menu to add a Hide/Show button and a force refresh button
 - Added an option for a refresh button on the UI
-- Fixed a bug linked to the leaderboard not refreshing when playing new maps
+- Fixed a bug linked to the leaderboard not refreshing correctly when playing new maps
 
 ## 1.3.3
 - Hotfix 2 Electric boogaloo : Fixed the getter for the local pb and slightly improved the first hotfix

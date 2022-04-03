@@ -2,7 +2,7 @@
 void RenderSettingsCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You need at least the standard edition.");
+        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
         return;
     }
 
@@ -58,7 +58,7 @@ void RenderSettingsCustomization(){
 
     UI::Text("\n\tPositions customizations");
 
-    UI::Text("It will update the UI when the usual conditions are met (see Explanation) or if you press the refresh button.");
+    UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
@@ -94,8 +94,8 @@ void RenderSettingsCustomization(){
 
 [SettingsTab name="Explanation"]
 void RenderSettingsExplanation(){
-    UI::Text("This plugin allows you to see more leaderbaord position.\n\n");
-    UI::Text("You can modify the positions in the \"Customization tab\"\n");
+    UI::Text("This plugin allows you to see more leaderboard positions.\n\n");
+    UI::Text("You can modify the positions in the \"Customization\" tab\n");
     UI::Text("The leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
     UI::Text("This timer resets when you leave the map.");
     UI::Text("It is also automatically refreshed when you join a map, or if you set a new pb on a map.");;
