@@ -11,6 +11,7 @@ Please open an issue if you see any trouble.
 # Changelog
 ## 1.4.1
 - Fixed a few typos (Thanks you D0mm4S for the help !)
+- Added different display mode like hide when interface is hidden, or hide when driving
 
 ## 1.4
 - Remade the menu to add a Hide/Show button and a force refresh button
