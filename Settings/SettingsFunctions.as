@@ -33,6 +33,10 @@ void OnSettingsChanged(){
         currentComboChoice = -1;
     }
 
+    if(hiddingSpeedSetting < 0){
+        hiddingSpeedSetting = 0;
+    }
+
 }
 
 void OnSettingsSave(Settings::Section& section){

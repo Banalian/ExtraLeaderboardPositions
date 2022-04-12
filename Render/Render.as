@@ -37,7 +37,7 @@ void Render() {
         auto state = VehicleState::ViewingPlayerState();
         if(state is null) return;
         float currentSpeed = state.WorldVel.Length() * 3.6;
-        if(currentSpeed > 1) return;
+        if(currentSpeed >= hiddingSpeedSetting) return;
 
         RenderWindows();
     }

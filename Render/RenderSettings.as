@@ -14,6 +14,12 @@ void RenderSettingsCustomization(){
 
     showRefreshButtonSetting = UI::Checkbox("Add refresh button to UI (only appears when OP Overlay is on)", showRefreshButtonSetting);
 
+    UI::Text("\tDisplay mode customizations");
+
+    hiddingSpeedSetting = UI::InputFloat("Hide if speed is above X (if the hide when driving mode is active)", hiddingSpeedSetting);
+    if(hiddingSpeedSetting < 0){
+        hiddingSpeedSetting = 0;
+    }
 
     UI::Text("\tTimer");
 

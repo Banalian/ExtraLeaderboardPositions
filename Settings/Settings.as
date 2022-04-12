@@ -8,6 +8,9 @@ bool windowVisible = true;
 [Setting category="Display Settings" name="Display mode" description="When should the overlay be displayed?"]
 EnumDisplayMode displayMode = EnumDisplayMode::ALWAYS;
 
+[Setting hidden]
+float hiddingSpeedSetting = 1.0f;
+
 [Setting hidden name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
 
