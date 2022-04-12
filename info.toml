@@ -2,10 +2,10 @@
 name     = "Extra Leaderboard Positions"
 author   = "Banalian"
 category = "Race"
-version  = "1.4"
+version  = "1.4.1"
 siteid = 169
 
 
 [script]
-dependencies = [ "NadeoServices" ]
+dependencies = [ "NadeoServices", "VehicleState" ]
 imports = [ "Time.as", "Permissions.as"]

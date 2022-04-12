@@ -2,6 +2,16 @@
 // ### Consts and vars ###
 // #######################
 
+
+enum EnumDisplayMode
+{
+    ALWAYS,
+    ALWAYS_EXCEPT_IF_HIDDEN_INTERFACE,
+    ONLY_IF_OPENPLANET_MENU_IS_OPEN,
+    HIDE_WHEN_DRIVING
+};
+
+
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
     "\\$db4" + Icons::Kenney::PodiumAlt, // 10th and below : gold
