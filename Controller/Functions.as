@@ -94,7 +94,38 @@ CutoffTime@ GetPersonalBest() {
                 auto top = tops[0]["top"];
                 if(top.Length > 0) {
                     pbTimeTmp.time = top[0]["score"];
+                    pbTimeTmp.position = top[0]["position"];
                     currentPbTime = pbTimeTmp.time;
+                    currentPbPosition = pbTimeTmp.position;
+                }
+            }
+        }
+    }
+
+    return pbTimeTmp;
+}
+
+// Return the position of a given time. You still need to check if the time is valid (i.e. if it's different from the top 1, or from the PB)
+CutoffTime@ GetSpecificTimePosition(int time) {
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+    CutoffTime@ pbTimeTmp = CutoffTime();
+    pbTimeTmp.time = -1;
+    pbTimeTmp.position = -1;
+    pbTimeTmp.pb = false;
+
+    //check that we're in a map
+    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+        
+        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
+    
+        if(info.GetType() != Json::Type::Null) {
+            auto tops = info["tops"];
+            if(tops.GetType() == Json::Type::Array) {
+                auto top = tops[0]["top"];
+                if(top.Length > 0) {
+                    pbTimeTmp.time = top[0]["score"];
                     pbTimeTmp.position = top[0]["position"];
                 }
             }
@@ -104,6 +135,74 @@ CutoffTime@ GetPersonalBest() {
     return pbTimeTmp;
 }
 
+bool isAValidMedalTime(CutoffTime@ time) {
+    if(time.position == -1 && time.time == -1) {
+        return false;
+    }
+
+    if(time.position == currentPbPosition && time.time == currentPbTime) {
+        return false;
+    }
+
+    // We consider that if the position is 1, it's either below the WR, or the WR is the only one with that medal
+    if(time.position == 1) {
+        return false;
+    }
+
+    return true;
+}
+
+
+void AddMedalsPosition(){
+    // We get the medals time
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+    auto map = app.RootMap;
+
+    array<CutoffTime@> cutoffArrayTmp;
+    int atTime;
+    int goldTime;
+    int silverTime;
+    int bronzeTime;
+
+    if(network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        atTime = map.TMObjective_AuthorTime;
+        goldTime = map.TMObjective_GoldTime;
+		silverTime = map.TMObjective_SilverTime;
+		bronzeTime = map.TMObjective_BronzeTime;
+
+        // We get the positions of the 4 medals
+        auto atPosition = GetSpecificTimePosition(atTime);
+        atPosition.desc = "AT";
+        auto goldPosition = GetSpecificTimePosition(goldTime);
+        goldPosition.desc = "Gold";
+        auto silverPosition = GetSpecificTimePosition(silverTime);
+        silverPosition.desc = "Silver";
+        auto bronzePosition = GetSpecificTimePosition(bronzeTime);
+        bronzePosition.desc = "Bronze";
+
+        // If the medal is valid, we add it to the array
+        if(isAValidMedalTime(atPosition)) {
+            cutoffArrayTmp.InsertLast(atPosition);
+        }
+        if(isAValidMedalTime(goldPosition)) {
+            cutoffArrayTmp.InsertLast(goldPosition);
+        }
+        if(isAValidMedalTime(silverPosition)) {
+            cutoffArrayTmp.InsertLast(silverPosition);
+        }
+        if(isAValidMedalTime(bronzePosition)) {
+            cutoffArrayTmp.InsertLast(bronzePosition);
+        }
+
+        // We then add the array to the general array
+        for(uint i = 0; i < cutoffArrayTmp.Length; i++) {
+            cutoffArray.InsertLast(cutoffArrayTmp[i]);
+        }
+        cutoffArray.SortAsc();
+    }
+
+}
 
 void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
@@ -146,4 +245,6 @@ void UpdateTimes(){
     //sort the array
     cutoffArrayTmp.SortAsc();
     cutoffArray = cutoffArrayTmp;
+
+    AddMedalsPosition();
 }

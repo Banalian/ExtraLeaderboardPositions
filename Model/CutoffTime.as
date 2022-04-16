@@ -2,13 +2,15 @@
 class CutoffTime{
 
     // the time of the player
-    int time;
+    int time = -1;
 
     // the position of the player in the leaderboard
-    int position;
+    int position = -1;
 
     // true if it's a personal best, false otherwise
     bool pb = false;
+
+    string desc = "";
 
     // Comparaison operator
     int opCmp(CutoffTime@ other){

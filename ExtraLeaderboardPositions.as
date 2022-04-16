@@ -42,6 +42,7 @@ array<int> allPositionToGet = {};
 array<CutoffTime@> cutoffArray;
 CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
+int currentPbPosition = -1;
 
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
