@@ -18,6 +18,18 @@ int refreshTimer = 5;
 bool showPb = true;
 
 [Setting hidden]
+bool showMedals = true;
+
+[Setting hidden]
+bool showAT = true;
+[Setting hidden]
+bool showGold = true;
+[Setting hidden]
+bool showSilver = true;
+[Setting hidden]
+bool showBronze = true;
+
+[Setting hidden]
 bool showRefreshButtonSetting = true;
 
 [Setting hidden]

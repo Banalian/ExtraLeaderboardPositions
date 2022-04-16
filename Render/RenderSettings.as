@@ -29,6 +29,18 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::Text("\n\tMedals");
+
+    showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
+
+    if(showMedals){
+        showAT = UI::Checkbox("Show AT", showAT);
+        showGold = UI::Checkbox("Show Gold", showGold);
+        showSilver = UI::Checkbox("Show Silver", showSilver);
+        showBronze = UI::Checkbox("Show Bronze", showBronze);
+    }
+
+
     UI::Text("\n\tTime difference");
     showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
     if(showTimeDifference){
