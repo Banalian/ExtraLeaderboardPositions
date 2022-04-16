@@ -14,6 +14,9 @@ class CutoffTime{
 
     // Comparaison operator
     int opCmp(CutoffTime@ other){
-        return position - other.position;
+        if(position - other.position != 0)
+            return position - other.position;
+        else
+            return time - other.time;
     }
 }

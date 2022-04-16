@@ -40,6 +40,7 @@ array<int> allPositionToGet = {};
 
 
 array<CutoffTime@> cutoffArray;
+array<CutoffTime@> cutoffArrayTmp;
 CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
 int currentPbPosition = -1;

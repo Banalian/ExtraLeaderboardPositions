@@ -137,8 +137,8 @@ void RenderTab(){
 
         //------------IS PB----------------
         UI::TableNextColumn();
-        if(cutoffArray[i].pb){
-            UI::Text("PB");
+        if(cutoffArray[i].desc != ""){
+            UI::Text(cutoffArray[i].desc);
         }
         
         //------------TIME DIFFERENCE------

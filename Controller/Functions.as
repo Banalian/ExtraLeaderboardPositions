@@ -81,6 +81,7 @@ CutoffTime@ GetPersonalBest() {
     pbTimeTmp.time = -1;
     pbTimeTmp.position = -1;
     pbTimeTmp.pb = true;
+    pbTimeTmp.desc = "PB";
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
@@ -127,6 +128,7 @@ CutoffTime@ GetSpecificTimePosition(int time) {
                 if(top.Length > 0) {
                     pbTimeTmp.time = top[0]["score"];
                     pbTimeTmp.position = top[0]["position"];
+                    pbTimeTmp.position -= 1;
                 }
             }
         }
@@ -140,12 +142,12 @@ bool isAValidMedalTime(CutoffTime@ time) {
         return false;
     }
 
-    if(time.position == currentPbPosition && time.time == currentPbTime) {
+    if(time.position == (currentPbPosition -1) && time.time == currentPbTime) {
         return false;
     }
 
-    // We consider that if the position is 1, it's either below the WR, or the WR is the only one with that medal
-    if(time.position == 1) {
+    // We consider that if the position is 0, it's either below the WR, or the WR is the only one with that medal
+    if(time.position == 0) {
         return false;
     }
 
@@ -159,7 +161,6 @@ void AddMedalsPosition(){
     auto network = cast<CTrackManiaNetwork>(app.Network);
     auto map = app.RootMap;
 
-    array<CutoffTime@> cutoffArrayTmp;
     int atTime;
     int goldTime;
     int silverTime;
@@ -195,18 +196,13 @@ void AddMedalsPosition(){
             cutoffArrayTmp.InsertLast(bronzePosition);
         }
 
-        // We then add the array to the general array
-        for(uint i = 0; i < cutoffArrayTmp.Length; i++) {
-            cutoffArray.InsertLast(cutoffArrayTmp[i]);
-        }
-        cutoffArray.SortAsc();
     }
 
 }
 
 void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
-    array<CutoffTime@> cutoffArrayTmp;
+    cutoffArrayTmp = array<CutoffTime@>();
 
     cutoffArrayTmp.InsertLast(GetPersonalBest());
 
@@ -242,9 +238,10 @@ void UpdateTimes(){
             }
         }
     }
+    
+    AddMedalsPosition();
+    
     //sort the array
     cutoffArrayTmp.SortAsc();
     cutoffArray = cutoffArrayTmp;
-
-    AddMedalsPosition();
 }
