@@ -58,8 +58,7 @@ void RenderInterface(){
 
 void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
-    auto network = cast<CTrackManiaNetwork>(app.Network);
-
+    
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
     bool showRefreshButton = false;
 
