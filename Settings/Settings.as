@@ -17,6 +17,7 @@ int refreshTimer = 5;
 [Setting hidden]
 bool showPb = true;
 
+
 [Setting hidden]
 bool showMedals = true;
 
@@ -28,6 +29,10 @@ bool showGold = true;
 bool showSilver = true;
 [Setting hidden]
 bool showBronze = true;
+
+[Setting hidden]
+EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
+
 
 [Setting hidden]
 bool showRefreshButtonSetting = true;

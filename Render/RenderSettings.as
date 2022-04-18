@@ -1,3 +1,5 @@
+
+
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
 
@@ -28,17 +30,6 @@ void RenderSettingsCustomization(){
     UI::Text("\n\tPersonal best");
 
     showPb = UI::Checkbox("Show personal best", showPb);
-
-    UI::Text("\n\tMedals");
-
-    showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
-
-    if(showMedals){
-        showAT = UI::Checkbox("Show AT", showAT);
-        showGold = UI::Checkbox("Show Gold", showGold);
-        showSilver = UI::Checkbox("Show Silver", showSilver);
-        showBronze = UI::Checkbox("Show Bronze", showBronze);
-    }
 
 
     UI::Text("\n\tTime difference");
@@ -121,3 +112,4 @@ void RenderSettingsExplanation(){
     UI::Dummy(vec2(0,150));
     UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
 }
+

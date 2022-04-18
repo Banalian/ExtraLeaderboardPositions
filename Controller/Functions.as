@@ -177,34 +177,47 @@ void AddMedalsPosition(){
 
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
         if(showAT){
-            auto atPosition = GetSpecificTimePosition(atTime);
-            atPosition.desc = "AT";
-            if(isAValidMedalTime(atPosition)) {
-                cutoffArrayTmp.InsertLast(atPosition);
+            if(atTime < currentPbTime || currentPbTime == -1){
+                auto atPosition = GetSpecificTimePosition(atTime);
+                atPosition.desc = "AT";
+                atPosition.isMedal = true;
+                if(isAValidMedalTime(atPosition)) {
+                    cutoffArrayTmp.InsertLast(atPosition);
+                }
             }
+            
         }
 
         if(showGold){
-            auto goldPosition = GetSpecificTimePosition(goldTime);
-            goldPosition.desc = "Gold";
-            if(isAValidMedalTime(goldPosition)) {
-                cutoffArrayTmp.InsertLast(goldPosition);
+            if(goldTime < currentPbTime || currentPbTime == -1){
+                auto goldPosition = GetSpecificTimePosition(goldTime);
+                goldPosition.desc = "Gold";
+                goldPosition.isMedal = true;
+                if(isAValidMedalTime(goldPosition)) {
+                    cutoffArrayTmp.InsertLast(goldPosition);
+                }
             }
         }
 
         if(showSilver){
-            auto silverPosition = GetSpecificTimePosition(silverTime);
-            silverPosition.desc = "Silver";
-            if(isAValidMedalTime(silverPosition)) {
-                cutoffArrayTmp.InsertLast(silverPosition);
+            if(silverTime < currentPbTime || currentPbTime == -1){
+                auto silverPosition = GetSpecificTimePosition(silverTime);
+                silverPosition.desc = "Silver";
+                silverPosition.isMedal = true;
+                if(isAValidMedalTime(silverPosition)) {
+                    cutoffArrayTmp.InsertLast(silverPosition);
+                }
             }
         }
 
         if(showBronze){
-            auto bronzePosition = GetSpecificTimePosition(bronzeTime);
-            bronzePosition.desc = "Bronze";
-            if(isAValidMedalTime(bronzePosition)) {
-                cutoffArrayTmp.InsertLast(bronzePosition);
+            if(bronzeTime < currentPbTime || currentPbTime == -1){
+                auto bronzePosition = GetSpecificTimePosition(bronzeTime);
+                bronzePosition.desc = "Bronze";
+                bronzePosition.isMedal = true;
+                if(isAValidMedalTime(bronzePosition)) {
+                    cutoffArrayTmp.InsertLast(bronzePosition);
+                }
             }
         }
 

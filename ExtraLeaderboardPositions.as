@@ -11,6 +11,12 @@ enum EnumDisplayMode
     HIDE_WHEN_DRIVING
 };
 
+enum EnumDisplayMedal
+{
+    NORMAL,
+    IN_GREY
+};
+
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
@@ -26,6 +32,7 @@ const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; 
 const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
+const string greyColor = "\\$888";
 
 const string pluginName = "Extra Leaderboard positions";
 

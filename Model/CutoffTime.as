@@ -10,6 +10,10 @@ class CutoffTime{
     // true if it's a personal best, false otherwise
     bool pb = false;
 
+    // true if it's a medal, false otherwise
+    bool isMedal = false;
+
+    // really short description of the record
     string desc = "";
 
     // Comparaison operator

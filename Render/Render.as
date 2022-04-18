@@ -118,6 +118,21 @@ void RenderTab(){
             continue;
         }
 
+        // If the current record is a medal one, we make a display string based on the display mode
+        string displayString = "";
+
+        if(cutoffArray[i].isMedal){
+            switch(medalDisplayMode){
+                case EnumDisplayMedal::NORMAL:
+                    break;
+                case EnumDisplayMedal::IN_GREY:
+                    displayString = greyColor;
+                    break;                   
+                default:
+                    break;
+            }
+        }
+
         //------------POSITION ICON--------
         UI::TableNextRow();
         UI::TableNextColumn();
@@ -126,19 +141,19 @@ void RenderTab(){
         //------------POSITION-------------
         UI::TableNextColumn();
         if(cutoffArray[i].position > 10000){
-            UI::Text("<" + cutoffArray[i].position);
+            UI::Text(displayString + "<" + cutoffArray[i].position);
         }else{
-            UI::Text(""+ cutoffArray[i].position);
+            UI::Text(displayString + "" + cutoffArray[i].position);
         }
         
         //------------TIME-----------------
         UI::TableNextColumn();
-        UI::Text(TimeString(cutoffArray[i].time));
+        UI::Text(displayString + TimeString(cutoffArray[i].time));
 
-        //------------IS PB----------------
+        //------------HAS DESC-------------
         UI::TableNextColumn();
         if(cutoffArray[i].desc != ""){
-            UI::Text(cutoffArray[i].desc);
+            UI::Text(displayString + cutoffArray[i].desc);
         }
         
         //------------TIME DIFFERENCE------
