@@ -50,7 +50,25 @@ string TimeString(int scoreTime, bool showSign = false) {
     return timeString;
 }
 
+bool mapHasNadeoLeaderboard(string mapId){
+    auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/map/" + mapId);
+
+    if(info.GetType() != Json::Type::Null){
+        if(info.GetType() == Json::Type::Array){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int GetTimeWithOffset(float offset = 0) {
+
+    if(!validMap){
+        return -1;
+    }
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
@@ -83,6 +101,10 @@ CutoffTime@ GetPersonalBest() {
     pbTimeTmp.pb = true;
     pbTimeTmp.desc = "PB";
 
+    if(!validMap){
+        return pbTimeTmp;
+    }
+
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
@@ -114,6 +136,10 @@ CutoffTime@ GetSpecificTimePosition(int time) {
     pbTimeTmp.time = -1;
     pbTimeTmp.position = -1;
     pbTimeTmp.pb = false;
+
+    if(!validMap){
+        return pbTimeTmp;
+    }
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
@@ -225,7 +251,7 @@ void AddMedalsPosition(){
 
 }
 
-void UpdateTimes(){
+void UpdateTimes(){    
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 

@@ -55,6 +55,8 @@ int currentPbPosition = -1;
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
 
+bool validMap = false;
+
 // ############################## MAIN #############################
 
 
@@ -98,7 +100,16 @@ void Main(){
 
         //if we're on a new map or the timer is over, we update the times
         if(refreshPosition){
-            UpdateTimes();
+            //check that we're in a map
+            if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+                string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+                if(mapHasNadeoLeaderboard(mapid)){
+                    validMap = true;
+                    UpdateTimes();
+                }else{
+                    validMap = false;
+                }
+            }
             refreshPosition = false;
         }
         yield();
