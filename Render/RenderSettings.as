@@ -1,5 +1,3 @@
-
-
 [SettingsTab name="Customization"]
 void RenderSettingsCustomization(){
 
@@ -113,3 +111,53 @@ void RenderSettingsExplanation(){
     UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter.");
 }
 
+[SettingsTab name="Medals Position"]
+void RenderMedalSettings(){
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        return;
+    }
+
+    if(UI::Button("Reset to default")){
+        showMedals = true;
+        showAT = true;
+        showGold = true;
+        showSilver = true;
+        showBronze = true;
+        medalDisplayMode = EnumDisplayMedal::NORMAL;
+    }
+    showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
+
+    if(showMedals){
+        showAT = UI::Checkbox("Show AT", showAT);
+        showGold = UI::Checkbox("Show Gold", showGold);
+        showSilver = UI::Checkbox("Show Silver", showSilver);
+        showBronze = UI::Checkbox("Show Bronze", showBronze);
+    }
+
+    UI::Text("\n\tAppearance");
+
+    // Show it as normal, greyed out and/or italic
+    string comboTitle = "Invalid state";
+
+    switch(medalDisplayMode){
+        case EnumDisplayMedal::NORMAL:
+            comboTitle = "Normal";
+            break;
+        case EnumDisplayMedal::IN_GREY:
+            comboTitle = "In grey";
+            break;
+    }
+
+    if(UI::BeginCombo("Medal display mode", comboTitle)){
+        if(UI::Selectable("Normal", medalDisplayMode == EnumDisplayMedal::NORMAL)){
+            medalDisplayMode = EnumDisplayMedal::NORMAL;
+        }
+        if(UI::Selectable("In grey", medalDisplayMode == EnumDisplayMedal::IN_GREY)){
+            medalDisplayMode = EnumDisplayMedal::IN_GREY;
+        }
+
+        UI::EndCombo();
+    }
+
+}
