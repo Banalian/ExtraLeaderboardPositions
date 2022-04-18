@@ -108,6 +108,9 @@ void Main(){
                     UpdateTimes();
                 }else{
                     validMap = false;
+                    if(cutoffArray.Length > 0){
+                        cutoffArray = array<CutoffTime@>();
+                    }
                 }
             }
             refreshPosition = false;
