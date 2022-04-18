@@ -11,6 +11,12 @@ enum EnumDisplayMode
     HIDE_WHEN_DRIVING
 };
 
+enum EnumDisplayMedal
+{
+    NORMAL,
+    IN_GREY
+};
+
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
@@ -26,6 +32,7 @@ const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; 
 const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
+const string greyColor = "\\$888";
 
 const string pluginName = "Extra Leaderboard positions";
 
@@ -40,11 +47,15 @@ array<int> allPositionToGet = {};
 
 
 array<CutoffTime@> cutoffArray;
+array<CutoffTime@> cutoffArrayTmp;
 CutoffTime@ timeDifferenceCutoff = CutoffTime();
 int currentPbTime = -1;
+int currentPbPosition = -1;
 
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
+
+bool validMap = false;
 
 // ############################## MAIN #############################
 
@@ -89,7 +100,16 @@ void Main(){
 
         //if we're on a new map or the timer is over, we update the times
         if(refreshPosition){
-            UpdateTimes();
+            //check that we're in a map
+            if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+                string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+                if(mapHasNadeoLeaderboard(mapid)){
+                    validMap = true;
+                    UpdateTimes();
+                }else{
+                    validMap = false;
+                }
+            }
             refreshPosition = false;
         }
         yield();

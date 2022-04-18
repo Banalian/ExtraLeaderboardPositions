@@ -9,6 +9,10 @@ If you have any ideas for features, I'd be happy to hear them ! (you can use the
 Please open an issue if you see any trouble.
 
 # Changelog
+## 1.5
+Medals positions
+- Added medals position, telling you where that medal time would be in the leaderboard (to get an idea of how hard an AT is for example)
+
 ## 1.4.1
 - Fixed a few typos (Thanks you D0mm4S for the help !)
 - Added different display mode like hide when interface is hidden, or hide when driving

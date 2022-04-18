@@ -2,16 +2,25 @@
 class CutoffTime{
 
     // the time of the player
-    int time;
+    int time = -1;
 
     // the position of the player in the leaderboard
-    int position;
+    int position = -1;
 
     // true if it's a personal best, false otherwise
     bool pb = false;
 
+    // true if it's a medal, false otherwise
+    bool isMedal = false;
+
+    // really short description of the record
+    string desc = "";
+
     // Comparaison operator
     int opCmp(CutoffTime@ other){
-        return position - other.position;
+        if(position - other.position != 0)
+            return position - other.position;
+        else
+            return time - other.time;
     }
 }

@@ -46,6 +46,9 @@ void Update(float dt) {
 }
 
 bool newPBSet(int timePbLocal) {
+    if(!validMap){
+        return false;
+    }
     bool isLocalPbDifferent = timePbLocal != currentPbTime;
     if(isLocalPbDifferent){
         if(timePbLocal == -1){
