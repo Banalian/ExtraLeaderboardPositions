@@ -8,6 +8,8 @@ If you have any ideas for features, I'd be happy to hear them ! (you can use the
 
 Please open an issue if you see any trouble.
 
+Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
+
 # Changelog
 ## 1.5
 Medals positions
