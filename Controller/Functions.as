@@ -50,18 +50,10 @@ string TimeString(int scoreTime, bool showSign = false) {
     return timeString;
 }
 
-bool mapHasNadeoLeaderboard(string mapId){
+bool MapHasNadeoLeaderboard(string mapId){
     auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/map/" + mapId);
 
-    if(info.GetType() != Json::Type::Null){
-        if(info.GetType() == Json::Type::Array){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    return false;
+    return info.GetType() == Json::Type::Object;
 }
 
 int GetTimeWithOffset(float offset = 0) {

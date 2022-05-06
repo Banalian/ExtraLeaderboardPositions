@@ -103,7 +103,7 @@ void Main(){
             //check that we're in a map
             if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
                 string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-                if(mapHasNadeoLeaderboard(mapid)){
+                if(MapHasNadeoLeaderboard(mapid)){
                     validMap = true;
                     UpdateTimes();
                 }else{
