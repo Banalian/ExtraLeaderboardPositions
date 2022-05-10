@@ -44,7 +44,7 @@ string TimeString(int scoreTime, bool showSign = false) {
             timeString += "+";
         }
     }
-    
+
     timeString += Time::Format(Math::Abs(scoreTime));
 
     return timeString;
@@ -68,7 +68,7 @@ int GetTimeWithOffset(float offset = 0) {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -77,7 +77,7 @@ int GetTimeWithOffset(float offset = 0) {
                     int infoTop = top[0]["score"];
                     return infoTop;
                 }
-            }            
+            }
         }
     }
 
@@ -100,9 +100,9 @@ CutoffTime@ GetPersonalBest() {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
+
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -136,9 +136,9 @@ CutoffTime@ GetSpecificTimePosition(int time) {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
+
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -149,6 +149,53 @@ CutoffTime@ GetSpecificTimePosition(int time) {
                 }
             }
         }
+    }
+
+    return pbTimeTmp;
+}
+
+CutoffTime@ GetSlowest() {
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+    CutoffTime@ pbTimeTmp = CutoffTime();
+    pbTimeTmp.time = -1;
+    pbTimeTmp.position = -1;
+    pbTimeTmp.pb = false;
+
+    if(!validMap){
+        return pbTimeTmp;
+    }
+
+    //check that we're in a map
+    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+        int offset = 1000000;
+        auto lastTops = Json::Array();
+        int i = 0;
+        while(lastTops.get_Length() == 0 && i < 10){
+            print(offset);
+            i++;
+
+            auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+            if(info.GetType() != Json::Type::Null) {
+                auto tops = info["tops"];
+                if(tops.GetType() == Json::Type::Array) {
+                    if(tops.get_Length() > 0){
+                        lastTops = tops[0]["top"];
+                        print(tops[0].get_Length());
+                    }
+                }
+            }
+            print(Json::Write(lastTops));
+            offset = offset / 2;
+        }
+        print(Json::Write(lastTops));
+        if(lastTops.Length > 0) {
+            pbTimeTmp.time = lastTops[0]["score"];
+            pbTimeTmp.position = lastTops[0]["position"];
+        }
+
+
     }
 
     return pbTimeTmp;
@@ -203,7 +250,7 @@ void AddMedalsPosition(){
                     cutoffArrayTmp.InsertLast(atPosition);
                 }
             }
-            
+
         }
 
         if(showGold){
@@ -243,11 +290,12 @@ void AddMedalsPosition(){
 
 }
 
-void UpdateTimes(){    
+void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
     cutoffArrayTmp.InsertLast(GetPersonalBest());
+    cutoffArrayTmp.InsertLast(GetSlowest());
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
@@ -267,7 +315,7 @@ void UpdateTimes(){
         }
     }
 
-    
+
     if(currentComboChoice == -1){
         timeDifferenceCutoff = cutoffArrayTmp[0];
     }else{
@@ -281,9 +329,9 @@ void UpdateTimes(){
             }
         }
     }
-    
+
     AddMedalsPosition();
-    
+
     //sort the array
     cutoffArrayTmp.SortAsc();
     cutoffArray = cutoffArrayTmp;
