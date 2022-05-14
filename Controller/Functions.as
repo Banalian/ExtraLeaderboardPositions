@@ -217,7 +217,7 @@ bool isAValidMedalTime(CutoffTime@ time) {
 }
 
 
-void AddMedalsPosition(){
+void AddMedalsPosition(uint totalPositions){
 
     if(!showMedals){
         return;
@@ -243,6 +243,7 @@ void AddMedalsPosition(){
             if(atTime < currentPbTime || currentPbTime == -1){
                 auto atPosition = GetSpecificTimePosition(atTime);
                 atPosition.desc = "AT";
+                atPosition.percentage = ((100.0f * atPosition.position) / totalPositions);
                 atPosition.isMedal = true;
                 if(isAValidMedalTime(atPosition)) {
                     cutoffArrayTmp.InsertLast(atPosition);
@@ -255,6 +256,7 @@ void AddMedalsPosition(){
             if(goldTime < currentPbTime || currentPbTime == -1){
                 auto goldPosition = GetSpecificTimePosition(goldTime);
                 goldPosition.desc = "Gold";
+                goldPosition.percentage = ((100.0f * goldPosition.position) / totalPositions);
                 goldPosition.isMedal = true;
                 if(isAValidMedalTime(goldPosition)) {
                     cutoffArrayTmp.InsertLast(goldPosition);
@@ -266,6 +268,7 @@ void AddMedalsPosition(){
             if(silverTime < currentPbTime || currentPbTime == -1){
                 auto silverPosition = GetSpecificTimePosition(silverTime);
                 silverPosition.desc = "Silver";
+                silverPosition.percentage = ((100.0f * silverPosition.position) / totalPositions);
                 silverPosition.isMedal = true;
                 if(isAValidMedalTime(silverPosition)) {
                     cutoffArrayTmp.InsertLast(silverPosition);
@@ -277,6 +280,7 @@ void AddMedalsPosition(){
             if(bronzeTime < currentPbTime || currentPbTime == -1){
                 auto bronzePosition = GetSpecificTimePosition(bronzeTime);
                 bronzePosition.desc = "Bronze";
+                bronzePosition.percentage = ((100.0f * bronzePosition.position) / totalPositions);
                 bronzePosition.isMedal = true;
                 if(isAValidMedalTime(bronzePosition)) {
                     cutoffArrayTmp.InsertLast(bronzePosition);
@@ -299,9 +303,12 @@ void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
-    cutoffArrayTmp.InsertLast(GetPersonalBest());
-
     int slowestPos = GetSlowestPos();
+
+    auto personalBest = GetPersonalBest();
+    personalBest.percentage = (100.0f * personalBest.position / slowestPos);
+    cutoffArrayTmp.InsertLast(personalBest);
+
     print(slowestPos);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
@@ -314,6 +321,7 @@ void UpdateTimes(){
         int offset = position - 1;
 
         best.position = position;
+        best.percentage = ((100.0f * position) / slowestPos);
 
         best.time = GetTimeWithOffset(offset);
 
@@ -330,7 +338,7 @@ void UpdateTimes(){
         best.time = -1;
         best.position = -1;
         best.pb = false;
-        best.desc = (extraPosPercentage[i]) + "%";
+        best.percentage = extraPosPercentage[i];
 
         int position = slowestPos * extraPosPercentage[i] / 100;
         int offset = position - 1;
@@ -359,7 +367,7 @@ void UpdateTimes(){
         }
     }
 
-    AddMedalsPosition();
+    AddMedalsPosition(slowestPos);
 
     //sort the array
     cutoffArrayTmp.SortAsc();
