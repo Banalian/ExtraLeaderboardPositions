@@ -177,8 +177,7 @@ CutoffTime@ GetSpecificTimePosition(int time) {
 }
 
 
-// Return the position of a given time. You still need to check if the time is valid (i.e. if it's different from the top 1, or from the PB)
-int GetSlowestPos() {
+int GetTotalPlayers() {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
@@ -191,11 +190,10 @@ int GetSlowestPos() {
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
 
         auto info = GetTMIOAsync("https://trackmania.io" + "/api/leaderboard/map/" + mapid);
-        //print(Json::Write(info));
-            if(info.GetType() != Json::Type::Null) {
+        if(info.GetType() != Json::Type::Null) {
             return info["playercount"];
-                    }
-                }
+        }
+    }
     return -1;
 }
 
@@ -303,13 +301,13 @@ void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
-    int slowestPos = GetSlowestPos();
+    int totalPlayers = GetTotalPlayers();
 
     auto personalBest = GetPersonalBest();
-    personalBest.percentage = (100.0f * personalBest.position / slowestPos);
+    personalBest.percentage = (100.0f * personalBest.position / totalPlayers);
     cutoffArrayTmp.InsertLast(personalBest);
 
-    print(slowestPos);
+    print(totalPlayers);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
@@ -321,7 +319,7 @@ void UpdateTimes(){
         int offset = position - 1;
 
         best.position = position;
-        best.percentage = ((100.0f * position) / slowestPos);
+        best.percentage = ((100.0f * position) / totalPlayers);
 
         best.time = GetTimeWithOffset(offset);
 
@@ -331,7 +329,7 @@ void UpdateTimes(){
     }
 
     int targetsToGet = 3;
-    float pbPercentage = 100.0f * currentPbPosition / slowestPos;
+    float pbPercentage = 100.0f * currentPbPosition / totalPlayers;
     array<float> extraPosPercentage = GetPercentagesAbovePB(3, pbPercentage);
     for(uint i = 0; i< extraPosPercentage.Length; i++){
         CutoffTime@ best = CutoffTime();
@@ -340,7 +338,7 @@ void UpdateTimes(){
         best.pb = false;
         best.percentage = extraPosPercentage[i];
 
-        int position = slowestPos * extraPosPercentage[i] / 100;
+        int position = totalPlayers * extraPosPercentage[i] / 100;
         int offset = position - 1;
 
         best.position = position;
@@ -367,7 +365,17 @@ void UpdateTimes(){
         }
     }
 
-    AddMedalsPosition(slowestPos);
+    AddMedalsPosition(totalPlayers);
+
+    for(uint i = 0; i < cutoffArrayTmp.Length; i++){
+        auto percentage = cutoffArrayTmp[i].percentage;
+        if(percentage % 1 == 0) {
+            cutoffArrayTmp[i].percentageDisplay = Text::Format("%.0f%%", percentage);
+        }
+        else {
+            cutoffArrayTmp[i].percentageDisplay = Text::Format("%.02f%%", percentage);
+        }
+    }
 
     //sort the array
     cutoffArrayTmp.SortAsc();

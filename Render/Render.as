@@ -161,7 +161,7 @@ void RenderTab(){
         //------------%--------------------
         UI::TableNextColumn();
         if(cutoffArray[i].percentage != 0.0f){
-            UI::Text(displayString + Text::Format("%.02f%%", (cutoffArray[i].percentage)));
+            UI::Text(displayString + cutoffArray[i].percentageDisplay);
         }
 
         //------------TIME DIFFERENCE------
