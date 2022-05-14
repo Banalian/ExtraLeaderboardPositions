@@ -45,16 +45,12 @@ Net::HttpRequest@ GetTMIO(const string &in url)
 
 Json::Value GetTMIOAsync(const string &in url)
 {
-    print(url);
     auto req = GetTMIO(url);
     while (!req.Finished()) {
         yield();
     }
-    print(req.ResponseCode());
     return Json::Parse(req.String());
 }
-
-
 
 
 string TimeString(int scoreTime, bool showSign = false) {
@@ -320,8 +316,6 @@ void UpdateTimes(){
     auto personalBest = GetPersonalBest();
     personalBest.percentage = (100.0f * personalBest.position / totalPlayers);
     cutoffArrayTmp.InsertLast(personalBest);
-
-    print(totalPlayers);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
