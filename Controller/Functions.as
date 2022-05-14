@@ -292,9 +292,23 @@ void AddMedalsPosition(uint totalPositions){
 
 array<float> GetPercentagesAbovePB(int targets, float pbPercent){
     float nearest = Math::Floor(pbPercent);
-    float nearestFive = Math::Floor(pbPercent / 5) * 5;
-    int nearestTen = Math::Floor(pbPercent / 10) * 10;
-    return {nearest, nearestFive, nearestTen};
+    if(pbPercent > 10){
+        int nearestFive = Math::Floor(pbPercent / 5) * 5;
+        int nearestTen = nearestFive - 5;
+        return {nearest, nearestFive, nearestTen};
+    }
+    else if (pbPercent > 6){
+        return {nearest, nearest - 1, 5};
+    }
+    else if (pbPercent > 3){
+        return {nearest, nearest - 1, 1};
+    }
+    else if (pbPercent > 2){
+        return {nearest, 1};
+    }
+    else {
+        return {nearest};
+    }
 }
 
 void UpdateTimes(){
@@ -328,25 +342,27 @@ void UpdateTimes(){
         }
     }
 
-    int targetsToGet = 3;
-    float pbPercentage = 100.0f * currentPbPosition / totalPlayers;
-    array<float> extraPosPercentage = GetPercentagesAbovePB(3, pbPercentage);
-    for(uint i = 0; i< extraPosPercentage.Length; i++){
-        CutoffTime@ best = CutoffTime();
-        best.time = -1;
-        best.position = -1;
-        best.pb = false;
-        best.percentage = extraPosPercentage[i];
+    if(addTargetRankings){
+        int targetsToGet = 3;
+        float pbPercentage = 100.0f * currentPbPosition / totalPlayers;
+        array<float> extraPosPercentage = GetPercentagesAbovePB(3, pbPercentage);
+        for(uint i = 0; i< extraPosPercentage.Length; i++){
+            CutoffTime@ best = CutoffTime();
+            best.time = -1;
+            best.position = -1;
+            best.pb = false;
+            best.percentage = extraPosPercentage[i];
 
-        int position = totalPlayers * extraPosPercentage[i] / 100;
-        int offset = position - 1;
+            int position = totalPlayers * extraPosPercentage[i] / 100;
+            int offset = position - 1;
 
-        best.position = position;
+            best.position = position;
 
-        best.time = GetTimeWithOffset(offset);
+            best.time = GetTimeWithOffset(offset);
 
-        if(best.time != -1){
-            cutoffArrayTmp.InsertLast(best);
+            if(best.time != -1){
+                cutoffArrayTmp.InsertLast(best);
+            }
         }
     }
 
