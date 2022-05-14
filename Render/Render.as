@@ -105,9 +105,10 @@ void RenderTab(){
     UI::Text("Time");
     UI::TableNextColumn();
     UI::TableNextColumn();
-    UI::Text("%");
+    if(showRanking){
+        UI::Text("%");
+    }
     if(refreshPosition){
-        UI::TableNextColumn();
         UI::TableNextColumn();
         UI::Text("Refreshing...");
     }
@@ -160,7 +161,7 @@ void RenderTab(){
 
         //------------%--------------------
         UI::TableNextColumn();
-        if(cutoffArray[i].percentage != 0.0f){
+        if(showRanking && cutoffArray[i].percentage != 0.0f){
             UI::Text(displayString + cutoffArray[i].percentageDisplay);
         }
 
