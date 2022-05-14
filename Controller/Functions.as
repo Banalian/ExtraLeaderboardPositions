@@ -288,6 +288,13 @@ void AddMedalsPosition(){
 
 }
 
+array<float> GetPercentagesAbovePB(int targets, float pbPercent){
+    float nearest = Math::Floor(pbPercent);
+    float nearestFive = Math::Floor(pbPercent / 5) * 5;
+    int nearestTen = Math::Floor(pbPercent / 10) * 10;
+    return {nearest, nearestFive, nearestTen};
+}
+
 void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
@@ -315,15 +322,17 @@ void UpdateTimes(){
         }
     }
 
-    array<uint> extraPosToGet = {10, 20, 50, 80, 100};
-    for(uint i = 0; i< extraPosToGet.Length; i++){
+    int targetsToGet = 3;
+    float pbPercentage = 100.0f * currentPbPosition / slowestPos;
+    array<float> extraPosPercentage = GetPercentagesAbovePB(3, pbPercentage);
+    for(uint i = 0; i< extraPosPercentage.Length; i++){
         CutoffTime@ best = CutoffTime();
         best.time = -1;
         best.position = -1;
         best.pb = false;
-        best.desc = extraPosToGet[i] + "%";
+        best.desc = (extraPosPercentage[i]) + "%";
 
-        int position = slowestPos * extraPosToGet[i] / 100;
+        int position = slowestPos * extraPosPercentage[i] / 100;
         int offset = position - 1;
 
         best.position = position;
