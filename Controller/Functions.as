@@ -34,6 +34,28 @@ Json::Value FetchEndpoint(const string &in route) {
     return Json::Parse(req.String());
 }
 
+Net::HttpRequest@ GetTMIO(const string &in url)
+{
+    auto ret = Net::HttpRequest();
+    ret.Method = Net::HttpMethod::Get;
+    ret.Url = url;
+    ret.Start();
+    return ret;
+}
+
+Json::Value GetTMIOAsync(const string &in url)
+{
+    print(url);
+    auto req = GetTMIO(url);
+    while (!req.Finished()) {
+        yield();
+    }
+    print(req.ResponseCode());
+    return Json::Parse(req.String());
+}
+
+
+
 
 string TimeString(int scoreTime, bool showSign = false) {
     string timeString = "";
@@ -154,51 +176,27 @@ CutoffTime@ GetSpecificTimePosition(int time) {
     return pbTimeTmp;
 }
 
-CutoffTime@ GetSlowest() {
+
+// Return the position of a given time. You still need to check if the time is valid (i.e. if it's different from the top 1, or from the PB)
+int GetSlowestPos() {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    CutoffTime@ pbTimeTmp = CutoffTime();
-    pbTimeTmp.time = -1;
-    pbTimeTmp.position = -1;
-    pbTimeTmp.pb = false;
 
     if(!validMap){
-        return pbTimeTmp;
+        return -1;
     }
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        int offset = 1000000;
-        auto lastTops = Json::Array();
-        int i = 0;
-        while(lastTops.get_Length() == 0 && i < 10){
-            print(offset);
-            i++;
 
-            auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+        auto info = GetTMIOAsync("https://trackmania.io" + "/api/leaderboard/map/" + mapid);
+        //print(Json::Write(info));
             if(info.GetType() != Json::Type::Null) {
-                auto tops = info["tops"];
-                if(tops.GetType() == Json::Type::Array) {
-                    if(tops.get_Length() > 0){
-                        lastTops = tops[0]["top"];
-                        print(tops[0].get_Length());
+            return info["playercount"];
                     }
                 }
-            }
-            print(Json::Write(lastTops));
-            offset = offset / 2;
-        }
-        print(Json::Write(lastTops));
-        if(lastTops.Length > 0) {
-            pbTimeTmp.time = lastTops[0]["score"];
-            pbTimeTmp.position = lastTops[0]["position"];
-        }
-
-
-    }
-
-    return pbTimeTmp;
+    return -1;
 }
 
 bool isAValidMedalTime(CutoffTime@ time) {
@@ -295,7 +293,9 @@ void UpdateTimes(){
     cutoffArrayTmp = array<CutoffTime@>();
 
     cutoffArrayTmp.InsertLast(GetPersonalBest());
-    cutoffArrayTmp.InsertLast(GetSlowest());
+
+    int slowestPos = GetSlowestPos();
+    print(slowestPos);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
@@ -304,6 +304,26 @@ void UpdateTimes(){
         best.pb = false;
 
         int position = allPositionToGet[i];
+        int offset = position - 1;
+
+        best.position = position;
+
+        best.time = GetTimeWithOffset(offset);
+
+        if(best.time != -1){
+            cutoffArrayTmp.InsertLast(best);
+        }
+    }
+
+    array<uint> extraPosToGet = {10, 20, 50, 80, 100};
+    for(uint i = 0; i< extraPosToGet.Length; i++){
+        CutoffTime@ best = CutoffTime();
+        best.time = -1;
+        best.position = -1;
+        best.pb = false;
+        best.desc = extraPosToGet[i] + "%";
+
+        int position = slowestPos * extraPosToGet[i] / 100;
         int offset = position - 1;
 
         best.position = position;
