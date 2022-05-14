@@ -11,6 +11,8 @@ void RenderSettingsCustomization(){
         hiddingSpeedSetting = 1.0f;
         refreshTimer = 5;
         showPb = true;
+        showRanking = true;
+        addTargetRankings = true;
         showTimeDifference = true;
         showColoredTimeDifference = true;
         inverseTimeDiffSign = false;
@@ -34,6 +36,9 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::Text("\n\tPercentage ranking");
+    showRanking = UI::Checkbox("Show ranking column", showRanking);
+    addTargetRankings = UI::Checkbox("Add target rankings", addTargetRankings);
 
     UI::Text("\n\tTime difference");
     showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
@@ -63,10 +68,10 @@ void RenderSettingsCustomization(){
             }
             UI::EndCombo();
         }
-            
+
 
     }
-    
+
 }
 
 [SettingsTab name="Explanation"]

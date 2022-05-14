@@ -17,6 +17,10 @@ int refreshTimer = 5;
 [Setting hidden]
 bool showPb = true;
 
+[Setting hidden]
+bool showRanking = true;
+[Setting hidden]
+bool addTargetRankings = true;
 
 [Setting hidden]
 bool showMedals = true;

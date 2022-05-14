@@ -41,8 +41,8 @@ void Render() {
 
         RenderWindows();
     }
-    
-    
+
+
 }
 
 void RenderInterface(){
@@ -58,7 +58,7 @@ void RenderInterface(){
 
 void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
-    
+
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
     bool showRefreshButton = false;
 
@@ -74,7 +74,7 @@ void RenderWindows(){
     if(cutoffArray.Length == 1 && cutoffArray[0].position == -1){
         return;
     }
-        
+
 
     if(windowVisible && app.CurrentPlayground !is null){
         UI::Begin(pluginName, windowFlags);
@@ -82,7 +82,7 @@ void RenderWindows(){
         UI::BeginGroup();
 
         UI::Text("Extra leaderboard positions");
-        
+
         RenderTab();
 
         RenderRefreshButton();
@@ -95,7 +95,7 @@ void RenderWindows(){
 
 // Render the table with the custom leaderboard
 void RenderTab(){
-    UI::BeginTable("Main", 5);        
+    UI::BeginTable("Main", 6);
 
     UI::TableNextRow();
     UI::TableNextColumn();
@@ -103,8 +103,12 @@ void RenderTab(){
     UI::Text("Position");
     UI::TableNextColumn();
     UI::Text("Time");
+    UI::TableNextColumn();
+    UI::TableNextColumn();
+    if(showRanking){
+        UI::Text("%");
+    }
     if(refreshPosition){
-        UI::TableNextColumn();
         UI::TableNextColumn();
         UI::Text("Refreshing...");
     }
@@ -126,7 +130,7 @@ void RenderTab(){
                     break;
                 case EnumDisplayMedal::IN_GREY:
                     displayString = greyColor;
-                    break;                   
+                    break;
                 default:
                     break;
             }
@@ -136,7 +140,7 @@ void RenderTab(){
         UI::TableNextRow();
         UI::TableNextColumn();
         UI::Text(GetIconForPosition(cutoffArray[i].position));
-        
+
         //------------POSITION-------------
         UI::TableNextColumn();
         if(cutoffArray[i].position > 10000){
@@ -144,7 +148,7 @@ void RenderTab(){
         }else{
             UI::Text(displayString + "" + cutoffArray[i].position);
         }
-        
+
         //------------TIME-----------------
         UI::TableNextColumn();
         UI::Text(displayString + TimeString(cutoffArray[i].time));
@@ -154,7 +158,13 @@ void RenderTab(){
         if(cutoffArray[i].desc != ""){
             UI::Text(displayString + cutoffArray[i].desc);
         }
-        
+
+        //------------%--------------------
+        UI::TableNextColumn();
+        if(showRanking && cutoffArray[i].percentage != 0.0f){
+            UI::Text(displayString + cutoffArray[i].percentageDisplay);
+        }
+
         //------------TIME DIFFERENCE------
         UI::TableNextColumn();
 
@@ -167,7 +177,7 @@ void RenderTab(){
             }else{
                 int timeDifference = cutoffArray[i].time - timeDifferenceCutoff.time;
                 string timeDifferenceString = TimeString(Math::Abs(timeDifference));
-                
+
                 if(inverseTimeDiffSign){
                     if(timeDifference < 0){
                         UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
@@ -185,7 +195,7 @@ void RenderTab(){
         }
 
         i++;
-            
+
     }
 
     UI::EndTable();

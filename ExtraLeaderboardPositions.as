@@ -87,7 +87,7 @@ void Main(){
     startupEnded = true;
     // Add the audiences you need
     NadeoServices::AddAudience("NadeoLiveServices");
- 
+
     // Wait until the services are authenticated
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
       yield();

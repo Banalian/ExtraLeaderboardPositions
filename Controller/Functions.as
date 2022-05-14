@@ -34,6 +34,24 @@ Json::Value FetchEndpoint(const string &in route) {
     return Json::Parse(req.String());
 }
 
+Net::HttpRequest@ GetTMIO(const string &in url)
+{
+    auto ret = Net::HttpRequest();
+    ret.Method = Net::HttpMethod::Get;
+    ret.Url = url;
+    ret.Start();
+    return ret;
+}
+
+Json::Value GetTMIOAsync(const string &in url)
+{
+    auto req = GetTMIO(url);
+    while (!req.Finished()) {
+        yield();
+    }
+    return Json::Parse(req.String());
+}
+
 
 string TimeString(int scoreTime, bool showSign = false) {
     string timeString = "";
@@ -44,7 +62,7 @@ string TimeString(int scoreTime, bool showSign = false) {
             timeString += "+";
         }
     }
-    
+
     timeString += Time::Format(Math::Abs(scoreTime));
 
     return timeString;
@@ -68,7 +86,7 @@ int GetTimeWithOffset(float offset = 0) {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -77,7 +95,7 @@ int GetTimeWithOffset(float offset = 0) {
                     int infoTop = top[0]["score"];
                     return infoTop;
                 }
-            }            
+            }
         }
     }
 
@@ -100,9 +118,9 @@ CutoffTime@ GetPersonalBest() {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
+
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -136,9 +154,9 @@ CutoffTime@ GetSpecificTimePosition(int time) {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
+
         auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
-    
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -152,6 +170,27 @@ CutoffTime@ GetSpecificTimePosition(int time) {
     }
 
     return pbTimeTmp;
+}
+
+
+int GetTotalPlayers() {
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+
+    if(!validMap){
+        return -1;
+    }
+
+    //check that we're in a map
+    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+
+        auto info = GetTMIOAsync("https://trackmania.io" + "/api/leaderboard/map/" + mapid);
+        if(info.GetType() != Json::Type::Null) {
+            return info["playercount"];
+        }
+    }
+    return -1;
 }
 
 bool isAValidMedalTime(CutoffTime@ time) {
@@ -172,7 +211,7 @@ bool isAValidMedalTime(CutoffTime@ time) {
 }
 
 
-void AddMedalsPosition(){
+void AddMedalsPosition(uint totalPositions){
 
     if(!showMedals){
         return;
@@ -198,18 +237,20 @@ void AddMedalsPosition(){
             if(atTime < currentPbTime || currentPbTime == -1){
                 auto atPosition = GetSpecificTimePosition(atTime);
                 atPosition.desc = "AT";
+                atPosition.percentage = ((100.0f * atPosition.position) / totalPositions);
                 atPosition.isMedal = true;
                 if(isAValidMedalTime(atPosition)) {
                     cutoffArrayTmp.InsertLast(atPosition);
                 }
             }
-            
+
         }
 
         if(showGold){
             if(goldTime < currentPbTime || currentPbTime == -1){
                 auto goldPosition = GetSpecificTimePosition(goldTime);
                 goldPosition.desc = "Gold";
+                goldPosition.percentage = ((100.0f * goldPosition.position) / totalPositions);
                 goldPosition.isMedal = true;
                 if(isAValidMedalTime(goldPosition)) {
                     cutoffArrayTmp.InsertLast(goldPosition);
@@ -221,6 +262,7 @@ void AddMedalsPosition(){
             if(silverTime < currentPbTime || currentPbTime == -1){
                 auto silverPosition = GetSpecificTimePosition(silverTime);
                 silverPosition.desc = "Silver";
+                silverPosition.percentage = ((100.0f * silverPosition.position) / totalPositions);
                 silverPosition.isMedal = true;
                 if(isAValidMedalTime(silverPosition)) {
                     cutoffArrayTmp.InsertLast(silverPosition);
@@ -232,6 +274,7 @@ void AddMedalsPosition(){
             if(bronzeTime < currentPbTime || currentPbTime == -1){
                 auto bronzePosition = GetSpecificTimePosition(bronzeTime);
                 bronzePosition.desc = "Bronze";
+                bronzePosition.percentage = ((100.0f * bronzePosition.position) / totalPositions);
                 bronzePosition.isMedal = true;
                 if(isAValidMedalTime(bronzePosition)) {
                     cutoffArrayTmp.InsertLast(bronzePosition);
@@ -243,11 +286,36 @@ void AddMedalsPosition(){
 
 }
 
-void UpdateTimes(){    
+array<float> GetPercentagesAbovePB(int targets, float pbPercent){
+    float nearest = Math::Floor(pbPercent);
+    if(pbPercent > 10){
+        int nearestFive = Math::Floor(pbPercent / 5) * 5;
+        int nearestTen = nearestFive - 5;
+        return {nearest, nearestFive, nearestTen};
+    }
+    else if (pbPercent > 6){
+        return {nearest, nearest - 1, 5};
+    }
+    else if (pbPercent > 3){
+        return {nearest, nearest - 1, 1};
+    }
+    else if (pbPercent > 2){
+        return {nearest, 1};
+    }
+    else {
+        return {nearest};
+    }
+}
+
+void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
-    cutoffArrayTmp.InsertLast(GetPersonalBest());
+    int totalPlayers = GetTotalPlayers();
+
+    auto personalBest = GetPersonalBest();
+    personalBest.percentage = (100.0f * personalBest.position / totalPlayers);
+    cutoffArrayTmp.InsertLast(personalBest);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
@@ -259,6 +327,7 @@ void UpdateTimes(){
         int offset = position - 1;
 
         best.position = position;
+        best.percentage = ((100.0f * position) / totalPlayers);
 
         best.time = GetTimeWithOffset(offset);
 
@@ -267,7 +336,31 @@ void UpdateTimes(){
         }
     }
 
-    
+    if(addTargetRankings){
+        int targetsToGet = 3;
+        float pbPercentage = 100.0f * currentPbPosition / totalPlayers;
+        array<float> extraPosPercentage = GetPercentagesAbovePB(3, pbPercentage);
+        for(uint i = 0; i< extraPosPercentage.Length; i++){
+            CutoffTime@ best = CutoffTime();
+            best.time = -1;
+            best.position = -1;
+            best.pb = false;
+            best.percentage = extraPosPercentage[i];
+
+            int position = totalPlayers * extraPosPercentage[i] / 100;
+            int offset = position - 1;
+
+            best.position = position;
+
+            best.time = GetTimeWithOffset(offset);
+
+            if(best.time != -1){
+                cutoffArrayTmp.InsertLast(best);
+            }
+        }
+    }
+
+
     if(currentComboChoice == -1){
         timeDifferenceCutoff = cutoffArrayTmp[0];
     }else{
@@ -281,9 +374,19 @@ void UpdateTimes(){
             }
         }
     }
-    
-    AddMedalsPosition();
-    
+
+    AddMedalsPosition(totalPlayers);
+
+    for(uint i = 0; i < cutoffArrayTmp.Length; i++){
+        auto percentage = cutoffArrayTmp[i].percentage;
+        if(percentage % 1 == 0) {
+            cutoffArrayTmp[i].percentageDisplay = Text::Format("%.0f%%", percentage);
+        }
+        else {
+            cutoffArrayTmp[i].percentageDisplay = Text::Format("%.02f%%", percentage);
+        }
+    }
+
     //sort the array
     cutoffArrayTmp.SortAsc();
     cutoffArray = cutoffArrayTmp;

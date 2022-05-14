@@ -16,6 +16,10 @@ class CutoffTime{
     // really short description of the record
     string desc = "";
 
+    float percentage = 0.0f;
+
+    string percentageDisplay = "";
+
     // Comparaison operator
     int opCmp(CutoffTime@ other){
         if(position - other.position != 0)
