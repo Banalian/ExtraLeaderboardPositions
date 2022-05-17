@@ -262,7 +262,7 @@ void UpdateTimes(){
 
     if(pbTimeTmp.time == lastPbTime) {
         counterTries++;
-        if(counterTries > 5) {
+        if(counterTries > maxTries) {
             failedRefresh = true;
         }
         // we still want to try and get the other times

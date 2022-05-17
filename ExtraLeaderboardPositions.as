@@ -59,6 +59,7 @@ bool validMap = false;
 
 //variables to check that we aren't currently in a "failed request" (server not responding or not updating the pb) to not spam the server
 int counterTries = 0;
+int maxTries = 6;
 bool failedRefresh = false;
 
 // ############################## MAIN #############################
