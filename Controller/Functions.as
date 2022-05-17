@@ -243,11 +243,35 @@ void AddMedalsPosition(){
 
 }
 
+// Force a refresh of the leaderboard ( requested by the user )
+// also remove the "failed request" lock
+void ForceRefresh(){
+    failedRefresh = false;
+    counterTries = 0;
+    if(!refreshPosition){
+            refreshPosition = true;
+    }
+}
+
 void UpdateTimes(){    
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
-    cutoffArrayTmp.InsertLast(GetPersonalBest());
+    int lastPbTime = currentPbTime;
+    CutoffTime@ pbTimeTmp = GetPersonalBest();
+
+    if(pbTimeTmp.time == lastPbTime) {
+        counterTries++;
+        if(counterTries > 5) {
+            failedRefresh = true;
+        }
+        // we still want to try and get the other times
+        if(counterTries != 1) {
+            return;
+        }
+        
+    }
+    cutoffArrayTmp.InsertLast(pbTimeTmp);
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();

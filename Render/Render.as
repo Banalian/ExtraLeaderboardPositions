@@ -7,7 +7,7 @@ void RenderMenu() {
                 windowVisible = false;
             }
             if(UI::MenuItem("Force refresh")) {
-                refreshPosition = true;
+                ForceRefresh();
             }
         } else {
             if(UI::MenuItem("Show")) {
@@ -66,7 +66,7 @@ void RenderWindows(){
         windowFlags |= UI::WindowFlags::NoInputs;
     }
 
-    if(cutoffArray.Length == 0){
+    if(cutoffArray.Length == 0 && !failedRefresh){
         return;
     }
 
@@ -96,17 +96,19 @@ void RenderWindows(){
 // Render the table with the custom leaderboard
 void RenderTab(){
     UI::BeginTable("Main", 5);        
-
+    
     UI::TableNextRow();
     UI::TableNextColumn();
     UI::TableNextColumn();
     UI::Text("Position");
     UI::TableNextColumn();
     UI::Text("Time");
+    UI::TableNextColumn();
+    UI::TableNextColumn();
     if(refreshPosition){
-        UI::TableNextColumn();
-        UI::TableNextColumn();
         UI::Text("Refreshing...");
+    }else if(failedRefresh){
+        UI::Text("Refreshing failed.");
     }
 
     int i = 0;
@@ -195,9 +197,7 @@ void RenderTab(){
 void RenderRefreshButton(){
     if(showRefreshButtonSetting && UI::IsOverlayShown()){
         if(UI::Button("Refresh")){
-            if(!refreshPosition){
-                refreshPosition = true;
-            }
+            ForceRefresh();
         }
     }
 }

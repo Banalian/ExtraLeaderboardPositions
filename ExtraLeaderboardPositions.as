@@ -57,6 +57,10 @@ bool startupEnded = false;
 
 bool validMap = false;
 
+//variables to check that we aren't currently in a "failed request" (server not responding or not updating the pb) to not spam the server
+int counterTries = 0;
+bool failedRefresh = false;
+
 // ############################## MAIN #############################
 
 
@@ -98,20 +102,26 @@ void Main(){
 
     while(true){
 
-        //if we're on a new map or the timer is over, we update the times
+        //if we're on a new map, the timer is over or a new pb has been made we update the times
         if(refreshPosition){
             //check that we're in a map
             if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-                string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-                if(MapHasNadeoLeaderboard(mapid)){
-                    validMap = true;
-                    UpdateTimes();
-                }else{
-                    validMap = false;
-                    if(cutoffArray.Length > 0){
-                        cutoffArray = array<CutoffTime@>();
+
+                //we don't want to update the times if we know the current refresh has already failed.
+                //This should not deadlock because other parts of the plugin will be able to unlock this
+                if(!failedRefresh){
+                    string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+                    if(MapHasNadeoLeaderboard(mapid)){
+                        validMap = true;
+                        UpdateTimes();
+                    }else{
+                        validMap = false;
+                        if(cutoffArray.Length > 0){
+                            cutoffArray = array<CutoffTime@>();
+                        }
                     }
                 }
+
             }
             refreshPosition = false;
         }

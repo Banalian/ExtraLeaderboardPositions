@@ -100,9 +100,7 @@ void RenderMedalSettings(){
     }
 
     if(UI::Button("Refresh")){
-        if(!refreshPosition){
-            refreshPosition = true;
-        }
+        ForceRefresh();
     }
 
     showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
@@ -158,9 +156,7 @@ void RenderPositionCustomization(){
     }
 
     if(UI::Button("Refresh")){
-        if(!refreshPosition){
-            refreshPosition = true;
-        }
+        ForceRefresh();
     }
 
     for(int i = 0; i < nbSizePositionToGetArray; i++){
