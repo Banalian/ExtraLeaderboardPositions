@@ -12,7 +12,7 @@ Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositio
 
 # Changelog
 ## 1.5.1
-- Added a fix to stop trying to get the personnal best after a few failed tries. it'll stop trying to get the leaderboard until the timer is up or a refresh is forced (via the buttons)
+- Added a fix to stop trying to get the personal best after a few failed tries. it'll stop trying to get the leaderboard until the timer is up or a refresh is forced (via the buttons)
 
 ## 1.5
 Medals positions
