@@ -29,22 +29,24 @@ void Update(float dt) {
 		
         //if the map change, or the timer is over or a new pb is found, we refresh the positions
         if (mapIdChanged || timer > updateFrequency || newPBSet(timePbLocal)) {
+            
             if(mapIdChanged){
                 currentMapUid = app.RootMap.MapInfo.MapUid;
                 currentPbTime = -1;
             }
 
-            //we check that we aren't currently in a "failed request" (server not responding or not updating the pb) to not spam the server
-            if(failedRefresh){
-                //if the refresh is from a map change or the timer, we remove the "lock"
-                if(mapIdChanged || timer > updateFrequency){
+            //we remove the "lock" if the change was a map change or the timer
+            if(mapIdChanged || timer > updateFrequency){
                     failedRefresh = false;
                     counterTries = 0;
-                    refreshPosition = true;
-                }
-            } else {
-                refreshPosition = true;
             }
+
+
+            //we refresh the positions if the lock is not set
+            if(!failedRefresh){
+                refreshPosition = true;
+            } 
+            
             
             timer = 0;
         } else {
