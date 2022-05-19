@@ -50,7 +50,7 @@ void Update(float dt) {
         } else {
             timer += dt;
         }
-    }else{
+    } else {
         timer = 0;
         currentMapUid = "";
     }

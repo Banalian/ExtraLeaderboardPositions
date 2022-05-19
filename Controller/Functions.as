@@ -266,10 +266,12 @@ void UpdateTimes(){
             failedRefresh = true;
         }
         // we still want to try and get the other times
-        if(counterTries != 1) {
+        if(counterTries > 1) {
             return;
         }
         
+    } else {
+        counterTries = 0;
     }
     cutoffArrayTmp.InsertLast(pbTimeTmp);
 
