@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 1.6
+Map name and author
+- Add the possibility to have the map name and author displayed (this is off by default)
+- Add a separator below the plugin's name (on by default, but can be disabled)
+
 ## 1.5.1
 - Added a fix to stop trying to get the personal best after a few failed tries. it'll stop trying to get the leaderboard until the timer is up or a refresh is forced (via the buttons)
 
