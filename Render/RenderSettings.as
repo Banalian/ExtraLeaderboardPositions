@@ -34,6 +34,10 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::Text("\n\tMap/Author Name");
+
+    showMapName = UI::Checkbox("Show map name", showMapName);
+    showMapAuthor = UI::Checkbox("Show author name", showMapAuthor);
 
     UI::Text("\n\tTime difference");
     showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);

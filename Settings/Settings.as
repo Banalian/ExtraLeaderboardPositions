@@ -8,6 +8,9 @@ bool windowVisible = true;
 [Setting category="Display Settings" name="Display mode" description="When should the overlay be displayed?"]
 EnumDisplayMode displayMode = EnumDisplayMode::ALWAYS;
 
+[Setting category="Display Settings" name="Show separator" description="Should the separator be displayed"]
+bool showSeparator = true;
+
 [Setting hidden]
 float hiddingSpeedSetting = 1.0f;
 
@@ -33,6 +36,12 @@ bool showBronze = true;
 [Setting hidden]
 EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
 
+
+[Setting hidden]
+bool showMapName = false;
+
+[Setting hidden]
+bool showMapAuthor = false;
 
 [Setting hidden]
 bool showRefreshButtonSetting = true;

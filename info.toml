@@ -8,4 +8,4 @@ siteid = 169
 
 [script]
 dependencies = [ "NadeoServices", "VehicleState" ]
-imports = [ "Time.as", "Permissions.as"]
+imports = [ "Time.as", "Permissions.as", "Formatting.as"]

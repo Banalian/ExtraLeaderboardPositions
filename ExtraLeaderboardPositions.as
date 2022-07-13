@@ -33,6 +33,7 @@ const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
 const string greyColor = "\\$888";
+const string brightGreyColor = "\\$aaa";
 
 const string pluginName = "Extra Leaderboard positions";
 

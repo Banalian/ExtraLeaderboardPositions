@@ -58,6 +58,7 @@ void RenderInterface(){
 
 void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
+   
     
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
     bool showRefreshButton = false;
@@ -74,6 +75,11 @@ void RenderWindows(){
     if(cutoffArray.Length == 1 && cutoffArray[0].position == -1){
         return;
     }
+
+    //we don't want to show the window if we're in the editor
+    if(app.Editor !is null){
+        return;
+    }
         
 
     if(windowVisible && app.CurrentPlayground !is null){
@@ -83,6 +89,22 @@ void RenderWindows(){
 
         UI::Text("Extra leaderboard positions");
         
+        if(showSeparator){
+            UI::Separator();
+        }
+
+        if(app.RootMap !is null){
+            if(showMapName){
+                UI::Text(StripFormatCodes(app.RootMap.MapInfo.Name));
+            }
+
+            if(showMapAuthor){
+                UI::Text(brightGreyColor + "Made by " + StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));
+            }
+        }
+
+        
+
         RenderTab();
 
         RenderRefreshButton();
