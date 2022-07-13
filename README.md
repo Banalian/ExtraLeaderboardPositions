@@ -4,7 +4,7 @@ Trackmania Next (2020) plugin that allows you to see the times of more key posit
 
 This can be used to see how far approximatly you are from getting a better trophy reward in a TOTD for example.
 
-If you have any ideas for features, I'd be happy to hear them ! (you can use the issues or discord, in the OpenPlanet server)
+I have a few features planned for when I'll have more time to work on the plugin, but if you have any ideas for features, I'd be happy to hear them ! (you can use the issues or discord, in the OpenPlanet server)
 
 Please open an issue if you see any trouble.
 
