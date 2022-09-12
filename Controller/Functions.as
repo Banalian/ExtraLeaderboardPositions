@@ -50,7 +50,7 @@ string TimeString(int scoreTime, bool showSign = false) {
     return timeString;
 }
 
-bool MapHasNadeoLeaderboard(string mapId){
+bool MapHasNadeoLeaderboard(const string &in mapId){
     auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/map/" + mapId);
 
     return info.GetType() == Json::Type::Object;

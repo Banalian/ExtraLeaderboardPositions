@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 1.6.1
+Internal change following OP Update
+- Removed deprecated imports
+- Remove warnings
+
 ## 1.6
 Map name and author
 - Add the possibility to have the map name and author displayed (this is off by default)
