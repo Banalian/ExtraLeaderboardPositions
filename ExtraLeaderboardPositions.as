@@ -17,6 +17,11 @@ enum EnumDisplayMedal
     IN_GREY
 };
 
+const array<string> invalidGamemodes = {
+    "TM_Royal_Online",
+    "TM_RoyalTimeAttack_Online",
+    "TM_RoyalValidation_Local"
+};
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
@@ -104,26 +109,45 @@ void Main(){
 
     while(true){
 
+        // TODO : Rewrite this to remove all this nesting
         //if we're on a new map, the timer is over or a new pb has been made we update the times
         if(refreshPosition){
             //check that we're in a map
             if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
 
-                //we don't want to update the times if we know the current refresh has already failed.
-                //This should not deadlock because other parts of the plugin will be able to unlock this
-                if(!failedRefresh){
-                    string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-                    if(MapHasNadeoLeaderboard(mapid)){
-                        validMap = true;
-                        UpdateTimes();
-                    }else{
-                        validMap = false;
-                        if(cutoffArray.Length > 0){
-                            cutoffArray = array<CutoffTime@>();
+                // check that we're not in an invalid gamemode
+                auto ServerInfo = cast<CTrackManiaNetworkServerInfo>(network.ServerInfo);
+                string gamemode = ServerInfo.CurGameModeStr;
+
+                if(invalidGamemodes.Find(gamemode) == -1){
+                    //we don't want to update the times if we know the current refresh has already failed.
+                    //This should not deadlock because other parts of the plugin will be able to unlock this
+                    if(!failedRefresh){
+                        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+                        if(MapHasNadeoLeaderboard(mapid)){
+                            validMap = true;
+                            UpdateTimes();
+                        }else{
+                            validMap = false;
+                            if(cutoffArray.Length > 0){
+                                cutoffArray = array<CutoffTime@>();
+                            }
                         }
                     }
+                }else{
+                    // temp solution
+                    validMap = false;
+                    if(cutoffArray.Length > 0){
+                        cutoffArray = array<CutoffTime@>();
+                    }
                 }
+                
+                
 
+            }else{
+                if(cutoffArray.Length > 0){
+                    cutoffArray = array<CutoffTime@>();
+                }
             }
             refreshPosition = false;
         }
