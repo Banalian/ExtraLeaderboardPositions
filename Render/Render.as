@@ -60,7 +60,7 @@ void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
    
     
-    int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking;
+    int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking | UI::WindowFlags::NoFocusOnAppearing;
     bool showRefreshButton = false;
 
     if (!UI::IsOverlayShown()) {
