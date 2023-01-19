@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 1.6.2
+- Changed windows flag to not focus on appearing window
+- Plugin now won't display when in Royal mode
+
 ## 1.6.1
 Internal change following OP Update
 - Removed deprecated imports
