@@ -253,7 +253,7 @@ void ForceRefresh(){
     }
 }
 
-void UpdateTimes(){    
+void UpdateTimes(){
     // We get the 1st, 10th, 100th and 1000th leaderboard time, as well as the personal best time
     cutoffArrayTmp = array<CutoffTime@>();
 
@@ -274,6 +274,33 @@ void UpdateTimes(){
         counterTries = 0;
     }
     cutoffArrayTmp.InsertLast(pbTimeTmp);
+
+    // if activated, call the extra leaderboardAPI
+    if(ExtraLeaderboardAPI::Active == true){
+        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest req = ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest();
+
+        auto app = cast<CTrackMania>(GetApp());
+        auto network = cast<CTrackManiaNetwork>(app.Network);
+        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+
+        req.mapId = mapid;
+        req.positions = array<int>();
+        for(uint i = 0; i< allPositionToGet.Length; i++){
+            req.positions.InsertLast(allPositionToGet[i]);
+        }
+
+        req.medals = array<MedalType>();
+        req.medals.InsertLast(MedalType::BRONZE);
+        req.medals.InsertLast(MedalType::SILVER);
+        req.medals.InsertLast(MedalType::GOLD);
+        req.medals.InsertLast(MedalType::AT);
+
+        req.scores = array<int>();
+        req.scores.InsertLast(currentPbTime);
+
+        ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
+
+    }
 
     for(uint i = 0; i< allPositionToGet.Length; i++){
         CutoffTime@ best = CutoffTime();
