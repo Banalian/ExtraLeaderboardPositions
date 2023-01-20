@@ -71,6 +71,10 @@ bool refreshPosition = false;
 array<int> allPositionToGet = {};
 
 
+array<LeaderboardEntry@> leaderboardArray;
+array<LeaderboardEntry@> leaderboardArrayTmp;
+LeaderboardEntry@ timeDifferenceEntry = LeaderboardEntry();
+
 array<CutoffTime@> cutoffArray;
 array<CutoffTime@> cutoffArrayTmp;
 CutoffTime@ timeDifferenceCutoff = CutoffTime();
@@ -123,9 +127,8 @@ void Main(){
       yield();
     }
 
-    // TODO : Change to have it load from config
-    ExtraLeaderboardAPI::API_URL = "3.96.0.136:8080/ELP/api";
-    ExtraLeaderboardAPI::Active = true;
+    // Load the config to use the External API or not
+    ExtraLeaderboardAPI::LoadURLConfig();
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);

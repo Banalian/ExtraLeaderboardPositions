@@ -8,22 +8,22 @@ namespace ExtraLeaderboardAPI
         /**
          * MapID of the map requested
          */
-        string mapId;
+        string mapId = "";
         
         /**
          * List of time you want the position of
          */
-        array<int> scores;
+        array<int> scores = {};
 
         /**
          * List of positions you want the time of
          */
-        array<int> positions;
+        array<int> positions = {};
 
         /**
          * List of medal's time and position you want
          */
-        array<MedalType> medals;
+        array<MedalType> medals = {};
 
         /**
          * get the amount of player on the map
@@ -38,7 +38,7 @@ namespace ExtraLeaderboardAPI
         /**
          * Generate the url to request the API based on the current state of the class
          */
-        string generateUrl(){
+        string GenerateUrl(){
             string url = API_URL + "/leaderboard/map/" + mapId + "/records?";
             if(getPlayerCount){
                 url += "getplayercount=true&";
