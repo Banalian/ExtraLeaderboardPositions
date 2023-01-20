@@ -277,67 +277,58 @@ void UpdateTimes(){
 
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active == true){
-        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest req = ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest();
-
-        auto app = cast<CTrackMania>(GetApp());
-        auto network = cast<CTrackManiaNetwork>(app.Network);
-        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-
-        req.mapId = mapid;
-        req.positions = array<int>();
-        for(uint i = 0; i< allPositionToGet.Length; i++){
-            req.positions.InsertLast(allPositionToGet[i]);
-        }
-
-        req.medals = array<MedalType>();
-        req.medals.InsertLast(MedalType::BRONZE);
-        req.medals.InsertLast(MedalType::SILVER);
-        req.medals.InsertLast(MedalType::GOLD);
-        req.medals.InsertLast(MedalType::AT);
-
-        req.scores = array<int>();
-        req.scores.InsertLast(currentPbTime);
+        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
 
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
 
-    }
-
-    for(uint i = 0; i< allPositionToGet.Length; i++){
-        CutoffTime@ best = CutoffTime();
-        best.time = -1;
-        best.position = -1;
-        best.pb = false;
-
-        int position = allPositionToGet[i];
-        int offset = position - 1;
-
-        best.position = position;
-
-        best.time = GetTimeWithOffset(offset);
-
-        if(best.time != -1){
-            cutoffArrayTmp.InsertLast(best);
+        // We extract the times from the response if there's any
+        if(resp is null){
+            warn("response from ExtraLeaderboardAPI is null or empty");
+            return;
         }
-    }
-
-    
-    if(currentComboChoice == -1){
-        timeDifferenceCutoff = cutoffArrayTmp[0];
+        // TODO : fix the convertion here
+        //leaderboardArrayTmp = resp.positions;
+        //sort the array
+        //leaderboardArrayTmp.SortAsc();
+        //leaderboardArray = leaderboardArrayTmp;
     }else{
-        timeDifferenceCutoff.time = -1;
-        timeDifferenceCutoff.position = -1;
-        timeDifferenceCutoff.pb = false;
-        for(uint i = 1; i< cutoffArrayTmp.Length; i++){
-            if(cutoffArrayTmp[i].position == currentComboChoice){
-                timeDifferenceCutoff = cutoffArrayTmp[i];
-                break;
+        for(uint i = 0; i< allPositionToGet.Length; i++){
+            CutoffTime@ best = CutoffTime();
+            best.time = -1;
+            best.position = -1;
+            best.pb = false;
+
+            int position = allPositionToGet[i];
+            int offset = position - 1;
+
+            best.position = position;
+
+            best.time = GetTimeWithOffset(offset);
+
+            if(best.time != -1){
+                cutoffArrayTmp.InsertLast(best);
             }
         }
+
+        
+        if(currentComboChoice == -1){
+            timeDifferenceCutoff = cutoffArrayTmp[0];
+        }else{
+            timeDifferenceCutoff.time = -1;
+            timeDifferenceCutoff.position = -1;
+            timeDifferenceCutoff.pb = false;
+            for(uint i = 1; i< cutoffArrayTmp.Length; i++){
+                if(cutoffArrayTmp[i].position == currentComboChoice){
+                    timeDifferenceCutoff = cutoffArrayTmp[i];
+                    break;
+                }
+            }
+        }
+        
+        AddMedalsPosition();
+        //sort the array
+        cutoffArrayTmp.SortAsc();
+        cutoffArray = cutoffArrayTmp;
     }
     
-    AddMedalsPosition();
-    
-    //sort the array
-    cutoffArrayTmp.SortAsc();
-    cutoffArray = cutoffArrayTmp;
 }

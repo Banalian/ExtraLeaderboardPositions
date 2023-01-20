@@ -39,26 +39,26 @@ namespace ExtraLeaderboardAPI
         int bronzeTime;
 
         // Convert a json object to an ExtraLeaderboardAPIResponse object
-        ExtraLeaderboardAPIResponse fromJson(Json::Value input){
+        ExtraLeaderboardAPIResponse fromJson(Json::Value@ input){
             ExtraLeaderboardAPIResponse response;
 
-            if(input.Get("meta") !is null && input.Get("meta").GetType() != Json::Type::Null){
-                auto metaInfo = input["meta"];
-                response.playerCount = metaInfo.Get("playerCount");
-                //response.playerCount = input["meta"]["playerCount"];
+            if(input.HasKey("meta")){
+                auto metaJson = input.Get("meta");
+                if(metaJson.HasKey("playerCount")){
+                    response.playerCount = metaJson.Get("playerCount");
+                }
             }
 
-            if(input.Get("mapInfo") !is null && input.Get("mapInfo").GetType() == Json::Type::Null){
-                auto mapInfo = input["mapInfo"];
-                response.mapName = mapInfo["mapName"];
-                response.mapAuthor = mapInfo["mapAuthor"];
-                response.authorTime = mapInfo["authorTime"];
-                response.goldTime = mapInfo["goldTime"];
-                response.silverTime = mapInfo["silverTime"];
-                response.bronzeTime = mapInfo["bronzeTime"];
+            if(input.HasKey("mapInfo")){
+                auto mapInfo = input.Get("mapInfo");
+                response.mapName = mapInfo.Get("name");
+                response.mapAuthor = mapInfo.Get("author");
+                response.authorTime = mapInfo.Get("authorTime");
+                response.goldTime = mapInfo.Get("goldTime");
+                response.silverTime = mapInfo.Get("silverTime");
+                response.bronzeTime = mapInfo.Get("bronzeTime");
             }
             
-
             auto positions = input.Get("positions");
 
             response.positions = {};
@@ -69,6 +69,24 @@ namespace ExtraLeaderboardAPI
                 response.positions.InsertLast(entry);
             }
             return response;
+        }
+
+        /**
+         * Convert the response to a string
+         */
+        string toString(){
+            string output = "";
+            output += "Map: " + mapName + " by " + mapAuthor + "\n";
+            output += "Author time: " + authorTime + "\n";
+            output += "Gold time: " + goldTime + "\n";
+            output += "Silver time: " + silverTime + "\n";
+            output += "Bronze time: " + bronzeTime + "\n";
+            output += "Player count: " + playerCount + "\n";
+            output += "Positions: \n";
+            for(uint i = 0; i < positions.Length; i++){
+                output += "\t- Position: " + positions[i].position + " - Time :" + positions[i].time + " - Desc :" + positions[i].desc + "\n";
+            }
+            return output;
         }
     
         
