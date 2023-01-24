@@ -15,9 +15,14 @@ void RenderSettingsCustomization(){
         showColoredTimeDifference = true;
         inverseTimeDiffSign = false;
         currentComboChoice = -1;
+        useExternalAPI = false;
     }
 
     showRefreshButtonSetting = UI::Checkbox("Add refresh button to UI (only appears when OP Overlay is on)", showRefreshButtonSetting);
+
+    UI::Text("\n\tExternal API");
+
+    useExternalAPI = UI::Checkbox("Use external API if available (allow for more informations on maps)", useExternalAPI);
 
     UI::Text("\n\tDisplay mode customizations");
 

@@ -23,14 +23,8 @@ enum EnumLeaderboardEntryType
     PB,
     MEDAL,
     POSTIME,
-    EXTERNAL
+    EXTERNAL // To be potentially used by other plugins wishing to add their own entries
 }
-
-const array<string> invalidGamemodes = {
-    "TM_Royal_Online",
-    "TM_RoyalTimeAttack_Online",
-    "TM_RoyalValidation_Local"
-};
 
 enum MedalType
 {
@@ -41,6 +35,11 @@ enum MedalType
     AT
 }
 
+const array<string> invalidGamemodes = {
+    "TM_Royal_Online",
+    "TM_RoyalTimeAttack_Online",
+    "TM_RoyalValidation_Local"
+};
 
 const array<string> podiumIcon = {
     "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green

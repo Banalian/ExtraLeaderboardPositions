@@ -8,7 +8,7 @@ namespace ExtraLeaderboardAPI
         /**
          * List of entries made by the API
          */
-        array<LeaderboardEntry> positions;
+        array<LeaderboardEntry@> positions;
 
         /**
          * Number of players who have played the map
@@ -66,6 +66,14 @@ namespace ExtraLeaderboardAPI
                 LeaderboardEntry entry;
                 entry.time = positions[i].Get("time");
                 entry.position = positions[i].Get("rank");
+                string type = positions[i].Get("entryType");
+                if(type == "MEDAL"){
+                    entry.type = EnumLeaderboardEntryType::MEDAL;
+                } else if(type == "TIME" || type == "POSITION"){
+                    entry.type = EnumLeaderboardEntryType::POSTIME;
+                } else{
+                    entry.type = EnumLeaderboardEntryType::UNKNOWN;
+                }
                 response.positions.InsertLast(entry);
             }
             return response;
@@ -84,7 +92,7 @@ namespace ExtraLeaderboardAPI
             output += "Player count: " + playerCount + "\n";
             output += "Positions: \n";
             for(uint i = 0; i < positions.Length; i++){
-                output += "\t- Position: " + positions[i].position + " - Time :" + positions[i].time + " - Desc :" + positions[i].desc + "\n";
+                output += "\t- Position: " + positions[i].position + " - Time :" + positions[i].time + " - Desc :" + positions[i].desc + " - Type :" + positions[i].type + "\n";
             }
             return output;
         }

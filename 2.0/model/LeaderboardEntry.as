@@ -13,6 +13,8 @@ class LeaderboardEntry{
     // Really short description of the entry (medal type for example, or custom description)
     string desc = "";
 
+    EnumLeaderboardEntryType entryType = EnumLeaderboardEntryType::UNKNOWN;
+
     // Comparaison operator
     int opCmp(LeaderboardEntry@ other){
         if(position - other.position != 0)
