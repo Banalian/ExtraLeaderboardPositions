@@ -276,7 +276,7 @@ void UpdateTimes(){
     cutoffArrayTmp.InsertLast(pbTimeTmp);
 
     // if activated, call the extra leaderboardAPI
-    if(ExtraLeaderboardAPI::Active == true){
+    if(ExtraLeaderboardAPI::Active && useExternalAPI){
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
 
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
@@ -286,11 +286,10 @@ void UpdateTimes(){
             warn("response from ExtraLeaderboardAPI is null or empty");
             return;
         }
-        // TODO : fix the convertion here
-        //leaderboardArrayTmp = resp.positions;
+        leaderboardArrayTmp = resp.positions;
         //sort the array
-        //leaderboardArrayTmp.SortAsc();
-        //leaderboardArray = leaderboardArrayTmp;
+        leaderboardArrayTmp.SortAsc();
+        leaderboardArray = leaderboardArrayTmp;
     }else{
         for(uint i = 0; i< allPositionToGet.Length; i++){
             CutoffTime@ best = CutoffTime();

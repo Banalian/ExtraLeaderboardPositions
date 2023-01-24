@@ -41,7 +41,11 @@ namespace ExtraLeaderboardAPI
      */ 
     ExtraLeaderboardAPIResponse@ GetExtraLeaderboard(ExtraLeaderboardAPIRequest@ request){
         if(!Active){
-            warn("External API is disabled");
+            warn("External API is disabled by config");
+            return null;
+        }
+        if(!useExternalAPI){
+            warn("External API is disabled by user");
             return null;
         }
         if(request is null){
