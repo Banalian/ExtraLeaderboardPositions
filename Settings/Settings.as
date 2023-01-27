@@ -67,4 +67,4 @@ bool inverseTimeDiffSign = false;
 int currentComboChoice = -1;
 
 [Setting hidden]
-bool useExternalAPI = true;
+bool useExternalAPI = false;
