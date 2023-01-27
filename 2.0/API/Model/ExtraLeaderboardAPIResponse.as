@@ -69,8 +69,10 @@ namespace ExtraLeaderboardAPI
                 string type = positions[i].Get("entryType");
                 if(type == "MEDAL"){
                     entry.entryType = EnumLeaderboardEntryType::MEDAL;
-                } else if(type == "TIME" || type == "POSITION"){
-                    entry.entryType = EnumLeaderboardEntryType::POSTIME;
+                } else if(type == "TIME"){
+                    entry.entryType = EnumLeaderboardEntryType::TIME;
+                } else if(type == "POSITION"){
+                    entry.entryType = EnumLeaderboardEntryType::POSITION;
                 } else{
                     entry.entryType = EnumLeaderboardEntryType::UNKNOWN;
                 }
