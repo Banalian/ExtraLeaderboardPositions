@@ -20,7 +20,8 @@ enum EnumLeaderboardEntryType
     UNKNOWN,
     PB,
     MEDAL,
-    POSTIME,
+    POSITION,
+    TIME,
     EXTERNAL // To be potentially used by other plugins wishing to add their own entries
 }
 

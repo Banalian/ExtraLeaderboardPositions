@@ -109,7 +109,7 @@ void RenderTab(){
         
         //------------POSITION-------------
         UI::TableNextColumn();
-        if(cutoffArray[i].position > 10000){
+        if(leaderboardArray[i].position > 10000){
             UI::Text(displayString + "<" + leaderboardArray[i].position);
         }else{
             UI::Text(displayString + "" + leaderboardArray[i].position);

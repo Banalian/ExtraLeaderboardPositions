@@ -67,7 +67,7 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
                     int infoTop = top[0]["score"];
                     positionEntry.time = infoTop;
                     positionEntry.position = position;
-                    positionEntry.entryType = EnumLeaderboardEntryType::POSTIME;
+                    positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
                     return positionEntry;
                 }
             }            
@@ -86,7 +86,7 @@ LeaderboardEntry@ GetSpecificPositionEntry(int time) {
     LeaderboardEntry@ positionEntry = LeaderboardEntry();
     positionEntry.time = -1;
     positionEntry.position = -1;
-    positionEntry.entryType = EnumLeaderboardEntryType::POSTIME;
+    positionEntry.entryType = EnumLeaderboardEntryType::TIME;
 
     if(!validMap){
         return positionEntry;
