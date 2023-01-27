@@ -47,6 +47,21 @@ void RefreshLeaderboard(){
         await(coroutines);
     }
 
+    // Time difference entry finding
+    if(currentComboChoice == -1){
+        timeDifferenceEntry = leaderboardArrayTmp[0];
+    }else{
+        timeDifferenceEntry.time = -1;
+        timeDifferenceEntry.position = -1;
+        timeDifferenceEntry.entryType = EnumLeaderboardEntryType::POSTIME;
+        for(uint i = 1; i< leaderboardArrayTmp.Length; i++){
+            if(leaderboardArrayTmp[i].position == currentComboChoice){
+                timeDifferenceEntry = leaderboardArrayTmp[i];
+                break;
+            }
+        }
+    }
+
     //sort the array
     leaderboardArrayTmp.SortAsc();
     leaderboardArray = leaderboardArrayTmp;

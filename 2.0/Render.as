@@ -1,62 +1,4 @@
-// ############################## MENU #############################
-
-void RenderMenu() {
-    if(UI::BeginMenu(podiumIconBlue + " " +pluginName)) {
-        if(windowVisible) {
-            if(UI::MenuItem("Hide")) {
-                windowVisible = false;
-            }
-            if(UI::MenuItem("Force refresh")) {
-                ForceRefresh();
-            }
-        } else {
-            if(UI::MenuItem("Show")) {
-                windowVisible = true;
-            }
-        }
-
-        UI::EndMenu();
-    }
-}
-
-// ############################## WINDOW RENDER #############################
-
-void Render() {
-
-    if(!UserCanUseThePlugin()){
-        return;
-    }
-
-    if(displayMode == EnumDisplayMode::ALWAYS) {
-        RenderWindows();
-    } else if (UI::IsGameUIVisible() && displayMode == EnumDisplayMode::ALWAYS_EXCEPT_IF_HIDDEN_INTERFACE){
-        RenderWindows();
-    }
-
-    if(displayMode == EnumDisplayMode::HIDE_WHEN_DRIVING){
-        auto state = VehicleState::ViewingPlayerState();
-        if(state is null) return;
-        float currentSpeed = state.WorldVel.Length() * 3.6;
-        if(currentSpeed >= hiddingSpeedSetting) return;
-
-        RenderWindows();
-    }
-    
-    
-}
-
-void RenderInterface(){
-    if(!UserCanUseThePlugin()){
-        return;
-    }
-
-    if(displayMode == EnumDisplayMode::ONLY_IF_OPENPLANET_MENU_IS_OPEN) {
-        RenderWindows();
-    }
-}
-
-
-void RenderWindowsOld(){
+void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
    
     
@@ -67,12 +9,12 @@ void RenderWindowsOld(){
         windowFlags |= UI::WindowFlags::NoInputs;
     }
 
-    if(cutoffArray.Length == 0 && !failedRefresh){
+    if(leaderboardArray.Length == 0 && !failedRefresh){
         return;
     }
 
     //if this is true, we're probably on a map not uploaded to nadeo's server. we don't want to show the window
-    if(cutoffArray.Length == 1 && cutoffArray[0].position == -1){
+    if(leaderboardArray.Length == 1 && leaderboardArray[0].position == -1){
         return;
     }
 
@@ -115,8 +57,10 @@ void RenderWindowsOld(){
     }
 }
 
-// Render the table with the custom leaderboard
-void RenderTabOld(){
+/**
+ * Render the table with the custom leaderboard
+ */
+void RenderTab(){
     UI::BeginTable("Main", 5);        
     
     UI::TableNextRow();
@@ -134,9 +78,11 @@ void RenderTabOld(){
     }
 
     int i = 0;
-    while(i < int(cutoffArray.Length)){
+    while(i < int(leaderboardArray.Length)){
             //We skip the pb if there's none
-        if( (cutoffArray[i].pb && cutoffArray[i].time == -1) || (!showPb && cutoffArray[i].pb) ){
+        if( 
+            (leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB && leaderboardArray[i].time == -1) ||
+            (!showPb && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB) ){
             i++;
             continue;
         }
@@ -144,7 +90,7 @@ void RenderTabOld(){
         // If the current record is a medal one, we make a display string based on the display mode
         string displayString = "";
 
-        if(cutoffArray[i].isMedal){
+        if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::MEDAL){
             switch(medalDisplayMode){
                 case EnumDisplayMedal::NORMAL:
                     break;
@@ -159,37 +105,37 @@ void RenderTabOld(){
         //------------POSITION ICON--------
         UI::TableNextRow();
         UI::TableNextColumn();
-        UI::Text(GetIconForPosition(cutoffArray[i].position));
+        UI::Text(GetIconForPosition(leaderboardArray[i].position));
         
         //------------POSITION-------------
         UI::TableNextColumn();
         if(cutoffArray[i].position > 10000){
-            UI::Text(displayString + "<" + cutoffArray[i].position);
+            UI::Text(displayString + "<" + leaderboardArray[i].position);
         }else{
-            UI::Text(displayString + "" + cutoffArray[i].position);
+            UI::Text(displayString + "" + leaderboardArray[i].position);
         }
         
         //------------TIME-----------------
         UI::TableNextColumn();
-        UI::Text(displayString + TimeString(cutoffArray[i].time));
+        UI::Text(displayString + TimeString(leaderboardArray[i].time));
 
         //------------HAS DESC-------------
         UI::TableNextColumn();
-        if(cutoffArray[i].desc != ""){
-            UI::Text(displayString + cutoffArray[i].desc);
+        if(leaderboardArray[i].desc != ""){
+            UI::Text(displayString + leaderboardArray[i].desc);
         }
         
         //------------TIME DIFFERENCE------
         UI::TableNextColumn();
 
         if(showTimeDifference){
-            if(cutoffArray[i].time == -1 || timeDifferenceCutoff.time == -1){
+            if(leaderboardArray[i].time == -1 || timeDifferenceEntry.time == -1){
                 //Nothing here, no time to compare to
-            }else if(cutoffArray[i].position == timeDifferenceCutoff.position){
+            }else if(leaderboardArray[i].position == timeDifferenceEntry.position){
                 //Nothing here, the position is the same, it's the same time
                 //still keeping the if in case we want to print/add something here
             }else{
-                int timeDifference = cutoffArray[i].time - timeDifferenceCutoff.time;
+                int timeDifference = leaderboardArray[i].time - timeDifferenceEntry.time;
                 string timeDifferenceString = TimeString(Math::Abs(timeDifference));
                 
                 if(inverseTimeDiffSign){
@@ -213,13 +159,4 @@ void RenderTabOld(){
     }
 
     UI::EndTable();
-}
-
-// Render the refresh button after we check if it's visible
-void RenderRefreshButton(){
-    if(showRefreshButtonSetting && UI::IsOverlayShown()){
-        if(UI::Button("Refresh")){
-            ForceRefresh();
-        }
-    }
 }
