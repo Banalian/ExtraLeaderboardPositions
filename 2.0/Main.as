@@ -34,6 +34,22 @@ void RefreshLeaderboard(){
             return;
         }
 
+        // extract the medal entries
+        array<LeaderboardEntry@> medalEntries;
+        for(uint i = 0; i< resp.positions.Length; i++){
+            if(resp.positions[i].entryType != EnumLeaderboardEntryType::MEDAL){
+                continue;
+            }
+            medalEntries.InsertLast(resp.positions[i]);
+        }
+        // sort the medal entries then add the description to them
+        medalEntries.SortAsc();
+        medalEntries[0].desc = "AT";
+        medalEntries[1].desc = "Gold";
+        medalEntries[2].desc = "Silver";
+        medalEntries[3].desc = "Bronze";
+
+        // Insert all entries in our temporary entry array
         for(uint i = 0; i< resp.positions.Length; i++){
             if(resp.positions[i].time == -1){
                 continue;
