@@ -20,6 +20,8 @@ void RefreshLeaderboard(){
         counterTries = 0;
     }
 
+    leaderboardArrayTmp = array<LeaderboardEntry@>();
+
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI){
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
@@ -31,11 +33,21 @@ void RefreshLeaderboard(){
             warn("response from ExtraLeaderboardAPI is null or empty");
             return;
         }
-        leaderboardArrayTmp = resp.positions;
-        
-    } else {
+
+        for(uint i = 0; i< resp.positions.Length; i++){
+            if(resp.positions[i].time == -1){
+                continue;
+            }
+            // For now, we assume that if the entry type is TIME, it's the pb, so we change it's type to PB
+            if(resp.positions[i].entryType == EnumLeaderboardEntryType::TIME){
+                resp.positions[i].entryType = EnumLeaderboardEntryType::PB;
+                resp.positions[i].desc = "PB";
+            }
+            leaderboardArrayTmp.InsertLast(resp.positions[i]);
+        }
+    } else {    
+        leaderboardArrayTmp.InsertLast(pbTimeTmp);
         // Make all the request in local (apart from impossible calls like medals above pb)
-        leaderboardArrayTmp = array<LeaderboardEntry@>();
         array<Meta::PluginCoroutine@> coroutines;
         for(uint i = 0; i< allPositionToGet.Length; i++){
             auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionToGet[i]));
@@ -49,11 +61,17 @@ void RefreshLeaderboard(){
 
     // Time difference entry finding
     if(currentComboChoice == -1){
-        timeDifferenceEntry = leaderboardArrayTmp[0];
+        // timeDifferenceEntry is the entry that has entryType Pb
+        for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
+            if(leaderboardArrayTmp[i].entryType == EnumLeaderboardEntryType::PB){
+                timeDifferenceEntry = leaderboardArrayTmp[i];
+                break;
+            }
+        }
     }else{
         timeDifferenceEntry.time = -1;
         timeDifferenceEntry.position = -1;
-        timeDifferenceEntry.entryType = EnumLeaderboardEntryType::POSTIME;
+        timeDifferenceEntry.entryType = EnumLeaderboardEntryType::POSITION; // Doesn't really matter since it isn't checked
         for(uint i = 1; i< leaderboardArrayTmp.Length; i++){
             if(leaderboardArrayTmp[i].position == currentComboChoice){
                 timeDifferenceEntry = leaderboardArrayTmp[i];
