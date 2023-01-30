@@ -51,13 +51,13 @@ void Main(){
                     RefreshLeaderboard();
                 }else{
                     validMap = false;
-                    if(cutoffArray.Length > 0){
-                        cutoffArray = array<CutoffTime@>();
+                    if(leaderboardArray.Length > 0){
+                        leaderboardArray = array<LeaderboardEntry@>();
                     }
                 }
             }else{
-                if(cutoffArray.Length > 0){
-                    cutoffArray = array<CutoffTime@>();
+                if(leaderboardArray.Length > 0){
+                    leaderboardArray = array<LeaderboardEntry@>();
                 }
             }
             
