@@ -1,6 +1,7 @@
 // File containing the main functions of the plugin (main loop and the function to refresh the leaderboard)
 
 void RefreshLeaderboard(){
+    auto startTime = Time::get_Now();
     int lastPbTime = currentPbTime;
     //No need to make this a coroutine since it is needed before executing the rest of the refresh
     LeaderboardEntry@ pbTimeTmp = GetPersonalBestEntry();
@@ -8,11 +9,12 @@ void RefreshLeaderboard(){
     if(pbTimeTmp.time == lastPbTime) {
         counterTries++;
         if(counterTries > maxTries) {
-            print("Failed to refresh the leaderboard " + maxTries + " times, stopping the refresh");
+            print("Failed to refresh the leaderboard " + maxTries + " times, stopping the refresh. Time spent : " + (Time::get_Now() - startTime) + "ms");
             failedRefresh = true;
         }
         // we still want to try and get the other times
         if(counterTries > 1) {
+            print("Failed to refresh the leaderboard " + counterTries + " times. Time spent : " + (Time::get_Now() - startTime) + "ms");
             return;
         }
         
@@ -99,6 +101,7 @@ void RefreshLeaderboard(){
     //sort the array
     leaderboardArrayTmp.SortAsc();
     leaderboardArray = leaderboardArrayTmp;
+    print("Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms");
 }
 
 
