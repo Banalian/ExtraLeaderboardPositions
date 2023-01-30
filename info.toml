@@ -8,3 +8,4 @@ siteid = 169
 
 [script]
 dependencies = [ "NadeoServices", "VehicleState" ]
+optional_dependencies = [ "ChampionMedals" ]

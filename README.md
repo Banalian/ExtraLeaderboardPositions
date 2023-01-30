@@ -1,6 +1,6 @@
 # ExtraLeaderboardPositions
 
-Trackmania Next (2020) plugin that allows you to see the times of more key positions (1st, 10th, 100th, 1000th and 10000th place times)
+Trackmania Next (2020) plugin that allows you to see the times of any positions in the leaderboard, as well as the hypothetical positions of any medals.
 
 This can be used to see how far approximatly you are from getting a better trophy reward in a TOTD for example.
 
@@ -13,10 +13,11 @@ Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositio
 # Changelog
 ## 2.0.0
 Big rewrite of the plugin for more functionality !
-- Rewrite of the plugin to hopefully have faster refreshings in "normal" mode
+- Rewrite of the plugin to hopefully have faster refreshing time in "normal" mode
 - Added a mode that uses an external API to gather the leaderboard (this mode allows for faster refreshes, and for getting medals positions even if you pb is better for example)
     - This mode is Opt-in, and can be enabled in the settings
     - It might be disabled in the future depending on the API's availability
+- Added Optional Dependency to Champion Medals
 
 ## 1.6.2
 - Changed windows flag to not focus on appearing window

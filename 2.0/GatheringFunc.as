@@ -141,6 +141,20 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 		silverTime = map.TMObjective_SilverTime;
 		bronzeTime = map.TMObjective_BronzeTime;
 
+#if DEPENDENCY_CHAMPIONMEDALS
+        if(showChampionMedals){
+            int championTime = ChampionMedals::GetCMTime();
+            if(championTime != 0){
+                auto championPosition = GetSpecificPositionEntry(championTime);
+                championPosition.desc = "Champion";
+                championPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                if(isAValidMedalTime(championPosition)) {
+                    tmpArray.InsertLast(championPosition);
+                }
+            }
+        }
+#endif
+
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
         if(showAT){
             if(atTime < currentPbTime || currentPbTime == -1){

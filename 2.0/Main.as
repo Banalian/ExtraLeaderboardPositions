@@ -63,6 +63,35 @@ void RefreshLeaderboard(){
             }
             leaderboardArrayTmp.InsertLast(resp.positions[i]);
         }
+
+#if DEPENDENCY_CHAMPIONMEDALS
+        // We check all the pb entries :
+        // There is either one or two entries. We check if the time of them is equal to the champion time. If only one of them is, we change its type to MEDAL, and the other to PB
+        // If both are, we sort them and change the first one to MEDAL and the second one to PB, since either they're both the same, or the medal if the "first" to have the medal
+        int championTime = ChampionMedals::GetCMTime();
+        if(championTime != 0){
+            array<LeaderboardEntry@> pbEntries;
+            for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
+                if(leaderboardArrayTmp[i].entryType == EnumLeaderboardEntryType::PB){
+                    pbEntries.InsertLast(leaderboardArrayTmp[i]);
+                }
+            }
+            if(pbEntries.Length == 1){
+                if(pbEntries[0].time == championTime){
+                    pbEntries[0].entryType = EnumLeaderboardEntryType::MEDAL;
+                    pbEntries[0].desc = "Champion";
+                }
+            }else if(pbEntries.Length == 2){
+                pbEntries.SortAsc();
+                if(pbEntries[0].time == championTime){
+                    pbEntries[0].entryType = EnumLeaderboardEntryType::MEDAL;
+                    pbEntries[0].desc = "Champion";
+                    pbEntries[1].entryType = EnumLeaderboardEntryType::PB;
+                    pbEntries[1].desc = "PB";
+                }
+            }
+        }
+#endif
     } else {    
         leaderboardArrayTmp.InsertLast(pbTimeTmp);
         // Make all the request in local (apart from impossible calls like medals above pb)
