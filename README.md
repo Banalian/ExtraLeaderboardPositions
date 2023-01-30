@@ -11,6 +11,13 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.0.0
+Big rewrite of the plugin for more functionality !
+- Rewrite of the plugin to hopefully have faster refreshings in "normal" mode
+- Added a mode that uses an external API to gather the leaderboard (this mode allows for faster refreshes, and for getting medals positions even if you pb is better for example)
+    - This mode is Opt-in, and can be enabled in the settings
+    - It might be disabled in the future depending on the API's availability
+
 ## 1.6.2
 - Changed windows flag to not focus on appearing window
 - Plugin now won't display when in Royal mode
