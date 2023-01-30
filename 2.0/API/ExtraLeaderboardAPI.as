@@ -106,6 +106,14 @@ namespace ExtraLeaderboardAPI
         if(showAT){
             request.medals.InsertLast(MedalType::AT);
         }
+#if DEPENDENCY_CHAMPIONMEDALS
+        if(showChampionMedals){
+            int champTime = ChampionMedals::GetCMTime();
+            if(champTime != 0){
+                request.scores.InsertLast(champTime);
+            }
+        }
+#endif
 
         return request;
     }

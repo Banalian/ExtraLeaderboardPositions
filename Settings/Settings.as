@@ -24,6 +24,10 @@ bool showPb = true;
 [Setting hidden]
 bool showMedals = true;
 
+#if DEPENDENCY_CHAMPIONMEDALS
+[Setting hidden]
+bool showChampionMedals = true;
+#endif
 [Setting hidden]
 bool showAT = true;
 [Setting hidden]
@@ -52,7 +56,7 @@ int nbSizePositionToGetArray = 1;
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
-// unsaved counterpart allPositionToGet is in the main file;
+// unsaved counterpart allPositionToGet is in the data file;
 
 [Setting hidden]
 bool showTimeDifference = true;

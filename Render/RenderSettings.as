@@ -101,6 +101,9 @@ void RenderMedalSettings(){
 
     if(UI::Button("Reset to default")){
         showMedals = true;
+#if DEPENDENCY_CHAMPIONMEDALS
+        showChampionMedals = true;
+#endif
         showAT = true;
         showGold = true;
         showSilver = true;
@@ -115,6 +118,9 @@ void RenderMedalSettings(){
     showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
 
     if(showMedals){
+#if DEPENDENCY_CHAMPIONMEDALS
+        showChampionMedals = UI::Checkbox("Show Champion medals", showChampionMedals);
+#endif
         showAT = UI::Checkbox("Show AT", showAT);
         showGold = UI::Checkbox("Show Gold", showGold);
         showSilver = UI::Checkbox("Show Silver", showSilver);
