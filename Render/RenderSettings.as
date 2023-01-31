@@ -274,3 +274,96 @@ void RenderPositionCustomization(){
         }
     }
 }
+
+
+
+/**
+ * Function to select an icon and color from the list of available ones
+ */
+ bool GetPositionData(int uniqueId, PositionData positionData){
+    bool changed = false;
+    UI::BeginTable("PositionData#" + uniqueId, 2);
+    UI::TableNextRow();
+    UI::TableNextColumn();
+    UI::BeginCombo("Icon", positionData.icon);
+
+    uint tmpPos = positionData.position;
+    string tmpIcon = positionData.icon;
+    string tmpColor = positionData.color;
+    
+    for(uint i = 0; i < possibleIcons.Length; i++){
+        if(UI::Selectable(possibleIcons[i], positionData.icon == possibleIcons[i])){
+            UI::SetItemDefaultFocus();
+            positionData.icon = possibleIcons[i];
+        }
+    }
+    UI::EndCombo();
+    UI::TableNextColumn();
+    UI::BeginCombo("Color", positionData.color);
+    for(uint i = 0; i < possibleColors.Length; i++){
+        if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.color == possibleColors[i])){
+            UI::SetItemDefaultFocus();
+            positionData.color = possibleColors[i];
+        }
+    }
+    UI::EndCombo();
+    UI::EndTable();
+
+    if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color){
+        changed = true;
+    }
+
+    return changed;
+ }
+
+[SettingsTab name="Positions customization"]
+void RenderPositionCustomization(){
+
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        return;
+    }
+
+    UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
+
+    if(UI::Button("Reset to default")){
+        allPositionData = array<PositionData>();
+        allPositionData.InsertLast(PositionData(1, "\\$071"));
+        allPositionData.InsertLast(PositionData(10, "\\$db4"));
+        allPositionData.InsertLast(PositionData(100, "\\$899"));
+        allPositionData.InsertLast(PositionData(1000, "\\$964"));
+        allPositionData.InsertLast(PositionData(10000, "\\$444"));
+        allPositionDataStringSave = "";
+        for(uint i = 0; i < allPositionData.Length; i++){
+            allPositionDataStringSave += allPositionData[i].Serialize();
+            if(i < allPositionData.Length - 1){
+                allPositionDataStringSave += ";";
+            }
+        }
+        nbSizePositionDataArray = 5;
+    }
+
+    if(UI::Button("Refresh")){
+        ForceRefresh();
+    }
+
+    if(UI::Button("+ : Add a position")){
+        nbSizePositionDataArray++;
+        allPositionData.InsertLast(PositionData(1, "\\$071"));
+        OnSettingsChanged();
+    }
+    if(UI::Button("- : Remove a position")){
+        if(nbSizePositionDataArray > 1){
+            nbSizePositionDataArray--;
+            allPositionData.RemoveAt(nbSizePositionDataArray);
+            OnSettingsChanged();
+        }
+    }
+
+    for(int i = 0; i < nbSizePositionDataArray; i++){
+        bool changed = GetPositionData(i, allPositionData[i]);
+        if(changed){
+            OnSettingsChanged();
+        }
+    }
+}
