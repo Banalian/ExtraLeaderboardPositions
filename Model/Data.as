@@ -15,6 +15,35 @@ const array<string> podiumIcon = {
     ""                                   // above 10k : No icon
 };
 
+
+/**
+ * List of available icons for leaderboard customisation
+ */
+const array<string> possibleIcons = {
+    Icons::Kenney::Podium,
+    Icons::Kenney::PodiumAlt,
+    Icons::Circle,
+    Icons::Heart,
+    Icons::Star,
+    Icons::User,
+    Icons::Trophy
+};
+
+/**
+ * List of available colors for leaderboard customisation
+ */
+const array<string> possibleColors = {
+    "\\$071", // green
+    "\\$db4", // gold
+    "\\$899", // silver
+    "\\$964", // bronze
+    "\\$444", // grey
+    "\\$777", // bright grey
+    "\\$77f", // blue
+    "\\$f77", // red
+    "\\$fff", // white
+};
+
 const array<string> loadingSteps = {
     Icons::Kenney::MoveBr,
     Icons::Kenney::MoveBt,
@@ -61,6 +90,8 @@ bool refreshOPConfig = false;
 
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
+
+array<PositionData> allPositionData = {};
 
 
 array<LeaderboardEntry@> leaderboardArray;
