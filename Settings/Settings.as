@@ -57,9 +57,17 @@ bool showRefreshButtonSetting = true;
 int nbSizePositionToGetArray = 1;
 
 [Setting hidden]
+int nbSizePositionDatatArray = 1;
+
+[Setting hidden]
 string allPositionToGetStringSave = "";
 
 // unsaved counterpart allPositionToGet is in the data file;
+
+[Setting hidden]
+bool allPositionDataStringSave = "";
+
+// unsaved counterpart allPositionData is in the data file;
 
 [Setting hidden]
 bool showTimeDifference = true;
