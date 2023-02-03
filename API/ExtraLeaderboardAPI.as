@@ -90,32 +90,73 @@ namespace ExtraLeaderboardAPI
         for(uint i = 0; i < allPositionToGet.Length; i++){
             request.positions.InsertLast(allPositionToGet[i]);
         }
-        if(currentPbTime != -1){
-            request.scores.InsertLast(currentPbTime);
-        }
 
-        if(showBronze){
+        if(ShouldRequestMedal(MedalType::BRONZE)){
             request.medals.InsertLast(MedalType::BRONZE);
         }
-        if(showSilver){
+        if(ShouldRequestMedal(MedalType::SILVER)){
             request.medals.InsertLast(MedalType::SILVER);
         }
-        if(showGold){
+        if(ShouldRequestMedal(MedalType::GOLD)){
             request.medals.InsertLast(MedalType::GOLD);
         }
-        if(showAT){
+        if(ShouldRequestMedal(MedalType::AT)){
             request.medals.InsertLast(MedalType::AT);
         }
 #if DEPENDENCY_CHAMPIONMEDALS
-        if(showChampionMedals){
-            int champTime = ChampionMedals::GetCMTime();
-            if(champTime != 0){
-                request.scores.InsertLast(champTime);
-            }
+        // We rewrite the logic of the ShouldRequestMedal function since we don't want to modify the medal enum
+        int champTime = ChampionMedals::GetCMTime();
+        if(
+            champTime != 0 && // if the medal exists
+            showChampionMedals && // if the user wants to show it
+            (((champTime < currentPbTime) || currentPbTime == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
+    
+        ){
+            request.scores.InsertLast(champTime);
         }
 #endif
 
         return request;
     }
     
+}
+
+
+/**
+ * Check if a medal should be requested based on settings and current PB
+ * Assumes that we're in a map.
+ * Isn't in toolbox since it's some "private" function only used in this namespace(and above function)
+ */
+bool ShouldRequestMedal(MedalType medal){
+   
+    auto app = GetApp();
+    auto map = app.RootMap;
+
+    bool shouldShow = false;
+    int medalTime = -1;
+    switch(medal){
+        case MedalType::BRONZE:
+               shouldShow = showBronze;
+               medalTime = map.TMObjective_BronzeTime;
+               break;
+         case MedalType::SILVER:
+               shouldShow = showSilver;
+                medalTime = map.TMObjective_SilverTime;
+               break;
+        case MedalType::GOLD:
+                shouldShow = showGold;
+                medalTime = map.TMObjective_GoldTime;
+                break;
+        case MedalType::AT:
+                shouldShow = showAT;
+                medalTime = map.TMObjective_AuthorTime;
+                break;
+    }
+
+    // Check if the medal is better than the PB or if the user wants to show it anyway
+    if(shouldShow && currentPbTime != -1){
+        shouldShow =  medalTime < currentPbTime || showMedalWhenBetter;
+    }
+
+    return shouldShow;
 }
