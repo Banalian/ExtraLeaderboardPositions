@@ -23,6 +23,7 @@ void RefreshLeaderboard(){
     }
 
     leaderboardArrayTmp = array<LeaderboardEntry@>();
+    leaderboardArrayTmp.InsertLast(pbTimeTmp);
 
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI){
@@ -72,44 +73,16 @@ void RefreshLeaderboard(){
             if(resp.positions[i].time == -1){
                 continue;
             }
-            // For now, we assume that if the entry type is TIME, it's the pb, so we change it's type to PB
+#if DEPENDENCY_CHAMPIONMEDALS
+            // For now, we assume that if the entry type is TIME, it's the Champion medal, since we're only requesting this in the score list
             if(resp.positions[i].entryType == EnumLeaderboardEntryType::TIME){
-                resp.positions[i].entryType = EnumLeaderboardEntryType::PB;
-                resp.positions[i].desc = "PB";
+                resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
+                resp.positions[i].desc = "Champion";
             }
+#endif
             leaderboardArrayTmp.InsertLast(resp.positions[i]);
         }
-
-#if DEPENDENCY_CHAMPIONMEDALS
-        // We check all the pb entries :
-        // There is either one or two entries. We check if the time of them is equal to the champion time. If only one of them is, we change its type to MEDAL, and the other to PB
-        // If both are, we sort them and change the first one to MEDAL and the second one to PB, since either they're both the same, or the medal if the "first" to have the medal
-        int championTime = ChampionMedals::GetCMTime();
-        if(championTime != 0){
-            array<LeaderboardEntry@> pbEntries;
-            for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
-                if(leaderboardArrayTmp[i].entryType == EnumLeaderboardEntryType::PB){
-                    pbEntries.InsertLast(leaderboardArrayTmp[i]);
-                }
-            }
-            if(pbEntries.Length == 1){
-                if(pbEntries[0].time == championTime){
-                    pbEntries[0].entryType = EnumLeaderboardEntryType::MEDAL;
-                    pbEntries[0].desc = "Champion";
-                }
-            }else if(pbEntries.Length == 2){
-                pbEntries.SortAsc();
-                if(pbEntries[0].time == championTime){
-                    pbEntries[0].entryType = EnumLeaderboardEntryType::MEDAL;
-                    pbEntries[0].desc = "Champion";
-                    pbEntries[1].entryType = EnumLeaderboardEntryType::PB;
-                    pbEntries[1].desc = "PB";
-                }
-            }
-        }
-#endif
     } else {    
-        leaderboardArrayTmp.InsertLast(pbTimeTmp);
         // Make all the request in local (apart from impossible calls like medals above pb)
         array<Meta::PluginCoroutine@> coroutines;
         for(uint i = 0; i< allPositionToGet.Length; i++){

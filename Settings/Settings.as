@@ -24,6 +24,9 @@ bool showPb = true;
 [Setting hidden]
 bool showMedals = true;
 
+[Setting hidden]
+bool showMedalWhenBetter = true;
+
 #if DEPENDENCY_CHAMPIONMEDALS
 [Setting hidden]
 bool showChampionMedals = true;

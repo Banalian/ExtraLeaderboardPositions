@@ -101,6 +101,7 @@ void RenderMedalSettings(){
     UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
+        showMedalWhenBetter = false;
         showMedals = true;
 #if DEPENDENCY_CHAMPIONMEDALS
         showChampionMedals = true;
@@ -119,6 +120,8 @@ void RenderMedalSettings(){
     showMedals = UI::Checkbox("Show medals estimated positions", showMedals);
 
     if(showMedals){
+        showMedalWhenBetter = UI::Checkbox("Show medal even if you have it (if possible)", showMedalWhenBetter);
+        UI::Text("\n");
 #if DEPENDENCY_CHAMPIONMEDALS
         showChampionMedals = UI::Checkbox("Show Champion medals", showChampionMedals);
 #endif
