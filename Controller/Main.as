@@ -46,10 +46,26 @@ void RefreshLeaderboard(){
         }
         // sort the medal entries then add the description to them
         medalEntries.SortAsc();
-        medalEntries[0].desc = "AT";
-        medalEntries[1].desc = "Gold";
-        medalEntries[2].desc = "Silver";
-        medalEntries[3].desc = "Bronze";
+
+        array<string> medalDesc = {};
+        // only add the medal description if the associated medal is activated
+        if(showAT){
+            medalDesc.InsertLast("AT");
+        }
+        if(showGold){
+            medalDesc.InsertLast("Gold");
+        }
+        if(showSilver){
+            medalDesc.InsertLast("Silver");
+        }
+        if(showBronze){
+            medalDesc.InsertLast("Bronze");
+        }
+
+        for(uint i = 0; i< medalEntries.Length; i++){
+            medalEntries[i].desc = medalDesc[i];
+        }
+
 
         // Insert all entries in our temporary entry array
         for(uint i = 0; i< resp.positions.Length; i++){
