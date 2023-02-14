@@ -14,7 +14,6 @@ void RefreshLeaderboard(){
         }
         // we still want to try and get the other times
         if(counterTries > 1) {
-            print("Failed to refresh the leaderboard " + counterTries + " times. Time spent : " + (Time::get_Now() - startTime) + "ms");
             return;
         }
         
@@ -119,7 +118,14 @@ void RefreshLeaderboard(){
     //sort the array
     leaderboardArrayTmp.SortAsc();
     leaderboardArray = leaderboardArrayTmp;
-    print("Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms");
+
+    string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
+    if(ExtraLeaderboardAPI::Active && useExternalAPI){
+        RefreshEndMessage += " (using the external API)";
+    } else {
+        RefreshEndMessage += " (using local Nadeo API calls)";
+    }
+    print(RefreshEndMessage);
 }
 
 

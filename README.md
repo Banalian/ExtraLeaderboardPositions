@@ -20,7 +20,7 @@ Big rewrite of the plugin for more functionality !
 - Added Optional Dependency to Champion Medals
 - Added a new setting to show the medals positions even if you have a better time (if you're using the external API mode)
 - Added Icons to the settings tab and changed the orders
-- Added the time it takes to refresh the leaderboard to the log
+- Added the time it takes to refresh the leaderboard to the log, as well as the method used
 
 ## 1.6.2
 - Changed windows flag to not focus on appearing window
