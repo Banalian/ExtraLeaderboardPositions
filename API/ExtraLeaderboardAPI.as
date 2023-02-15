@@ -31,7 +31,7 @@ namespace ExtraLeaderboardAPI
             API_URL = externalAPI["url"];
             Active = true;
         }else{
-            warn("External API is disabled");
+            warn("External API is disabled by config for now");
             Active = false;
         }
     }

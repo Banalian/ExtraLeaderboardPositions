@@ -56,5 +56,12 @@ void Update(float dt) {
         timer = 0;
         currentMapUid = "";
     }
+
+    // update the config timer
+    timerOPConfig += dt;
+    if(timerOPConfig > updateFrequencyOPConfig){
+        timerOPConfig = 0;
+        refreshOPConfig = true;
+    }
     
 }

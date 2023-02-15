@@ -42,6 +42,11 @@ void Main(){
 
     while(true){
 
+        if(refreshOPConfig){
+            ExtraLeaderboardAPI::LoadURLConfig();
+            refreshOPConfig = false;
+        }
+
         //if we're on a new map, the timer is over or a new pb has been made we update the times
         if(refreshPosition){
             if(CanRefresh()){
