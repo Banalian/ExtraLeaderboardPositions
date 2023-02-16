@@ -5,6 +5,10 @@ namespace ExtraLeaderboardAPI
     string API_URL = "";
     bool Active = false;
 
+    int counterTriesAPI = 0;
+    int maxTriesAPI = 3;
+    bool failedAPI = false;
+
     /**
      * load the configuration of the plugin.
      */
@@ -48,6 +52,10 @@ namespace ExtraLeaderboardAPI
             warn("External API is disabled by user");
             return null;
         }
+        if(failedAPI){
+            warn("External API failed too many times, disabling it for the rest of the session");
+            return null;
+        }
         if(request is null){
             warn("Request is null");
             return null;
@@ -66,7 +74,15 @@ namespace ExtraLeaderboardAPI
         }
         if(req.ResponseCode() != 200){
             warn("Error calling API at url ' " + req.Url + "' : " + req.ResponseCode() + " - " + req.Error());
+            counterTriesAPI++;
+            if(counterTriesAPI >= maxTriesAPI){
+                failedAPI = true;
+                warn("Too many tries, disabling API for the rest of the session");
+            }
             return null;
+        } else {
+            counterTriesAPI = 0;
+            failedAPI = false;
         }
 
         // get the json object from the response
