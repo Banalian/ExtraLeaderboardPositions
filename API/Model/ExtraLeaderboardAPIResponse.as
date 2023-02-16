@@ -38,6 +38,8 @@ namespace ExtraLeaderboardAPI
          */
         int bronzeTime;
 
+        string requestID;
+
         // Convert a json object to an ExtraLeaderboardAPIResponse object
         ExtraLeaderboardAPIResponse fromJson(Json::Value@ input){
             ExtraLeaderboardAPIResponse response;
@@ -46,6 +48,9 @@ namespace ExtraLeaderboardAPI
                 auto metaJson = input.Get("meta");
                 if(metaJson.HasKey("playerCount")){
                     response.playerCount = metaJson.Get("playerCount");
+                }
+                if(metaJson.HasKey("requestId")){
+                    response.requestID = metaJson.Get("requestId");
                 }
             }
 
