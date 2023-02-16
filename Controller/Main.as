@@ -24,6 +24,8 @@ void RefreshLeaderboard(){
     leaderboardArrayTmp = array<LeaderboardEntry@>();
     leaderboardArrayTmp.InsertLast(pbTimeTmp);
 
+    // Declare the response here to access it from the logging part later.
+    ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ respLog = ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse();;
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
@@ -35,6 +37,8 @@ void RefreshLeaderboard(){
             warn("response from ExtraLeaderboardAPI is null or empty");
             return;
         }
+
+        respLog = resp;
 
         // extract the medal entries
         array<LeaderboardEntry@> medalEntries;
@@ -121,7 +125,7 @@ void RefreshLeaderboard(){
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
-        RefreshEndMessage += " (using the external API)";
+        RefreshEndMessage += " (using the external API, with request id : " + respLog.requestID +  ")";
     } else {
         RefreshEndMessage += " (using local Nadeo API calls)";
     }
