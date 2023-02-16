@@ -25,7 +25,7 @@ void RefreshLeaderboard(){
     leaderboardArrayTmp.InsertLast(pbTimeTmp);
 
     // if activated, call the extra leaderboardAPI
-    if(ExtraLeaderboardAPI::Active && useExternalAPI){
+    if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
 
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
@@ -120,7 +120,7 @@ void RefreshLeaderboard(){
     leaderboardArray = leaderboardArrayTmp;
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
-    if(ExtraLeaderboardAPI::Active && useExternalAPI){
+    if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
         RefreshEndMessage += " (using the external API)";
     } else {
         RefreshEndMessage += " (using local Nadeo API calls)";
