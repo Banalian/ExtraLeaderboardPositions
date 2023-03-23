@@ -28,7 +28,21 @@ void RefreshLeaderboard(){
     ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ respLog = ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse();;
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
-        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = ExtraLeaderboardAPI::PrepareRequest(true, true);
+
+        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = null; 
+        try 
+        {
+           @req = ExtraLeaderboardAPI::PrepareRequest();
+        } 
+        catch 
+        {
+            // we can assume that something went wrong while trying to prepare the request. We abort the refresh and try again later
+            // also warn in the log that something went wrong
+            warn("Something went wrong while trying to prepare the request. Aborting the refresh and trying again later");
+            warn("Error message : " + getExceptionInfo());
+            failedRefresh = true;
+            return;
+        }
 
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
 
