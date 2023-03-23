@@ -33,6 +33,7 @@ void Update(float dt) {
             if(mapIdChanged){
                 currentMapUid = app.RootMap.MapInfo.MapUid;
                 currentPbTime = -1;
+                playerCount = -1;
             }
 
             //we remove the "lock" if the change was a map change or the timer

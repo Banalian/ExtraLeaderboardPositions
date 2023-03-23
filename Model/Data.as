@@ -17,6 +17,8 @@ const array<string> podiumIcon = {
 
 const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; // blue icon
 
+const string playerIconGrey = "\\$888" + Icons::User + resetColor; // grey icon
+
 const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
@@ -42,6 +44,8 @@ array<int> allPositionToGet = {};
 array<LeaderboardEntry@> leaderboardArray;
 array<LeaderboardEntry@> leaderboardArrayTmp;
 LeaderboardEntry@ timeDifferenceEntry = LeaderboardEntry();
+
+int playerCount = -1;
 
 int currentPbTime = -1;
 int currentPbPosition = -1;

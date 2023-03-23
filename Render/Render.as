@@ -102,18 +102,37 @@ void RenderWindows(){
             UI::Separator();
         }
 
+        UI::BeginTable("Info", 3, UI::TableFlags::SizingFixedFit);
+        UI::TableSetupColumn("info", UI::TableColumnFlags::WidthFixed);
+        UI::TableSetupColumn("empty", UI::TableColumnFlags::WidthStretch);
+        UI::TableSetupColumn("playercount", UI::TableColumnFlags::WidthFixed);
+        UI::TableNextRow();
+        UI::TableNextColumn();
         if(app.RootMap !is null){
             if(showMapName){
                 UI::Text(StripFormatCodes(app.RootMap.MapInfo.Name));
             }
 
+            UI::TableNextRow();
+            UI::TableNextColumn();
             if(showMapAuthor){
                 UI::Text(brightGreyColor + "Made by " + StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));
             }
+            UI::TableNextColumn();
         }
 
-        
+        if(showPlayerCount && playerCount != -1){
+            // set the text to be on the right
+            UI::TableNextColumn();
+            // if player count is above 10k, we display it as <10k
+            string playerCountStr = "";
+            playerCountStr = playerCount > 10000 ? "<" + playerCount : "" + playerCount;
+            UI::Text(playerIconGrey + " " + playerCountStr);
+        }
+    
+        UI::EndTable();
 
+        
         RenderTab();
 
         RenderRefreshButton();

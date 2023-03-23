@@ -24,6 +24,8 @@ void RenderSettingsCustomization(){
 
     useExternalAPI = UI::Checkbox("Use external API if available (allow for more informations on maps)", useExternalAPI);
 
+    showPlayerCount = UI::Checkbox("Show player count (only available if using the API)", showPlayerCount);
+
     UI::Text("\n\tDisplay mode customizations");
 
     hiddingSpeedSetting = UI::InputFloat("Hide if speed is above X (if the hide when driving mode is active)", hiddingSpeedSetting);

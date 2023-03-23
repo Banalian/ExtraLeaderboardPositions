@@ -75,3 +75,6 @@ int currentComboChoice = -1;
 
 [Setting hidden]
 bool useExternalAPI = false;
+
+[Setting hidden]
+bool showPlayerCount = true;

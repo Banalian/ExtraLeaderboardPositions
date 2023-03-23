@@ -32,7 +32,7 @@ void RefreshLeaderboard(){
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = null; 
         try 
         {
-           @req = ExtraLeaderboardAPI::PrepareRequest();
+           @req = ExtraLeaderboardAPI::PrepareRequest(showPlayerCount);
         } 
         catch 
         {
@@ -53,6 +53,13 @@ void RefreshLeaderboard(){
         }
 
         respLog = resp;
+
+        // if there's a player count, try to extract it and set the player count
+        if(showPlayerCount && resp.playerCount > 0){
+            playerCount = resp.playerCount;
+        } else {
+            playerCount = -1;
+        }
 
         // extract the medal entries
         array<LeaderboardEntry@> medalEntries;
@@ -99,7 +106,10 @@ void RefreshLeaderboard(){
 #endif
             leaderboardArrayTmp.InsertLast(resp.positions[i]);
         }
-    } else {    
+    } else {
+        // can't get the player count if we don't use the external API, so we set it to -1
+        playerCount = -1;
+
         // Make all the request in local (apart from impossible calls like medals above pb)
         array<Meta::PluginCoroutine@> coroutines;
         for(uint i = 0; i< allPositionToGet.Length; i++){
