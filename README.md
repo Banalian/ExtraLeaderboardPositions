@@ -11,6 +11,9 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.0.1
+- Fixed a bug where the plugin would crash if you left the map while the leaderboard was refreshing
+
 ## 2.0.0
 Big rewrite of the plugin for more functionality !
 - Rewrite of the plugin to hopefully have faster refreshing time in "normal" mode
