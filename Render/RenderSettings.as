@@ -41,6 +41,10 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::Text("\n\tPosition Representation");
+
+    shorterNumberRepresentation = UI::Checkbox("Use shorter number representation (10k instead of 10000)", shorterNumberRepresentation);
+
     UI::Text("\n\tMap/Author Name");
 
     showMapName = UI::Checkbox("Show map name", showMapName);

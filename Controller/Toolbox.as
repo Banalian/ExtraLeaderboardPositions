@@ -131,3 +131,19 @@ bool newPBSet(int timePbLocal) {
         return false;
     }
 }
+
+
+/**
+ * return the string representation of a number based on some settings like shorter numbers, etc
+ */
+string NumberToString(int number){
+    string numberString = "";
+
+    if(number < 1000 || !shorterNumberRepresentation){
+        numberString = "" + number;
+    } else {
+        numberString = "" + number / 1000 + "k";
+    }
+
+    return numberString;
+}

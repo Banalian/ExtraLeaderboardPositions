@@ -74,6 +74,9 @@ bool inverseTimeDiffSign = false;
 int currentComboChoice = -1;
 
 [Setting hidden]
+bool shorterNumberRepresentation = false;
+
+[Setting hidden]
 bool useExternalAPI = false;
 
 [Setting hidden]
