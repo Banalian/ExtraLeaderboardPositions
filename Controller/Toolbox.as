@@ -139,7 +139,7 @@ bool newPBSet(int timePbLocal) {
 string NumberToString(int number){
     string numberString = "";
 
-    if(number < 1000 || !shorterNumberRepresentation){
+    if(number < 10000 || !shorterNumberRepresentation){
         numberString = "" + number;
     } else {
         numberString = "" + number / 1000 + "k";
