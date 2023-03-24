@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.1.0
+- Added a new setting to shorten the position number if wanted (10k instead of 10000 for example)
+- Added a new setting to show the number of players in the leaderboard on a map
+
 ## 2.0.1
 - Fixed a bug where the plugin would crash if you left the map while the leaderboard was refreshing
 
