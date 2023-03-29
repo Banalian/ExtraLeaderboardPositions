@@ -217,7 +217,7 @@ void RenderTab(){
         if(showTimeDifference){
             if(leaderboardArray[i].time == -1 || timeDifferenceEntry.time == -1){
                 //Nothing here, no time to compare to
-            }else if(leaderboardArray[i].position == timeDifferenceEntry.position){
+            }else if(leaderboardArray[i].customEquals(timeDifferenceEntry)){
                 //Nothing here, the position is the same, it's the same time
                 //still keeping the if in case we want to print/add something here
             }else{

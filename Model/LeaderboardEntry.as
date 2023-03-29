@@ -32,6 +32,13 @@ class LeaderboardEntry{
             return time - other.time;
     }
 
+    /**
+     * Custom Equality operator (only checks the position and the time compared to the regular equality operator)
+     */
+    bool customEquals(LeaderboardEntry@ other){
+        return position == other.position && time == other.time;
+    }
+
 
     /**
      * Check if the entry is valid (i.e. if it has been initialized with different values than the default ones)
