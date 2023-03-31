@@ -104,38 +104,9 @@ void RenderWindows(){
             UI::Separator();
         }
 
-        UI::BeginTable("Info", 3, UI::TableFlags::SizingFixedFit);
-        UI::TableSetupColumn("info", UI::TableColumnFlags::WidthFixed);
-        UI::TableSetupColumn("empty", UI::TableColumnFlags::WidthStretch);
-        UI::TableSetupColumn("playercount", UI::TableColumnFlags::WidthFixed);
-        UI::TableNextRow();
-        UI::TableNextColumn();
-        if(app.RootMap !is null){
-            if(showMapName){
-                UI::Text(StripFormatCodes(app.RootMap.MapInfo.Name));
-            }
-
-            UI::TableNextRow();
-            UI::TableNextColumn();
-            if(showMapAuthor){
-                UI::Text(brightGreyColor + "Made by " + StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));
-            }
-            UI::TableNextColumn();
-        }
-
-        if(showPlayerCount && playerCount != -1){
-            // set the text to be on the right
-            UI::TableNextColumn();
-            // if player count is above 10k, we display it as <10k
-            string playerCountStr = NumberToString(playerCount);
-            playerCountStr = playerCount > 10000 ? "<" + playerCountStr : playerCountStr;
-            UI::Text(playerIconGrey + " " + playerCountStr);
-        }
-    
-        UI::EndTable();
-
+        bool rendered = RenderInfoTab();
         
-        RenderTab();
+        RenderTab(!rendered);
 
         RenderRefreshButton();
 
@@ -146,9 +117,92 @@ void RenderWindows(){
 }
 
 /**
+ * Render the info tab
+ * 
+ * returns true if the refresh icon was rendered
+ */
+bool RenderInfoTab(){
+    // if we don't show anything, we don't render the tab
+    if(!(showMapName || showMapAuthor || showPlayerCount)){
+        return false;
+    }
+
+    auto app = cast<CTrackMania>(GetApp());
+
+    // To change where the refresh icon is rendered, we need to know if we rendered it or not
+    bool refreshWasRendered = false;
+
+
+    UI::BeginTable("Info", 4, UI::TableFlags::SizingFixedFit);
+    UI::TableSetupColumn("info", UI::TableColumnFlags::WidthFixed);
+    UI::TableSetupColumn("empty", UI::TableColumnFlags::WidthStretch);
+    UI::TableSetupColumn("potentialRefresh", UI::TableColumnFlags::WidthFixed);
+    UI::TableSetupColumn("playercount", UI::TableColumnFlags::WidthFixed);
+    UI::TableNextRow();
+    UI::TableNextColumn();
+    if(app.RootMap !is null){
+        if(showMapName){
+            UI::Text(StripFormatCodes(app.RootMap.MapInfo.Name));
+            UI::TableNextColumn();
+            UI::TableNextColumn();
+            UI::TableNextColumn();
+            RenderRefreshIcon();
+            refreshWasRendered = true;
+        }
+        
+        UI::TableNextRow();
+        UI::TableNextColumn();
+        if(showMapAuthor){
+            UI::Text(brightGreyColor + "Made by " + StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
+        }
+        UI::TableNextColumn();
+        UI::TableNextColumn();
+        // if the refresh icon wasn't rendered, we render it here (for better alignment)
+        if(!refreshWasRendered && (showMapAuthor || showPlayerCount)){
+            RenderRefreshIcon();
+            refreshWasRendered = true;
+        }     
+    }
+
+    if(showPlayerCount && playerCount != -1){
+        // set the text to be on the right
+        UI::TableNextColumn();
+        // if player count is above 10k, we display it as <10k
+        string playerCountStr = NumberToString(playerCount);
+        playerCountStr = playerCount > 10000 ? "<" + playerCountStr : playerCountStr;
+        UI::Text(playerIconGrey + " " + playerCountStr);
+    }
+
+    UI::EndTable();
+
+    return refreshWasRendered;
+}
+
+/**
+ * Render the refresh icon if we're refreshing
+ */
+ void RenderRefreshIcon(){
+    if(refreshPosition){
+        UI::Text(refreshIconWhite);
+        if(UI::IsItemHovered()){
+            UI::BeginTooltip();
+            UI::Text("Refreshing...");
+            UI::EndTooltip();
+        }
+    }else if(failedRefresh){
+        UI::Text(refreshIconWhite + warningIcon);
+        if(UI::IsItemHovered()){
+            UI::BeginTooltip();
+            UI::Text("Refreshing failed.");
+            UI::EndTooltip();
+        }
+    }
+}
+
+/**
  * Render the table with the custom leaderboard
  */
-void RenderTab(){
+void RenderTab(bool showRefresh = false){
     UI::BeginTable("Main", 5);        
     
     UI::TableNextRow();
@@ -158,12 +212,10 @@ void RenderTab(){
     UI::TableNextColumn();
     UI::Text("Time");
     UI::TableNextColumn();
-    UI::TableNextColumn();
-    if(refreshPosition){
-        UI::Text("Refreshing...");
-    }else if(failedRefresh){
-        UI::Text("Refreshing failed.");
+    if(showRefresh){
+        RenderRefreshIcon();
     }
+    UI::TableNextColumn();
 
     int i = 0;
     while(i < int(leaderboardArray.Length)){

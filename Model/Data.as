@@ -19,6 +19,10 @@ const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; 
 
 const string playerIconGrey = "\\$888" + Icons::User + resetColor; // grey icon
 
+const string refreshIconWhite = "\\$fff" + Icons::Refresh + resetColor; // white icon
+
+const string warningIcon = "\\$f00" + Icons::ExclamationTriangle + resetColor; // red icon
+
 const string resetColor = "\\$z";
 const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
