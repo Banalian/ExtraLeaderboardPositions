@@ -96,9 +96,11 @@ void RenderWindows(){
 
         UI::BeginGroup();
 
-        UI::Text("Extra leaderboard positions");
+        if(showPluginName){
+            UI::Text(pluginName);
+        }
         
-        if(showSeparator){
+        if(showPluginName && showSeparator){
             UI::Separator();
         }
 

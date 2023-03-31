@@ -8,7 +8,10 @@ bool windowVisible = true;
 [Setting category="Display Settings" name="Display mode" description="When should the overlay be displayed?"]
 EnumDisplayMode displayMode = EnumDisplayMode::ALWAYS;
 
-[Setting category="Display Settings" name="Show separator" description="Should the separator be displayed"]
+[Setting category="Display Settings" name="Show the plugin's name" description="Should the plugin's name be displayed?"]
+bool showPluginName = true;
+
+[Setting category="Display Settings" name="Show separator" description="Should the separator be displayed ? (only if the plugin's name is displayed)))"]
 bool showSeparator = true;
 
 [Setting hidden]
