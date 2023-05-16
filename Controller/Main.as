@@ -98,10 +98,22 @@ void RefreshLeaderboard(){
                 continue;
             }
 #if DEPENDENCY_CHAMPIONMEDALS
-            // For now, we assume that if the entry type is TIME, it's the Champion medal, since we're only requesting this in the score list
-            if(resp.positions[i].entryType == EnumLeaderboardEntryType::TIME){
-                resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
-                resp.positions[i].desc = "Champion";
+            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+                // if there's a champion medal and the time is the champion time, we change the entry type to medal and set the description to champion
+                if(resp.positions[i].time == int(ChampionMedals::GetCMTime())){
+                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
+                    resp.positions[i].desc = "Champion";
+                }
+            }
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+                // if there's a SBVille medal and the time is the the SBVille AT, we change the entry type to medal and set the description to SBVille AT
+                // both medals should not be activated at the same time, so we can safely do this
+                if(resp.positions[i].time == int(SBVilleCampaignChallenges::getChallengeTime())){
+                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
+                    resp.positions[i].desc = "SBVille AT";
+                }
             }
 #endif
             leaderboardArrayTmp.InsertLast(resp.positions[i]);

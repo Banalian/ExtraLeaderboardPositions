@@ -155,6 +155,20 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 #endif
 
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        if(showSBVilleATMedal){
+            int SBVilleATTime = SBVilleCampaignChallenges::getChallengeTime();
+            if(SBVilleATTime != 0){
+                auto SBVillePosition = GetSpecificPositionEntry(SBVilleATTime);
+                SBVillePosition.desc = "SBVille AT";
+                SBVillePosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                if(isAValidMedalTime(SBVillePosition)) {
+                    tmpArray.InsertLast(SBVillePosition);
+                }
+            }
+        }
+#endif
+
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
         if(showAT){
             if(atTime < currentPbTime || currentPbTime == -1){

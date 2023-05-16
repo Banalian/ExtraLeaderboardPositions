@@ -109,6 +109,9 @@ void RenderMedalSettings(){
     if(UI::Button("Reset to default")){
         showMedalWhenBetter = false;
         showMedals = true;
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        showSBVilleATMedal = true;
+#endif
 #if DEPENDENCY_CHAMPIONMEDALS
         showChampionMedals = true;
 #endif
@@ -128,6 +131,9 @@ void RenderMedalSettings(){
     if(showMedals){
         showMedalWhenBetter = UI::Checkbox("Show medal even if you have it (if possible)", showMedalWhenBetter);
         UI::Text("\n");
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        showSBVilleATMedal = UI::Checkbox("Show SBVille AT medal", showSBVilleATMedal);
+#endif
 #if DEPENDENCY_CHAMPIONMEDALS
         showChampionMedals = UI::Checkbox("Show Champion medals", showChampionMedals);
 #endif

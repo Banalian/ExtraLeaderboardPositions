@@ -131,6 +131,18 @@ namespace ExtraLeaderboardAPI
             request.scores.InsertLast(champTime);
         }
 #endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        // Same as above
+        int sbVilleTime = SBVilleCampaignChallenges::getChallengeTime();
+        if(
+            sbVilleTime != 0 && // if the medal exists
+            showSBVilleATMedal && // if the user wants to show it
+            (((sbVilleTime < currentPbTime) || currentPbTime == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
+    
+        ){
+            request.scores.InsertLast(sbVilleTime);
+        }
+#endif
 
         return request;
     }

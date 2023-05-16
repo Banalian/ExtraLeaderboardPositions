@@ -30,6 +30,10 @@ bool showMedals = true;
 [Setting hidden]
 bool showMedalWhenBetter = true;
 
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+[Setting hidden]
+bool showSBVilleATMedal = true;
+#endif
 #if DEPENDENCY_CHAMPIONMEDALS
 [Setting hidden]
 bool showChampionMedals = true;
