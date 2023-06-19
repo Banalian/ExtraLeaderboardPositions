@@ -1,4 +1,4 @@
-[SettingsTab name="General Customization" icon="Cog" order="1"]
+[SettingsTab name="General Customization" icon="Cog" order="2"]
 void RenderSettingsCustomization(){
 
     if(!UserCanUseThePlugin()){
@@ -84,7 +84,7 @@ void RenderSettingsCustomization(){
     
 }
 
-[SettingsTab name="Explanation" icon="Question" order="4"]
+[SettingsTab name="Explanation" icon="Question" order="5"]
 void RenderSettingsExplanation(){
     UI::Text("This plugin allows you to see more leaderboard positions.\n\n");
     UI::Text("You can modify the positions in the \"Positions customization\" tab\n");
@@ -97,7 +97,7 @@ void RenderSettingsExplanation(){
     UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter or any feature you would like added to this plugin.");
 }
 
-[SettingsTab name="Medals Position" icon="Circle" order="3"]
+[SettingsTab name="Medals Position" icon="Circle" order="4"]
 void RenderMedalSettings(){
     if(!UserCanUseThePlugin()){
         UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
@@ -170,7 +170,7 @@ void RenderMedalSettings(){
 
 }
 
-[SettingsTab name="Positions customization" icon="Kenney::PodiumAlt" order="2"]
+[SettingsTab name="Positions customization" icon="Kenney::PodiumAlt" order="3"]
 void RenderPositionCustomization(){
 
     if(!UserCanUseThePlugin()){
@@ -213,5 +213,76 @@ void RenderPositionCustomization(){
             allPositionToGet.RemoveAt(nbSizePositionToGetArray);
             OnSettingsChanged();
         }
+    }
+}
+
+//The following 2 tabs were added by Daniel1730
+[SettingsTab name="Player Database" order="6"]
+void RenderPlayerDatabase(){
+
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        return;
+    }
+
+    UI::Text("The boxes are formatted in the following manner: <Player ID, Player Name> for as many players as desired. If any of the players below happen to set any of the desired times, their name will");
+
+    if(UI::Button("Reset to default")){
+        allPlayersToGet = {};
+        allPlayersToGetStringSave = "";
+        nbSizePlayersToGetArray = 0;
+    }
+
+    if(UI::Button("Refresh")){
+        ForceRefresh();
+    }
+
+    for(int i = 0; i < nbSizePlayersToGetArray; i++){
+        string tmp = UI::InputText("Custom player " + (i+1), allPlayersToGet[i]);
+        if(tmp != allPlayersToGet[i]){
+            allPlayersToGet[i] = tmp;
+            OnSettingsChanged();
+        }
+    }
+
+
+    if(UI::Button("+ : Add a player")){
+        nbSizePlayersToGetArray++;
+        allPlayersToGet.InsertLast("Player ID, Player Name");
+        OnSettingsChanged();
+    }
+    if(UI::Button("- : Remove a player")){
+        if(nbSizePlayersToGetArray > 1){
+            nbSizePlayersToGetArray--;
+            allPlayersToGet.RemoveAt(nbSizePlayersToGetArray);
+            OnSettingsChanged();
+        }
+    }
+}
+
+[SettingsTab name="Mode Swap" order="1"]
+void RenderModeSwap(){
+
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        return;
+    }
+
+    UI::Text("The available modes are \"Normal\" and \"Rival\". In Rival mode, custom positions will not be used. Instead, the leaderboard will display only the times and positions of the players listed in the player database");
+
+    string tmp = UI::InputText("Mode", currMode);
+    if(tmp != currMode){
+        currMode = tmp;
+        OnSettingsChanged();
+    }
+
+    UI::Text("The available scope is 0 (World), 1 (Continent), 2 (Country), or 3 (Region). If a scope other than world is selected, the leaderboard will only display times in that region, instead of the World.");
+    UI::Text("Changing this mode in a map will not have an effect until you change maps or reload the map");
+
+    int tmp2 = UI::InputInt("Scope", currScope);
+    if(tmp2 != currScope && tmp2 > -1 && tmp2 < 4){
+        currScope = tmp2;
+        updateAllZonesToSearch();
+        OnSettingsChanged();
     }
 }

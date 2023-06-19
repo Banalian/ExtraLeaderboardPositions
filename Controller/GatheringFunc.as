@@ -21,16 +21,23 @@ LeaderboardEntry@ GetPersonalBestEntry() {
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
         
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
+        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0");
     
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
-                auto top = tops[0]["top"];
+                auto top = tops[currScope]["top"];
+                if(playerContinent == ""){
+                    playerContinent = tops[1]["zoneName"];
+                    playerCountry = tops[2]["zoneName"];
+                    if(tops.Length > 3)
+                        playerRegion = tops[3]["zoneName"];
+                    updateAllZonesToSearch();
+                }
                 if(top.Length > 0) {
                     pbTimeTmp.time = top[0]["score"];
-                    pbTimeTmp.position = top[0]["position"];
                     currentPbTime = pbTimeTmp.time;
+                    pbTimeTmp.position = top[0]["position"];
                     currentPbPosition = pbTimeTmp.position;
                 }
             }
@@ -38,6 +45,50 @@ LeaderboardEntry@ GetPersonalBestEntry() {
     }
 
     return pbTimeTmp;
+}
+
+// Gets the list of Top 10k players on the map and their respective regions - DANIEL1730
+void UpdatePlayerLists(){
+    if(currScope == 1){
+        pluginName = playerContinent + " Leaderboard positions";
+    }else if(currScope == 2){
+        pluginName = playerCountry + " Leaderboard positions";
+    }else if(currScope == 3){
+        pluginName = playerRegion + " Leaderboard positions";
+    }
+
+    auto app = cast<CTrackMania>(GetApp());
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+    int offset = 0;
+
+     //check that we're in a map
+    while(offset < 1900){
+        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+            auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=100&offset="+offset+"&onlyWorld=true");
+        
+            if(info.GetType() != Json::Type::Null) {
+                auto tops = info["tops"];
+                if(tops.GetType() == Json::Type::Array) {
+                    auto top = tops[0]["top"];
+                    if(top.Length > 0) {
+                        for(int i = 0; i < top.Length; i++){
+                            string zone = top[i]["zoneName"];
+                            for(int j = 0; j < allZonesToSearch.Length; j++){
+                                if(zone == allZonesToSearch[j]){
+                                    regionalPlayers.InsertLast(top[i]["accountId"]);
+                                    regionalTimes.InsertLast(top[i]["score"]);
+                                }
+                            }
+                        }
+                    }
+                }            
+            }
+            offset += 100;
+            print(offset / 100);
+        }else{
+            break;
+        }
+    }
 }
 
 
@@ -55,23 +106,32 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
-    //check that we're in a map
-    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
-    
-        if(info.GetType() != Json::Type::Null) {
-            auto tops = info["tops"];
-            if(tops.GetType() == Json::Type::Array) {
-                auto top = tops[0]["top"];
-                if(top.Length > 0) {
-                    int infoTop = top[0]["score"];
-                    positionEntry.time = infoTop;
-                    positionEntry.position = position;
-                    positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
-                    return positionEntry;
-                }
-            }            
+
+    if(currScope == 0){
+        //check that we're in a map
+        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+            auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+        
+            if(info.GetType() != Json::Type::Null) {
+                auto tops = info["tops"];
+                if(tops.GetType() == Json::Type::Array) {
+                    auto top = tops[0]["top"];
+                    if(top.Length > 0) {
+                        int infoTop = top[0]["score"];
+                        positionEntry.time = infoTop;
+                        positionEntry.position = position;
+                        positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+                        return positionEntry;
+                    }
+                }            
+            }
         }
+    }else if(regionalTimes.Length > position-1){
+        positionEntry.position = position;
+        positionEntry.time = regionalTimes[(position-1)];
+        positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+    }else{
+        return null;
     }
 
     return positionEntry;
@@ -92,20 +152,30 @@ LeaderboardEntry@ GetSpecificPositionEntry(int time) {
         return positionEntry;
     }
 
-    //check that we're in a map
-    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+    if(currScope == 0){
+        //check that we're in a map
+        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
+            string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+            
+            auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time);
         
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
-    
-        if(info.GetType() != Json::Type::Null) {
-            auto tops = info["tops"];
-            if(tops.GetType() == Json::Type::Array) {
-                auto top = tops[0]["top"];
-                if(top.Length > 0) {
-                    positionEntry.time = top[0]["score"];
-                    positionEntry.position = top[0]["position"];
+            if(info.GetType() != Json::Type::Null) {
+                auto tops = info["tops"];
+                if(tops.GetType() == Json::Type::Array) {
+                    auto top = tops[0]["top"];
+                    if(top.Length > 0) {
+                        positionEntry.time = top[0]["score"];
+                        positionEntry.position = top[0]["position"];
+                    }
                 }
+            }
+        }
+    }else{
+        for(int i = 0; i < regionalTimes.Length; i++){
+            if(time <= regionalTimes[i]){
+                positionEntry.time = time;
+                positionEntry.position = i;
+                break;
             }
         }
     }

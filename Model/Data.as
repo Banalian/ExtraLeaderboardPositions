@@ -29,7 +29,7 @@ const string redColor = "\\$f77";
 const string greyColor = "\\$888";
 const string brightGreyColor = "\\$aaa";
 
-const string pluginName = "Extra Leaderboard positions";
+string pluginName = "Extra Leaderboard positions";
 
 string currentMapUid = "";
 
@@ -43,6 +43,18 @@ bool refreshOPConfig = false;
 
 //also a setting, but can't be saved, allPositionToGetStringSave is the saved counterpart
 array<int> allPositionToGet = {};
+
+//Data added by Daniel1730
+array<string> allPlayersToGet = {};
+array<string> allZonesToSearch = {};
+string currMode = "";
+int currScope = 0;
+string playerContinent = "";
+string playerCountry = "";
+string playerRegion = "";
+array<string> regionalPlayers = {}; // All Top 10k player IDs on the map, filtered by appropriately scoped region
+array<int> regionalTimes = {}; // Corresponds to regionalPlayers with each player's time
+int refreshPercent = 0;
 
 
 array<LeaderboardEntry@> leaderboardArray;
