@@ -5,6 +5,8 @@ void RefreshLeaderboard(){
     int lastPbTime = currentPbTime;
     //No need to make this a coroutine since it is needed before executing the rest of the refresh
     LeaderboardEntry@ pbTimeTmp = GetPersonalBestEntry();
+    updateAllZonesToSearch();
+    UpdatePlayerLists();
 
     if(pbTimeTmp.time == lastPbTime) {
         counterTries++;

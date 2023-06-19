@@ -66,6 +66,19 @@ int nbSizePositionToGetArray = 1;
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
+//The following 4 settings were added by Daniel1730
+[Setting hidden]
+int nbSizePlayersToGetArray = 0;
+
+[Setting hidden]
+string allPlayersToGetStringSave = "";
+
+[Setting hidden]
+string modeSave = "";
+
+[Setting hidden]
+int scopeSave = 0;
+
 // unsaved counterpart allPositionToGet is in the data file;
 
 [Setting hidden]
