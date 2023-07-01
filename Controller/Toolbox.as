@@ -27,7 +27,7 @@ bool isAValidMedalTime(LeaderboardEntry@ time) {
  * Needs to be called from a yieldable function
  */
 bool MapHasNadeoLeaderboard(const string &in mapId){
-    auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/map/" + mapId);
+    auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/map/" + mapId);
 
     return info.GetType() == Json::Type::Object;
 }

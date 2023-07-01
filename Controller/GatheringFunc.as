@@ -20,9 +20,9 @@ LeaderboardEntry@ GetPersonalBestEntry() {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
-    
+
+        auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -57,8 +57,8 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
-    
+        auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
@@ -95,9 +95,9 @@ LeaderboardEntry@ GetSpecificPositionEntry(int time) {
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-        
-        auto info = FetchEndpoint(NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
-    
+
+        auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?score="+time+"&onlyWorld=true");
+
         if(info.GetType() != Json::Type::Null) {
             auto tops = info["tops"];
             if(tops.GetType() == Json::Type::Array) {
