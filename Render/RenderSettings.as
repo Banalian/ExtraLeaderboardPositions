@@ -11,6 +11,7 @@ void RenderSettingsCustomization(){
         hiddingSpeedSetting = 1.0f;
         refreshTimer = 5;
         showPb = true;
+        showPercentage = false;
         showTimeDifference = true;
         showColoredTimeDifference = true;
         inverseTimeDiffSign = false;
@@ -40,6 +41,14 @@ void RenderSettingsCustomization(){
     UI::Text("\n\tPersonal best");
 
     showPb = UI::Checkbox("Show personal best", showPb);
+
+    UI::BeginDisabled(!useExternalAPI);
+
+    UI::Text("\n\tPercentage ranking");
+
+    showPercentage = UI::Checkbox("Show percentage column (requires External API)", showPercentage && useExternalAPI);
+
+    UI::EndDisabled();
 
     UI::Text("\n\tPosition Representation");
 

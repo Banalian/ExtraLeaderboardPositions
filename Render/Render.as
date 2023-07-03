@@ -203,8 +203,8 @@ bool RenderInfoTab(){
  * Render the table with the custom leaderboard
  */
 void RenderTab(bool showRefresh = false){
-    UI::BeginTable("Main", 5);        
-    
+    UI::BeginTable("Main", 6);
+
     UI::TableNextRow();
     UI::TableNextColumn();
     UI::TableNextColumn();
@@ -212,6 +212,11 @@ void RenderTab(bool showRefresh = false){
     UI::TableNextColumn();
     UI::Text("Time");
     UI::TableNextColumn();
+    UI::TableNextColumn();
+    if(showPercentage){
+        UI::Text("%");
+    }
+    // UI::TableNextColumn();
     if(showRefresh){
         RenderRefreshIcon();
     }
@@ -264,7 +269,13 @@ void RenderTab(bool showRefresh = false){
         if(leaderboardArray[i].desc != ""){
             UI::Text(displayString + leaderboardArray[i].desc);
         }
-        
+
+        //------------%--------------------
+        UI::TableNextColumn();
+        if(showPercentage && leaderboardArray[i].percentage != 0.0f){
+            UI::Text(displayString + leaderboardArray[i].percentageDisplay);
+        }
+
         //------------TIME DIFFERENCE------
         UI::TableNextColumn();
 
