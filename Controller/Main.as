@@ -29,12 +29,13 @@ void RefreshLeaderboard(){
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
 
-        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = null; 
-        try 
+        bool needPlayerCount = showPlayerCount || showPercentage;
+        ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = null;
+        try
         {
-           @req = ExtraLeaderboardAPI::PrepareRequest(showPlayerCount);
-        } 
-        catch 
+           @req = ExtraLeaderboardAPI::PrepareRequest(needPlayerCount);
+        }
+        catch
         {
             // we can assume that something went wrong while trying to prepare the request. We abort the refresh and try again later
             // also warn in the log that something went wrong
@@ -55,7 +56,7 @@ void RefreshLeaderboard(){
         respLog = resp;
 
         // if there's a player count, try to extract it and set the player count
-        if(showPlayerCount && resp.playerCount > 0){
+        if(needPlayerCount && resp.playerCount > 0){
             playerCount = resp.playerCount;
         } else {
             playerCount = -1;
@@ -151,6 +152,19 @@ void RefreshLeaderboard(){
             if(leaderboardArrayTmp[i].position == currentComboChoice){
                 timeDifferenceEntry = leaderboardArrayTmp[i];
                 break;
+            }
+        }
+    }
+
+    if(showPercentage && playerCount > 0){
+        for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
+
+            leaderboardArrayTmp[i].percentage = ((100.0f * leaderboardArrayTmp[i].position) / playerCount);
+            if(leaderboardArrayTmp[i].percentage % 1 == 0) {
+                leaderboardArrayTmp[i].percentageDisplay = Text::Format("%.0f%%", leaderboardArrayTmp[i].percentage);
+            }
+            else {
+                leaderboardArrayTmp[i].percentageDisplay = Text::Format("%.02f%%", leaderboardArrayTmp[i].percentage);
             }
         }
     }

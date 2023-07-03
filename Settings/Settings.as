@@ -23,6 +23,8 @@ int refreshTimer = 5;
 [Setting hidden]
 bool showPb = true;
 
+[Setting hidden]
+bool showPercentage = false;
 
 [Setting hidden]
 bool showMedals = true;

@@ -17,6 +17,10 @@ class LeaderboardEntry{
      */
     string desc = "";
 
+    float percentage = 0.0f;
+
+    string percentageDisplay = "";
+
     /**
      * Type of the entry (medal, custom, etc...)
      */
