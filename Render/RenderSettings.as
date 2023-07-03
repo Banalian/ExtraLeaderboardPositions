@@ -25,7 +25,11 @@ void RenderSettingsCustomization(){
 
     useExternalAPI = UI::Checkbox("Use external API if available (allow for more informations on maps)", useExternalAPI);
 
+    UI::BeginDisabled(!useExternalAPI);
+
     showPlayerCount = UI::Checkbox("Show player count (only available if using the API)", showPlayerCount);
+
+    UI::EndDisabled();
 
     UI::Text("\n\tDisplay mode customizations");
 
