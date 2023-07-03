@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.3.0
+- Added a new setting to show the percentage view of the time (meaning, you can see the top%, for exemple, if you were top 100 on a map with 1000 players, you'd see 10%) (Thanks to Dayshine/tboby for the PR !)
+- Fixed warnings because of deprecated constant BaseURL() (Thanks to NaN-inf for the PR !)
+
 ## 2.2.0
 - Added Optional Dependency to SBVille Challenge medal plugin
 
