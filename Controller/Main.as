@@ -16,7 +16,6 @@ void RefreshLeaderboard(){
         if(counterTries > 1) {
             return;
         }
-        
     } else {
         counterTries = 0;
     }
@@ -25,7 +24,7 @@ void RefreshLeaderboard(){
     leaderboardArrayTmp.InsertLast(pbTimeTmp);
 
     // Declare the response here to access it from the logging part later.
-    ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ respLog = ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse();;
+    ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ respLog = ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse();
     // if activated, call the extra leaderboardAPI
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
 
@@ -158,7 +157,6 @@ void RefreshLeaderboard(){
 
     if(showPercentage && playerCount > 0){
         for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
-
             leaderboardArrayTmp[i].percentage = ((100.0f * leaderboardArrayTmp[i].position) / playerCount);
             if(leaderboardArrayTmp[i].percentage % 1 == 0) {
                 leaderboardArrayTmp[i].percentageDisplay = Text::Format("%.0f%%", leaderboardArrayTmp[i].percentage);
@@ -192,6 +190,7 @@ class Integer{
         this.value = value;
     }
 }
+
 void SpecificTimeEntryCoroutine(ref@ position){
     // cast ref to Integer
     Integer@ positionInt = cast<Integer@>(position);

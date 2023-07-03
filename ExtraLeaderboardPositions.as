@@ -28,7 +28,7 @@ void Main(){
     startupEnded = true;
     // Add the audiences you need
     NadeoServices::AddAudience("NadeoLiveServices");
- 
+
     // Wait until the services are authenticated
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
       yield();
@@ -65,7 +65,7 @@ void Main(){
                     leaderboardArray = array<LeaderboardEntry@>();
                 }
             }
-            
+
             refreshPosition = false;
         }
         yield();
@@ -86,7 +86,7 @@ bool CanRefresh(){
     if (network.ClientManiaAppPlayground is null || network.ClientManiaAppPlayground.Playground is null || network.ClientManiaAppPlayground.Playground.Map is null){
         return false;
     }
-    
+
     // check that we're not in an invalid gamemode
     auto ServerInfo = cast<CTrackManiaNetworkServerInfo>(network.ServerInfo);
     string gamemode = ServerInfo.CurGameModeStr;

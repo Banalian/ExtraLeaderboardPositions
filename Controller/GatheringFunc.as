@@ -70,7 +70,7 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
                     positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
                     return positionEntry;
                 }
-            }            
+            }
         }
     }
 
@@ -138,8 +138,8 @@ array<LeaderboardEntry@> GetMedalsEntries(){
     if(network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         atTime = map.TMObjective_AuthorTime;
         goldTime = map.TMObjective_GoldTime;
-		silverTime = map.TMObjective_SilverTime;
-		bronzeTime = map.TMObjective_BronzeTime;
+        silverTime = map.TMObjective_SilverTime;
+        bronzeTime = map.TMObjective_BronzeTime;
 
 #if DEPENDENCY_CHAMPIONMEDALS
         if(showChampionMedals){

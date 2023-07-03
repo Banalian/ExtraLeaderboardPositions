@@ -42,7 +42,7 @@ namespace ExtraLeaderboardAPI
 
     /**
      *  Return a list of LeaderboardEntry objects, given a map id and a list of requests
-     */ 
+     */
     ExtraLeaderboardAPIResponse@ GetExtraLeaderboard(ExtraLeaderboardAPIRequest@ request){
         if(!Active){
             warn("External API is disabled by config");
@@ -156,7 +156,6 @@ namespace ExtraLeaderboardAPI
  * Isn't in toolbox since it's some "private" function only used in this namespace(and above function)
  */
 bool ShouldRequestMedal(MedalType medal){
-   
     auto app = GetApp();
     auto map = app.RootMap;
 

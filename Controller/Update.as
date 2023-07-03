@@ -11,7 +11,7 @@ void Update(float dt) {
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    
+
     //check if we're in a map
     if(app.CurrentPlayground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         bool mapIdChanged = currentMapUid != app.RootMap.MapInfo.MapUid;
@@ -26,10 +26,9 @@ void Update(float dt) {
             timePbLocal = scoreMgr.Map_GetRecord_v2(userId, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
         }
 
-		
         //if the map change, or the timer is over or a new pb is found, we refresh the positions
         if (mapIdChanged || timer > updateFrequency || newPBSet(timePbLocal)) {
-            
+
             if(mapIdChanged){
                 currentMapUid = app.RootMap.MapInfo.MapUid;
                 currentPbTime = -1;
@@ -47,8 +46,7 @@ void Update(float dt) {
             if(!failedRefresh){
                 refreshPosition = true;
             } 
-            
-            
+
             timer = 0;
         } else {
             timer += dt;
@@ -64,5 +62,5 @@ void Update(float dt) {
         timerOPConfig = 0;
         refreshOPConfig = true;
     }
-    
+
 }

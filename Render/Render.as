@@ -41,8 +41,6 @@ void Render() {
 
         RenderWindows();
     }
-    
-    
 }
 
 void RenderInterface(){
@@ -67,8 +65,7 @@ void RenderRefreshButton(){
 
 void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
-   
-    
+
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking | UI::WindowFlags::NoFocusOnAppearing;
     bool showRefreshButton = false;
 
@@ -89,7 +86,6 @@ void RenderWindows(){
     if(app.Editor !is null){
         return;
     }
-        
 
     if(windowVisible && app.CurrentPlayground !is null){
         UI::Begin(pluginName, windowFlags);
@@ -99,13 +95,13 @@ void RenderWindows(){
         if(showPluginName){
             UI::Text(pluginName);
         }
-        
+
         if(showPluginName && showSeparator){
             UI::Separator();
         }
 
         bool rendered = RenderInfoTab();
-        
+
         RenderTab(!rendered);
 
         RenderRefreshButton();
@@ -149,7 +145,7 @@ bool RenderInfoTab(){
             RenderRefreshIcon();
             refreshWasRendered = true;
         }
-        
+
         UI::TableNextRow();
         UI::TableNextColumn();
         if(showMapAuthor){
@@ -161,7 +157,7 @@ bool RenderInfoTab(){
         if(!refreshWasRendered && (showMapAuthor || showPlayerCount)){
             RenderRefreshIcon();
             refreshWasRendered = true;
-        }     
+        }
     }
 
     if(showPlayerCount && playerCount != -1){
@@ -266,7 +262,7 @@ void RenderTab(bool showRefresh = false){
         UI::TableNextRow();
         UI::TableNextColumn();
         UI::Text(GetIconForPosition(leaderboardArray[i].position));
-        
+
         //------------POSITION-------------
         UI::TableNextColumn();
         if(leaderboardArray[i].position > 10000){
@@ -274,7 +270,7 @@ void RenderTab(bool showRefresh = false){
         }else{
             UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));
         }
-        
+
         //------------TIME-----------------
         UI::TableNextColumn();
         UI::Text(displayString + TimeString(leaderboardArray[i].time));
@@ -304,7 +300,7 @@ void RenderTab(bool showRefresh = false){
             }else{
                 int timeDifference = leaderboardArray[i].time - timeDifferenceEntry.time;
                 string timeDifferenceString = TimeString(Math::Abs(timeDifference));
-                
+
                 if(inverseTimeDiffSign){
                     if(timeDifference < 0){
                         UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
@@ -322,7 +318,6 @@ void RenderTab(bool showRefresh = false){
         }
 
         i++;
-            
     }
 
     UI::EndTable();

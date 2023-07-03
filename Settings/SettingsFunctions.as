@@ -5,7 +5,7 @@ void OnSettingsChanged(){
         refreshTimer = 1;
     }
     updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
-    
+
     bool foundCombo = false;
     for(int i = 0; i < nbSizePositionToGetArray; i++){
         if(allPositionToGet[i] < 1){
@@ -26,7 +26,7 @@ void OnSettingsChanged(){
 
         if(allPositionToGet[i] > 10000){
             allPositionToGet[i] = 10000;
-        } 
+        }
     }
 
     if(!foundCombo){

@@ -87,10 +87,9 @@ void RenderSettingsCustomization(){
             }
             UI::EndCombo();
         }
-            
 
     }
-    
+
 }
 
 [SettingsTab name="Explanation" icon="Question" order="4"]
