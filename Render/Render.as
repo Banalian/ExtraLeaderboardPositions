@@ -203,20 +203,35 @@ bool RenderInfoTab(){
  * Render the table with the custom leaderboard
  */
 void RenderTab(bool showRefresh = false){
-    UI::BeginTable("Main", 6);
+    int columnCount = 4;
+    if(showPercentage){
+        columnCount++;
+    }
+    if(showTimeDifference){
+        columnCount++;
+    }
+    UI::BeginTable("Main", columnCount);
 
     UI::TableNextRow();
+    // Icon
     UI::TableNextColumn();
+    // Position
     UI::TableNextColumn();
     UI::Text("Position");
+    // Time
     UI::TableNextColumn();
     UI::Text("Time");
+    // Desc
     UI::TableNextColumn();
-    UI::TableNextColumn();
+    // %
     if(showPercentage){
+        UI::TableNextColumn();
         UI::Text("%");
     }
-    // UI::TableNextColumn();
+    // Time diff
+    if(showTimeDifference){
+        UI::TableNextColumn();
+    }
     if(showRefresh){
         RenderRefreshIcon();
     }
@@ -271,15 +286,16 @@ void RenderTab(bool showRefresh = false){
         }
 
         //------------%--------------------
-        UI::TableNextColumn();
-        if(showPercentage && leaderboardArray[i].percentage != 0.0f){
-            UI::Text(displayString + leaderboardArray[i].percentageDisplay);
+        if(showPercentage){
+            UI::TableNextColumn();
+            if(leaderboardArray[i].percentage != 0.0f){
+                UI::Text(displayString + leaderboardArray[i].percentageDisplay);
+            }
         }
 
         //------------TIME DIFFERENCE------
-        UI::TableNextColumn();
-
         if(showTimeDifference){
+            UI::TableNextColumn();
             if(leaderboardArray[i].time == -1 || timeDifferenceEntry.time == -1){
                 //Nothing here, no time to compare to
             }else if(leaderboardArray[i].customEquals(timeDifferenceEntry)){
