@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.3.1
+- Added a settings to choose when to start shortening the position number if the setting is enabled
+- Modify the maximum position you can request to 100k (from 10k) (Thanks to Nadeo !)
+- Fixed a typo in the plugin's setting description
+
 ## 2.3.0
 - Added a new setting to show the percentage view of the time (meaning, you can see the top%, for exemple, if you were top 100 on a map with 1000 players, you'd see 10%) (Thanks to Dayshine/tboby for the PR !)
 - Fixed warnings because of deprecated constant BaseURL() (Thanks to NaN-inf for the PR !)
