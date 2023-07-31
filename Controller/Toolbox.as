@@ -138,11 +138,15 @@ bool newPBSet(int timePbLocal) {
  */
 string NumberToString(int number){
     string numberString = "";
+    // explicit cast to int to avoid warning
+    int shortenAboveInt = shortenAbove;
 
-    if(number < 10000 || !shorterNumberRepresentation){
+    if(number < shortenAboveInt || !shorterNumberRepresentation){
         numberString = "" + number;
-    } else {
+    } else if(number < 1000000){
         numberString = "" + number / 1000 + "k";
+    } else {
+        numberString = "" + number / 1000000 + "M";
     }
 
     return numberString;

@@ -16,6 +16,8 @@ void RenderSettingsCustomization(){
         showColoredTimeDifference = true;
         inverseTimeDiffSign = false;
         currentComboChoice = -1;
+        shorterNumberRepresentation = false;
+        shortenAbove = 100000;
         useExternalAPI = false;
     }
 
@@ -58,6 +60,12 @@ void RenderSettingsCustomization(){
 
     shorterNumberRepresentation = UI::Checkbox("Use shorter number representation (10k instead of 10000)", shorterNumberRepresentation);
 
+    UI::BeginDisabled(!shorterNumberRepresentation);
+
+    shortenAbove = UI::InputInt("Shorten above X (example with 10000 : show 10k instead of 10000)", shortenAbove);
+
+    UI::EndDisabled();
+
     UI::Text("\n\tMap/Author Name");
 
     showMapName = UI::Checkbox("Show map name", showMapName);
@@ -65,34 +73,36 @@ void RenderSettingsCustomization(){
 
     UI::Text("\n\tTime difference");
     showTimeDifference = UI::Checkbox("Show time difference", showTimeDifference);
-    if(showTimeDifference){
-        inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
 
-        showColoredTimeDifference = UI::Checkbox("Color the time difference (blue if negative, red otherwise)", showColoredTimeDifference);
+    UI::BeginDisabled(!showTimeDifference);
 
-        UI::Text("\t\tFrom which position should the time difference be shown?");
-        string comboText = "";
-        if(currentComboChoice == -1){
-            comboText = "Personal best";
-        }else{
-            comboText = "Position " + currentComboChoice;
-        }
+    inverseTimeDiffSign = UI::Checkbox("Inverse sign (+ instead of -)", inverseTimeDiffSign);
 
-        if(UI::BeginCombo("Time Diff position", comboText)){
-            if(UI::Selectable("Personal best", currentComboChoice == -1)){
-                currentComboChoice = -1;
-                UI::SetItemDefaultFocus();
-            }
-            for(int i = 0; i < int(allPositionToGet.Length); i++){
-                string text = "Position " + allPositionToGet[i];
-                if(UI::Selectable(text, currentComboChoice == allPositionToGet[i])){
-                    currentComboChoice = allPositionToGet[i];
-                }
-            }
-            UI::EndCombo();
-        }
+    showColoredTimeDifference = UI::Checkbox("Color the time difference (blue if negative, red otherwise)", showColoredTimeDifference);
 
+    UI::Text("\t\tFrom which position should the time difference be shown?");
+    string comboText = "";
+    if(currentComboChoice == -1){
+        comboText = "Personal best";
+    }else{
+        comboText = "Position " + currentComboChoice;
     }
+
+    if(UI::BeginCombo("Time Diff position", comboText)){
+        if(UI::Selectable("Personal best", currentComboChoice == -1)){
+            currentComboChoice = -1;
+            UI::SetItemDefaultFocus();
+        }
+        for(int i = 0; i < int(allPositionToGet.Length); i++){
+            string text = "Position " + allPositionToGet[i];
+            if(UI::Selectable(text, currentComboChoice == allPositionToGet[i])){
+                currentComboChoice = allPositionToGet[i];
+            }
+        }
+        UI::EndCombo();
+    }
+
+    UI::EndDisabled();
 
 }
 

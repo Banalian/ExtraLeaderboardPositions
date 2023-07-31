@@ -86,6 +86,9 @@ int currentComboChoice = -1;
 bool shorterNumberRepresentation = false;
 
 [Setting hidden]
+uint shortenAbove = 100000;
+
+[Setting hidden]
 bool useExternalAPI = false;
 
 [Setting hidden]
