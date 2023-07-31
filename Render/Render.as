@@ -165,7 +165,7 @@ bool RenderInfoTab(){
         UI::TableNextColumn();
         // if player count is above 10k, we display it as <10k
         string playerCountStr = NumberToString(playerCount);
-        playerCountStr = playerCount > 10000 ? "<" + playerCountStr : playerCountStr;
+        playerCountStr = playerCount > 100000 ? "<" + playerCountStr : playerCountStr;
         UI::Text(playerIconGrey + " " + playerCountStr);
     }
 
@@ -265,7 +265,7 @@ void RenderTab(bool showRefresh = false){
 
         //------------POSITION-------------
         UI::TableNextColumn();
-        if(leaderboardArray[i].position > 10000){
+        if(leaderboardArray[i].position > 100000){
             UI::Text(displayString + "<" + NumberToString(leaderboardArray[i].position));
         }else{
             UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));

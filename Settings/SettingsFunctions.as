@@ -17,15 +17,15 @@ void OnSettingsChanged(){
                 currentComboChoice = 1;
             }
 
-            if(currentComboChoice > 10000){
-                currentComboChoice = 10000;
+            if(currentComboChoice > 100000){
+                currentComboChoice = 100000;
             }
 
             foundCombo = true;
         }
 
-        if(allPositionToGet[i] > 10000){
-            allPositionToGet[i] = 10000;
+        if(allPositionToGet[i] > 100000){
+            allPositionToGet[i] = 100000;
         }
     }
 
@@ -64,13 +64,14 @@ void OnSettingsLoad(Settings::Section& section){
         }
 
     }else{
-        allPositionToGetStringSave = "1,10,100,1000,10000";
-        nbSizePositionToGetArray = 5;
+        allPositionToGetStringSave = "1,10,100,1000,10000,100000";
+        nbSizePositionToGetArray = 6;
         allPositionToGet.InsertLast(1);
         allPositionToGet.InsertLast(10);
         allPositionToGet.InsertLast(100);
         allPositionToGet.InsertLast(1000);
         allPositionToGet.InsertLast(10000);
+        allPositionToGet.InsertLast(100000);
     }
 
     OnSettingsChanged();
