@@ -114,7 +114,7 @@ void RenderSettingsExplanation(){
     UI::Text("This timer resets when you leave the map and is automatically refreshed when you join a map, or if you set a new pb on a map.");;
     UI::Text("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
     UI::Text("\nThe medals can also be added to the leaderboard. You can see them as \"if you had a time of X, you would be at the Y position\".\nBecause of API limitation, the medals are not shown in the leaderboard if you have them and are using the 'normal mode'.");
-    UI::Text("\nSince the 2.0 update, a new parameter has been added, allowing you to get faster refreshes and medals positions evn if you have them. You may enable it in the \"General Customization\" tab.\nPlease be aware that this feature might be removed at some point, as it depends on an external service that I might not be able to keep up all year long.");
+    UI::Text("\nSince the 2.0 update, a new parameter has been added, allowing you to get faster refreshes and medals positions even if you have them. You may enable it in the \"General Customization\" tab.\nPlease be aware that this feature might be removed at some point, as it depends on an external service that I might not be able to keep up all year long.");
     UI::Dummy(vec2(0,100));
     UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter or any feature you would like added to this plugin.");
 }
