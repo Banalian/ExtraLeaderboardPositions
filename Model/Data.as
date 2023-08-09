@@ -15,6 +15,23 @@ const array<string> podiumIcon = {
     ""                                   // above 10k : No icon
 };
 
+const array<string> loadingSteps = {
+    Icons::Kenney::MoveBr,
+    Icons::Kenney::MoveBt,
+    Icons::Kenney::MoveRt,
+    Icons::Kenney::MoveLr,
+    Icons::Kenney::MoveLt,
+    Icons::Kenney::MoveBtAlt,
+    Icons::Kenney::MoveLb,
+    Icons::Kenney::MoveLrAlt
+};
+
+uint currentLoadingStep = 0;
+
+float loadingStepTimer = 0;
+
+float loadingStepDuration = 25;
+
 const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; // blue icon
 
 const string playerIconGrey = "\\$888" + Icons::User + resetColor; // grey icon
