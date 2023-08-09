@@ -179,7 +179,7 @@ bool RenderInfoTab(){
  */
  void RenderRefreshIcon(){
     if(refreshPosition){
-        UI::Text(refreshIconWhite);
+        UI::Text(loadingSteps[currentLoadingStep]);
         if(UI::IsItemHovered()){
             UI::BeginTooltip();
             UI::Text("Refreshing...");

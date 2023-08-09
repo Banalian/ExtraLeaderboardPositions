@@ -63,4 +63,16 @@ void Update(float dt) {
         refreshOPConfig = true;
     }
 
+    // update the loading step timer if we're refreshing the positions
+    if(refreshPosition){
+        loadingStepTimer += dt;
+        if(loadingStepTimer > loadingStepDuration){
+            loadingStepTimer = 0;
+            currentLoadingStep++;
+            if(currentLoadingStep > loadingSteps.Length - 1){
+                currentLoadingStep = 0;
+            }
+        }
+    }
+
 }
