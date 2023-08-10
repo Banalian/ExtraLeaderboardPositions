@@ -70,6 +70,8 @@ int playerCount = -1;
 
 int currentPbTime = -1;
 int currentPbPosition = -1;
+bool earlyPBUpdate = false;
+int earlyPbTime = -1;
 
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
