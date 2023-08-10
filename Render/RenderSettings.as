@@ -48,6 +48,12 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::BeginDisabled(!showPb);
+
+    updatePbEarlySetting = UI::Checkbox("Update the PB early (updates the entry early while the whole leaderboard is refreshing)", updatePbEarlySetting);
+
+    UI::EndDisabled();
+
     UI::BeginDisabled(!useExternalAPI);
 
     UI::Text("\n\tPercentage ranking");

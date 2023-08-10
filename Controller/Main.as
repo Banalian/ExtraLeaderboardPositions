@@ -7,6 +7,12 @@ void RefreshLeaderboard(){
     LeaderboardEntry@ pbTimeTmp = GetPersonalBestEntry();
 
     if(pbTimeTmp.time == lastPbTime) {
+        // get the current pb entry, if any, to update it earlier if the setting is activated
+        if(updatePbEarlySetting){
+            earlyPbTime = currentPbTime;
+            earlyPBUpdate = true;
+        }
+        
         counterTries++;
         if(counterTries > maxTries) {
             print("Failed to refresh the leaderboard " + maxTries + " times, stopping the refresh. Time spent : " + (Time::get_Now() - startTime) + "ms");
@@ -170,6 +176,7 @@ void RefreshLeaderboard(){
     //sort the array
     leaderboardArrayTmp.SortAsc();
     leaderboardArray = leaderboardArrayTmp;
+    earlyPBUpdate = false;
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){

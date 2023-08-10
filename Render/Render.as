@@ -256,6 +256,11 @@ void RenderTab(bool showRefresh = false){
                 default:
                     break;
             }
+        } else if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
+            // if we're in an early update state, grey out the pb
+            if(updatePbEarlySetting && earlyPBUpdate){
+                displayString = greyColor;
+            }
         }
 
         //------------POSITION ICON--------
@@ -265,7 +270,9 @@ void RenderTab(bool showRefresh = false){
 
         //------------POSITION-------------
         UI::TableNextColumn();
-        if(leaderboardArray[i].position > 100000){
+        if(updatePbEarlySetting && earlyPBUpdate && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
+            UI::Text(displayString + "----");
+        }else if(leaderboardArray[i].position > 100000){
             UI::Text(displayString + "<" + NumberToString(leaderboardArray[i].position));
         }else{
             UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));
@@ -273,7 +280,11 @@ void RenderTab(bool showRefresh = false){
 
         //------------TIME-----------------
         UI::TableNextColumn();
-        UI::Text(displayString + TimeString(leaderboardArray[i].time));
+        if(updatePbEarlySetting && earlyPBUpdate && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
+            UI::Text(displayString + TimeString(earlyPbTime));
+        }else{
+            UI::Text(displayString + TimeString(leaderboardArray[i].time));
+        }
 
         //------------HAS DESC-------------
         UI::TableNextColumn();

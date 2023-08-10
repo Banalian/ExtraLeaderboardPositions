@@ -24,6 +24,9 @@ int refreshTimer = 5;
 bool showPb = true;
 
 [Setting hidden]
+bool updatePbEarlySetting = false;
+
+[Setting hidden]
 bool showPercentage = false;
 
 [Setting hidden]
