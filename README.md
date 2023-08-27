@@ -11,8 +11,13 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.3.2
+- Added a setting to update the PB early (i.e. when you have a new pb, show it in the leaderboard even if the whole leaderboard isn't refreshed yet)
+- Reverted the change allowing you to request specific positions between 10k and 100k, as this was an unintended change of the Nadeo API. (you can still see the accurate positions of your pb and medals if they are below 100k)
+- Updated the loading icon to look like a small gif
+
 ## 2.3.1
-- Added a settings to choose when to start shortening the position number if the setting is enabled
+- Added a setting to choose when to start shortening the position number if the setting is enabled
 - Modify the maximum position you can request to 100k (from 10k) (Thanks to Nadeo !)
 - Fixed a typo in the plugin's setting description
 
