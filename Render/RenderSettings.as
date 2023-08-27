@@ -203,9 +203,9 @@ void RenderPositionCustomization(){
     UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
-        allPositionToGet = {1,10,100,1000,10000,100000};
-        allPositionToGetStringSave = "1,10,100,1000,10000,100000";
-        nbSizePositionToGetArray = 6;
+        allPositionToGet = {1,10,100,1000,10000};
+        allPositionToGetStringSave = "1,10,100,1000,10000";
+        nbSizePositionToGetArray = 5;
     }
 
     if(UI::Button("Refresh")){
