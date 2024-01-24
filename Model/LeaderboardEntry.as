@@ -30,10 +30,22 @@ class LeaderboardEntry{
      * Comparaison operator
      */
     int opCmp(LeaderboardEntry@ other){
-        if(position - other.position != 0)
-            return position - other.position;
-        else
+        // Position can be -1 if we have new PB on leaderboard without position from API yet, so sort by time first
+        if (time != other.time)
             return time - other.time;
+        else if (position != other.position) {
+            // Sort a temporary -1 position later i.e. greater than a valid position,
+            // since driving an equal time would typically be ranked later than the already existing record.
+            // We'll only have to wait a bit for the API to give the actual position for definitive sort.
+            if (position == -1)
+                return 1;
+            else if (other.position == -1)
+                return -1;
+            else
+                return position - other.position;
+        }
+        else
+            return 0;
     }
 
     /**

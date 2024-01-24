@@ -45,8 +45,9 @@ const string blueColor = "\\$77f";
 const string redColor = "\\$f77";
 const string greyColor = "\\$888";
 const string brightGreyColor = "\\$aaa";
+const string greenColor = "\\$9f9";
 
-const string pluginName = "Extra Leaderboard positions";
+const string pluginName = "Extra Leaderboard Positions";
 
 string currentMapUid = "";
 
@@ -68,10 +69,13 @@ LeaderboardEntry@ timeDifferenceEntry = LeaderboardEntry();
 
 int playerCount = -1;
 
-int currentPbTime = -1;
-int currentPbPosition = -1;
-bool earlyPBUpdate = false;
-int earlyPbTime = -1;
+// Current local PB time, updated in Update() when new PB set.
+int currentTimePbLocal = -1;
+
+// PB entry we are currently displaying on the leaderboard.
+// When new PB set, updated and displayed immediately with the new time and an empty position value.
+// Position filled in later by API call.
+LeaderboardEntry@ currentPbEntry = LeaderboardEntry();
 
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
@@ -79,6 +83,6 @@ bool startupEnded = false;
 bool validMap = false;
 
 //variables to check that we aren't currently in a "failed request" (server not responding or not updating the pb) to not spam the server
-int counterTries = 0;
 int maxTries = 10;
+int retryTimeLimit = 10000;
 bool failedRefresh = false;

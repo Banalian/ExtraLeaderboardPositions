@@ -2,32 +2,78 @@
 
 void RefreshLeaderboard(){
     auto startTime = Time::get_Now();
-    int lastPbTime = currentPbTime;
-    //No need to make this a coroutine since it is needed before executing the rest of the refresh
-    LeaderboardEntry@ pbTimeTmp = GetPersonalBestEntry();
 
-    if(pbTimeTmp.time == lastPbTime) {
-        // get the current pb entry, if any, to update it earlier if the setting is activated
-        if(updatePbEarlySetting){
-            earlyPbTime = currentPbTime;
-            earlyPBUpdate = true;
+    // 3-stage update
+    // Stage 1: New local PB, not queried API yet. Update leaderboard with PB with empty position and re-sort by time.
+    // Stage 2: Get PB position from API. May be delayed (reports the old PB) so retry if necessary up to max.
+    // Stage 3: Get all remainaing positions from API.
+
+    if (currentTimePbLocal > 0 && (currentTimePbLocal < currentPbEntry.time || currentPbEntry.time <= 0)) {
+        // Stage 1: New local PB, not queried API yet. Update leaderboard with PB with empty position and re-sort by time.
+        trace("RefreshLeaderboard(): updating leaderboard PB time from " + TimeLogString(currentPbEntry.time) + " to " + TimeLogString(currentTimePbLocal));
+        LeaderboardEntry@ localPbEntry = LeaderboardEntry();
+        localPbEntry.time = currentTimePbLocal;
+        localPbEntry.position = -1;
+        localPbEntry.entryType = EnumLeaderboardEntryType::PB;
+        localPbEntry.desc = "PB";
+
+        leaderboardArrayTmp = array<LeaderboardEntry@>();
+        leaderboardArrayTmp.InsertLast(localPbEntry);
+        // Fill non-PB entries from previous leaderboard
+        for (uint i = 0; i < leaderboardArray.Length; i++) {
+            if (leaderboardArray[i].entryType != EnumLeaderboardEntryType::PB)
+                leaderboardArrayTmp.InsertLast(leaderboardArray[i]);
         }
-        
-        counterTries++;
-        if(counterTries > maxTries) {
-            print("Failed to refresh the leaderboard " + maxTries + " times, stopping the refresh. Time spent : " + (Time::get_Now() - startTime) + "ms");
-            failedRefresh = true;
-        }
-        // we still want to try and get the other times
-        if(counterTries > 1) {
-            return;
-        }
-    } else {
-        counterTries = 0;
+        UpdateTimeDifferenceEntry(leaderboardArrayTmp);
+        leaderboardArrayTmp.SortAsc();
+        leaderboardArray = leaderboardArrayTmp;
+
+        currentPbEntry = localPbEntry;
+        yield();
     }
 
+    if (currentPbEntry.time > 0) { // only run if we have a valid PB time on the leaderboard (e.g. not on unplayed map)
+        // Stage 2: Get PB position from API. May be delayed (reports the old PB) so retry if necessary up to max.
+        auto counterTries = 0;
+        auto retryStartTime = Time::get_Now();
+        auto retryElapsedTime = 0;
+        auto retrySuccess = false;
+        while (counterTries < maxTries && retryElapsedTime < retryTimeLimit) {
+            counterTries++;
+            // progressively longer delay to give more time for retries when API is slow to update
+            auto sleepDelay = counterTries * 100;
+            trace("RefreshLeaderboard(): PB API attempt " + counterTries + " at " + retryElapsedTime + "ms: sleeping " + sleepDelay + "ms to give API time to update");
+            sleep(sleepDelay);
+
+            // if something cleared refreshPosition while we were yielding/sleeping (e.g. exited map), abort the refresh
+            if (!refreshPosition)
+                return;
+
+            LeaderboardEntry@ apiPbEntry = GetPersonalBestEntry();
+
+            if (apiPbEntry.time > 0 && apiPbEntry.time <= currentPbEntry.time) {
+                trace("RefreshLeaderboard(): received valid API PB time " + TimeLogString(apiPbEntry.time) + ", position " + apiPbEntry.position);
+                currentPbEntry = apiPbEntry;
+                // don't add to leaderboard yet, stage 3 will do it
+                retrySuccess = true;
+                break;
+            } else {
+                trace("RefreshLeaderboard(): received invalid API PB time " + TimeLogString(apiPbEntry.time) + " behind leaderboard PB time " + TimeLogString(currentPbEntry.time));
+            }
+
+            retryElapsedTime = Time::get_Now() - retryStartTime;
+        }
+        if (!retrySuccess) {
+            print("RefreshLeaderboard(): Failed to refresh the online PB " + counterTries + " times in " + retryElapsedTime + "ms, stopping the PB refresh.");
+            failedRefresh = true;
+        }
+    }
+
+    // Stage 3: Get all remaining positions from API.
+    trace("RefreshLeaderboard(): getting all positions from API");
+
     leaderboardArrayTmp = array<LeaderboardEntry@>();
-    leaderboardArrayTmp.InsertLast(pbTimeTmp);
+    leaderboardArrayTmp.InsertLast(currentPbEntry);
 
     // Declare the response here to access it from the logging part later.
     ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ respLog = ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse();
@@ -140,27 +186,6 @@ void RefreshLeaderboard(){
         await(coroutines);
     }
 
-    // Time difference entry finding
-    if(currentComboChoice == -1){
-        // timeDifferenceEntry is the entry that has entryType Pb
-        for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
-            if(leaderboardArrayTmp[i].entryType == EnumLeaderboardEntryType::PB){
-                timeDifferenceEntry = leaderboardArrayTmp[i];
-                break;
-            }
-        }
-    }else{
-        timeDifferenceEntry.time = -1;
-        timeDifferenceEntry.position = -1;
-        timeDifferenceEntry.entryType = EnumLeaderboardEntryType::POSITION; // Doesn't really matter since it isn't checked
-        for(uint i = 1; i< leaderboardArrayTmp.Length; i++){
-            if(leaderboardArrayTmp[i].position == currentComboChoice){
-                timeDifferenceEntry = leaderboardArrayTmp[i];
-                break;
-            }
-        }
-    }
-
     if(showPercentage && playerCount > 0){
         for(uint i = 0; i< leaderboardArrayTmp.Length; i++){
             leaderboardArrayTmp[i].percentage = ((100.0f * leaderboardArrayTmp[i].position) / playerCount);
@@ -173,10 +198,9 @@ void RefreshLeaderboard(){
         }
     }
 
-    //sort the array
+    UpdateTimeDifferenceEntry(leaderboardArrayTmp);
     leaderboardArrayTmp.SortAsc();
     leaderboardArray = leaderboardArrayTmp;
-    earlyPBUpdate = false;
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
@@ -186,7 +210,6 @@ void RefreshLeaderboard(){
     }
     print(RefreshEndMessage);
 }
-
 
 /**
  * Hack class to be able to have handles
@@ -223,4 +246,33 @@ void SpecificPositionEntryCoroutine(ref@ time){
     if(positionEntry !is null && positionEntry.isValid()){
         leaderboardArrayTmp.InsertLast(positionEntry);
     }
+}
+
+void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
+    if (currentComboChoice == -1) {
+        // timeDifferenceEntry is the entry that has entryType Pb
+        for (uint i = 0; i < arrayTmp.Length; i++) {
+            if (arrayTmp[i].entryType == EnumLeaderboardEntryType::PB) {
+                timeDifferenceEntry = arrayTmp[i];
+                break;
+            }
+        }
+    } else {
+        timeDifferenceEntry.time = -1;
+        timeDifferenceEntry.position = -1;
+        timeDifferenceEntry.entryType = EnumLeaderboardEntryType::POSITION; // Doesn't really matter since it isn't checked
+        for (uint i = 0; i < arrayTmp.Length; i++) {
+            if (arrayTmp[i].position == currentComboChoice && arrayTmp[i].entryType == EnumLeaderboardEntryType::POSITION) {
+                timeDifferenceEntry = arrayTmp[i];
+                break;
+            }
+        }
+    }
+}
+
+string TimeLogString(int time) {
+    if (time >= 0)
+        return time + " [" + Time::Format(time) + "]";
+    else
+        return time + "";
 }

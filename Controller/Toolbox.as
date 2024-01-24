@@ -8,7 +8,7 @@ bool isAValidMedalTime(LeaderboardEntry@ time) {
         return false;
     }
 
-    if(time.position == currentPbPosition && time.time == currentPbTime) {
+    if(time.position == currentPbEntry.position && time.time == currentPbEntry.time) {
         return false;
     }
 
@@ -37,13 +37,13 @@ bool MapHasNadeoLeaderboard(const string &in mapId){
  * also remove the "failed request" lock
  */
 void ForceRefresh(){
-    failedRefresh = false;
-    counterTries = 0;
-    if(!refreshPosition){
-            refreshPosition = true;
+    // don't interfere if refresh already running
+    if (!refreshPosition) {
+        timer = 0;
+        failedRefresh = false;
+        refreshPosition = true;
     }
 }
-
 
 /**
  * Check if the user can use the plugin or not, based on different conditions
@@ -114,15 +114,15 @@ bool newPBSet(int timePbLocal) {
     if(!validMap){
         return false;
     }
-    bool isLocalPbDifferent = timePbLocal != currentPbTime;
+    bool isLocalPbDifferent = timePbLocal != currentPbEntry.time;
     if(isLocalPbDifferent){
         if(timePbLocal == -1){
             return false;
         }
-        if(currentPbTime == -1){
+        if(currentPbEntry.time == -1){
             return true;
         }
-        if(timePbLocal < currentPbTime){
+        if(timePbLocal < currentPbEntry.time){
             return true;
         }else{
             return false;

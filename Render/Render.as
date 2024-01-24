@@ -70,15 +70,10 @@ void RenderWindows(){
     bool showRefreshButton = false;
 
     if (!UI::IsOverlayShown()) {
-        windowFlags |= UI::WindowFlags::NoInputs;
+        windowFlags |= UI::WindowFlags::NoMove;
     }
 
     if(leaderboardArray.Length == 0 && !failedRefresh){
-        return;
-    }
-
-    //if this is true, we're probably on a map not uploaded to nadeo's server. we don't want to show the window
-    if(leaderboardArray.Length == 1 && leaderboardArray[0].position == -1){
         return;
     }
 
@@ -118,8 +113,12 @@ void RenderWindows(){
  * returns true if the refresh icon was rendered
  */
 bool RenderInfoTab(){
+
+    // used to avoid showing extra blank space when player count is still checked while external api is unchecked
+    auto showPlayerCountEnabled = showPlayerCount && useExternalAPI; 
+
     // if we don't show anything, we don't render the tab
-    if(!(showMapName || showMapAuthor || showPlayerCount)){
+    if(!(showMapName || showMapAuthor || showPlayerCountEnabled)){
         return false;
     }
 
@@ -154,13 +153,13 @@ bool RenderInfoTab(){
         UI::TableNextColumn();
         UI::TableNextColumn();
         // if the refresh icon wasn't rendered, we render it here (for better alignment)
-        if(!refreshWasRendered && (showMapAuthor || showPlayerCount)){
+        if(!refreshWasRendered && (showMapAuthor || showPlayerCountEnabled)){
             RenderRefreshIcon();
             refreshWasRendered = true;
         }
     }
 
-    if(showPlayerCount && playerCount != -1){
+    if(showPlayerCountEnabled && playerCount != -1){
         // set the text to be on the right
         UI::TableNextColumn();
         // if player count is above 10k, we display it as <10k
@@ -178,6 +177,9 @@ bool RenderInfoTab(){
  * Render the refresh icon if we're refreshing
  */
  void RenderRefreshIcon(){
+    auto remainingTime = Time::Format(int(Math::Ceil((updateFrequency - timer) / 1000)) * 1000);
+    remainingTime = remainingTime.SubStr(0 , remainingTime.Length - 4);
+
     if(refreshPosition){
         UI::Text(loadingSteps[currentLoadingStep]);
         if(UI::IsItemHovered()){
@@ -187,9 +189,26 @@ bool RenderInfoTab(){
         }
     }else if(failedRefresh){
         UI::Text(refreshIconWhite + warningIcon);
+        if(UI::IsItemClicked()){
+            ForceRefresh();
+        }
         if(UI::IsItemHovered()){
             UI::BeginTooltip();
-            UI::Text("Refreshing failed.");
+            UI::Text("Failed to receive updated data from the game API.");
+            UI::Text("API updates may be delayed during peak times.");
+            UI::Text("Automatic refresh in: " + remainingTime);
+            UI::Text("Click icon to refresh now.");
+            UI::EndTooltip();
+        }
+    }else {
+        UI::Text(refreshIconWhite);
+        if(UI::IsItemClicked()){
+            ForceRefresh();
+        }
+        if(UI::IsItemHovered()){
+            UI::BeginTooltip();
+            UI::Text("Automatic refresh in: " + remainingTime);
+            UI::Text("Click icon to refresh now.");
             UI::EndTooltip();
         }
     }
@@ -235,13 +254,22 @@ void RenderTab(bool showRefresh = false){
 
     int i = 0;
     while(i < int(leaderboardArray.Length)){
-            //We skip the pb if there's none
+        //We skip the pb if there's none
         if( 
             (leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB && leaderboardArray[i].time == -1) ||
             (!showPb && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB) ){
             i++;
             continue;
         }
+
+        // If the PB happens to be exactly a configured Position and we are displaying PB,
+        // then skip the Position record because it's essentially the same entry.
+        // (This doesn't affect ties becuase the positions would be different in that case e.g. Position record at 10 and tied PB at 11.)
+        if (leaderboardArray[i].entryType == EnumLeaderboardEntryType::POSITION && leaderboardArray[i].customEquals(currentPbEntry) && showPb) {
+            i++;
+            continue;
+        }
+        // Note the above position skip logic doesn't apply to medals since we still want to show the medal description
 
         // If the current record is a medal one, we make a display string based on the display mode
         string displayString = "";
@@ -257,10 +285,7 @@ void RenderTab(bool showRefresh = false){
                     break;
             }
         } else if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
-            // if we're in an early update state, grey out the pb
-            if(updatePbEarlySetting && earlyPBUpdate){
-                displayString = greyColor;
-            }
+            displayString = greenColor;
         }
 
         //------------POSITION ICON--------
@@ -270,8 +295,8 @@ void RenderTab(bool showRefresh = false){
 
         //------------POSITION-------------
         UI::TableNextColumn();
-        if(updatePbEarlySetting && earlyPBUpdate && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
-            UI::Text(displayString + "----");
+        if(leaderboardArray[i].position <= 0){
+            UI::Text(displayString + "-");
         }else if(leaderboardArray[i].position > 100000){
             UI::Text(displayString + "<" + NumberToString(leaderboardArray[i].position));
         }else{
@@ -280,11 +305,7 @@ void RenderTab(bool showRefresh = false){
 
         //------------TIME-----------------
         UI::TableNextColumn();
-        if(updatePbEarlySetting && earlyPBUpdate && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
-            UI::Text(displayString + TimeString(earlyPbTime));
-        }else{
-            UI::Text(displayString + TimeString(leaderboardArray[i].time));
-        }
+        UI::Text(displayString + TimeString(leaderboardArray[i].time));
 
         //------------HAS DESC-------------
         UI::TableNextColumn();
@@ -305,8 +326,8 @@ void RenderTab(bool showRefresh = false){
             UI::TableNextColumn();
             if(leaderboardArray[i].time == -1 || timeDifferenceEntry.time == -1){
                 //Nothing here, no time to compare to
-            }else if(leaderboardArray[i].customEquals(timeDifferenceEntry)){
-                //Nothing here, the position is the same, it's the same time
+            }else if(leaderboardArray[i].time == timeDifferenceEntry.time){
+                //Nothing here, it's the same time
                 //still keeping the if in case we want to print/add something here
             }else{
                 int timeDifference = leaderboardArray[i].time - timeDifferenceEntry.time;

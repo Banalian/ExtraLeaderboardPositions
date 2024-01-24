@@ -56,14 +56,10 @@ void Main(){
                     RefreshLeaderboard();
                 }else{
                     validMap = false;
-                    if(leaderboardArray.Length > 0){
-                        leaderboardArray = array<LeaderboardEntry@>();
-                    }
+                    ClearLeaderboard();
                 }
             }else{
-                if(leaderboardArray.Length > 0){
-                    leaderboardArray = array<LeaderboardEntry@>();
-                }
+                ClearLeaderboard();
             }
 
             refreshPosition = false;
@@ -102,4 +98,14 @@ bool CanRefresh(){
     }
 
     return true;
+}
+
+void ClearLeaderboard() {
+    if(leaderboardArray.Length > 0){
+        leaderboardArray = array<LeaderboardEntry@>();
+    }
+    currentPbEntry = LeaderboardEntry();
+    currentPbEntry.entryType = EnumLeaderboardEntryType::PB;
+    currentPbEntry.desc = "PB";
+    timeDifferenceEntry = LeaderboardEntry();
 }
