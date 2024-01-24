@@ -124,8 +124,8 @@ namespace ExtraLeaderboardAPI
         int champTime = ChampionMedals::GetCMTime();
         if(
             champTime != 0 && // if the medal exists
-            showChampionMedals && // if the user wants to show it
-            (((champTime < currentPbTime) || currentPbTime == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
+            showMedals && showChampionMedals && // if the user wants to show it
+            (((champTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
     
         ){
             request.scores.InsertLast(champTime);
@@ -136,8 +136,8 @@ namespace ExtraLeaderboardAPI
         int sbVilleTime = SBVilleCampaignChallenges::getChallengeTime();
         if(
             sbVilleTime != 0 && // if the medal exists
-            showSBVilleATMedal && // if the user wants to show it
-            (((sbVilleTime < currentPbTime) || currentPbTime == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
+            showMedals && showSBVilleATMedal && // if the user wants to show it
+            (((sbVilleTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
     
         ){
             request.scores.InsertLast(sbVilleTime);
@@ -156,6 +156,8 @@ namespace ExtraLeaderboardAPI
  * Isn't in toolbox since it's some "private" function only used in this namespace(and above function)
  */
 bool ShouldRequestMedal(MedalType medal){
+    if (!showMedals) return false;
+
     auto app = GetApp();
     auto map = app.RootMap;
 
@@ -181,8 +183,8 @@ bool ShouldRequestMedal(MedalType medal){
     }
 
     // Check if the medal is better than the PB or if the user wants to show it anyway
-    if(shouldShow && currentPbTime != -1){
-        shouldShow =  medalTime < currentPbTime || showMedalWhenBetter;
+    if(shouldShow && currentPbEntry.time != -1){
+        shouldShow =  medalTime < currentPbEntry.time || showMedalWhenBetter;
     }
 
     return shouldShow;

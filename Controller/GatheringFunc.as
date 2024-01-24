@@ -30,8 +30,6 @@ LeaderboardEntry@ GetPersonalBestEntry() {
                 if(top.Length > 0) {
                     pbTimeTmp.time = top[0]["score"];
                     pbTimeTmp.position = top[0]["position"];
-                    currentPbTime = pbTimeTmp.time;
-                    currentPbPosition = pbTimeTmp.position;
                 }
             }
         }
@@ -171,7 +169,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
         if(showAT){
-            if(atTime < currentPbTime || currentPbTime == -1){
+            if(atTime < currentPbEntry.time || currentPbEntry.time == -1){
                 auto atPosition = GetSpecificPositionEntry(atTime);
                 atPosition.desc = "AT";
                 atPosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -183,7 +181,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 
         if(showGold){
-            if(goldTime < currentPbTime || currentPbTime == -1){
+            if(goldTime < currentPbEntry.time || currentPbEntry.time == -1){
                 auto goldPosition = GetSpecificPositionEntry(goldTime);
                 goldPosition.desc = "Gold";
                 goldPosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -194,7 +192,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 
         if(showSilver){
-            if(silverTime < currentPbTime || currentPbTime == -1){
+            if(silverTime < currentPbEntry.time || currentPbEntry.time == -1){
                 auto silverPosition = GetSpecificPositionEntry(silverTime);
                 silverPosition.desc = "Silver";
                 silverPosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -205,7 +203,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 
         if(showBronze){
-            if(bronzeTime < currentPbTime || currentPbTime == -1){
+            if(bronzeTime < currentPbEntry.time || currentPbEntry.time == -1){
                 auto bronzePosition = GetSpecificPositionEntry(bronzeTime);
                 bronzePosition.desc = "Bronze";
                 bronzePosition.entryType = EnumLeaderboardEntryType::MEDAL;

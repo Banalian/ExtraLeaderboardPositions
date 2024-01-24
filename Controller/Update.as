@@ -26,34 +26,29 @@ void Update(float dt) {
             timePbLocal = scoreMgr.Map_GetRecord_v2(userId, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
         }
 
+        if (timePbLocal > 0 && currentTimePbLocal != timePbLocal) {
+            currentTimePbLocal = timePbLocal;
+            trace("Update(): new PB: " + TimeLogString(currentTimePbLocal));
+        }
+
         //if the map change, or the timer is over or a new pb is found, we refresh the positions
-        if (mapIdChanged || timer > updateFrequency || newPBSet(timePbLocal)) {
-
-            if(mapIdChanged){
-                currentMapUid = app.RootMap.MapInfo.MapUid;
-                currentPbTime = -1;
-                playerCount = -1;
-            }
-
-            //we remove the "lock" if the change was a map change or the timer
-            if(mapIdChanged || timer > updateFrequency){
-                    failedRefresh = false;
-                    counterTries = 0;
-            }
-
-
-            //we refresh the positions if the lock is not set
-            if(!failedRefresh){
-                refreshPosition = true;
-            } 
-
-            timer = 0;
+        if (mapIdChanged) {
+            currentMapUid = app.RootMap.MapInfo.MapUid;
+            trace("Update(): new map uid: " + currentMapUid);
+            playerCount = -1;
+            ClearLeaderboard();
+            ForceRefresh();
+        } else if (newPBSet(currentTimePbLocal) || timer > updateFrequency) {
+            ForceRefresh();
         } else {
             timer += dt;
         }
     } else {
         timer = 0;
         currentMapUid = "";
+        refreshPosition = false;
+        currentTimePbLocal = -1;
+        ClearLeaderboard();
     }
 
     // update the config timer
