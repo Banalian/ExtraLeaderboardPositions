@@ -269,10 +269,3 @@ void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
         }
     }
 }
-
-string TimeLogString(int time) {
-    if (time >= 0)
-        return time + " [" + Time::Format(time) + "]";
-    else
-        return time + "";
-}

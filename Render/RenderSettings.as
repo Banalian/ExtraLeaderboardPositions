@@ -48,6 +48,38 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
+    UI::BeginDisabled(!showPb);
+
+    string pbDisplayComboTitle = "Invalid state";
+
+    switch(personalBestDisplayMode){
+        case EnumDisplayPersonalBest::NORMAL:
+            pbDisplayComboTitle = "Normal";
+            break;
+        case EnumDisplayPersonalBest::IN_GREY:
+            pbDisplayComboTitle = "In grey";
+            break;
+        case EnumDisplayPersonalBest::IN_GREEN:
+            pbDisplayComboTitle = "In green";
+            break;
+    }
+
+    if(UI::BeginCombo("Personal best display mode", pbDisplayComboTitle)){
+        if(UI::Selectable("Normal", personalBestDisplayMode == EnumDisplayPersonalBest::NORMAL)){
+            personalBestDisplayMode = EnumDisplayPersonalBest::NORMAL;
+        }
+        if(UI::Selectable("In grey", personalBestDisplayMode == EnumDisplayPersonalBest::IN_GREY)){
+            personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREY;
+        }
+        if(UI::Selectable("In green", personalBestDisplayMode == EnumDisplayPersonalBest::IN_GREEN)){
+            personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;
+        }
+
+        UI::EndCombo();
+    }
+
+    UI::EndDisabled();
+
     UI::BeginDisabled(!useExternalAPI);
 
     UI::Text("\n\tPercentage ranking");

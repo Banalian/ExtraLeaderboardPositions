@@ -24,6 +24,9 @@ int refreshTimer = 5;
 bool showPb = true;
 
 [Setting hidden]
+EnumDisplayPersonalBest personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;
+
+[Setting hidden]
 bool showPercentage = false;
 
 [Setting hidden]
