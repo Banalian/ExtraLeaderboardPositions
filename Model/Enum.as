@@ -15,6 +15,13 @@ enum EnumDisplayMedal
     IN_GREY
 };
 
+enum EnumDisplayPersonalBest
+{
+    NORMAL,
+    IN_GREY,
+    IN_GREEN
+};
+
 enum EnumLeaderboardEntryType
 {
     UNKNOWN,

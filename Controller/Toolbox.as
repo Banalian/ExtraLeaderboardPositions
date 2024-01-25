@@ -108,6 +108,16 @@ string TimeString(int scoreTime, bool showSign = false) {
 }
 
 /**
+ * Format the time for logging with both integer value and readable string representation
+ */
+string TimeLogString(int time) {
+    if (time >= 0)
+        return time + " [" + Time::Format(time) + "]";
+    else
+        return time + "";
+}
+
+/**
  * Check if the new time is a new PB
  */
 bool newPBSet(int timePbLocal) {

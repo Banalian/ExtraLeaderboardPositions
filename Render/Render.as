@@ -285,7 +285,18 @@ void RenderTab(bool showRefresh = false){
                     break;
             }
         } else if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
-            displayString = greenColor;
+            switch(personalBestDisplayMode){
+                case EnumDisplayPersonalBest::NORMAL:
+                    break;
+                case EnumDisplayPersonalBest::IN_GREY:
+                    displayString = greyColor;
+                    break;                   
+                case EnumDisplayPersonalBest::IN_GREEN:
+                    displayString = greenColor;
+                    break;                   
+                default:
+                    break;
+            }
         }
 
         //------------POSITION ICON--------
