@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.3.3
+- Refactor/Upgrade of the early pb update : Now the default behavior, upgraded to correctly update (Huge thanks to zanaptak for their PR!!)
+- Added an option to show the PB as either white, green or grey (Also thanks to zanaptak's PR)
+
 ## 2.3.2
 - Added a setting to update the PB early (i.e. when you have a new pb, show it in the leaderboard even if the whole leaderboard isn't refreshed yet)
 - Reverted the change allowing you to request specific positions between 10k and 100k, as this was an unintended change of the Nadeo API. (you can still see the accurate positions of your pb and medals if they are below 100k)
