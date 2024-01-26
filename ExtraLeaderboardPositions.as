@@ -104,8 +104,8 @@ void ClearLeaderboard() {
     if(leaderboardArray.Length > 0){
         leaderboardArray = array<LeaderboardEntry@>();
     }
-    currentPbEntry.time = -1;
-    currentPbEntry.position = -1;
-    timeDifferenceEntry.time = -1;
-    timeDifferenceEntry.position = -1;
+    currentPbEntry = LeaderboardEntry();
+    currentPbEntry.entryType = EnumLeaderboardEntryType::PB;
+    currentPbEntry.desc = "PB";
+    timeDifferenceEntry = LeaderboardEntry();
 }
