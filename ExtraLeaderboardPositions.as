@@ -27,26 +27,21 @@ void Main(){
     }
     startupEnded = true;
     // Add the audiences you need
+    NadeoServices::AddAudience("NadeoServices");
     NadeoServices::AddAudience("NadeoLiveServices");
 
     // Wait until the services are authenticated
+    while (!NadeoServices::IsAuthenticated("NadeoServices")) {
+      yield();
+    }
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
       yield();
     }
-
-    // Load the config to use the External API or not
-    ExtraLeaderboardAPI::LoadURLConfig();
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
     while(true){
-
-        if(refreshOPConfig){
-            ExtraLeaderboardAPI::LoadURLConfig();
-            refreshOPConfig = false;
-        }
-
         //if we're on a new map, the timer is over or a new pb has been made we update the times
         if(refreshPosition){
             if(CanRefresh()){

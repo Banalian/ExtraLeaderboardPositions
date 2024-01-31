@@ -53,16 +53,6 @@ void RenderInterface(){
     }
 }
 
-// Render the refresh button after we check if it's visible
-void RenderRefreshButton(){
-    if(showRefreshButtonSetting && UI::IsOverlayShown()){
-        if(UI::Button("Refresh")){
-            ForceRefresh();
-        }
-    }
-}
-
-
 void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
 
@@ -99,8 +89,6 @@ void RenderWindows(){
 
         RenderTab(!rendered);
 
-        RenderRefreshButton();
-
         UI::EndGroup();
 
         UI::End();
@@ -114,11 +102,8 @@ void RenderWindows(){
  */
 bool RenderInfoTab(){
 
-    // used to avoid showing extra blank space when player count is still checked while external api is unchecked
-    auto showPlayerCountEnabled = showPlayerCount && useExternalAPI; 
-
     // if we don't show anything, we don't render the tab
-    if(!(showMapName || showMapAuthor || showPlayerCountEnabled)){
+    if(!(showMapName || showMapAuthor)){
         return false;
     }
 
@@ -153,19 +138,10 @@ bool RenderInfoTab(){
         UI::TableNextColumn();
         UI::TableNextColumn();
         // if the refresh icon wasn't rendered, we render it here (for better alignment)
-        if(!refreshWasRendered && (showMapAuthor || showPlayerCountEnabled)){
+        if(!refreshWasRendered && showMapAuthor){
             RenderRefreshIcon();
             refreshWasRendered = true;
         }
-    }
-
-    if(showPlayerCountEnabled && playerCount != -1){
-        // set the text to be on the right
-        UI::TableNextColumn();
-        // if player count is above 10k, we display it as <10k
-        string playerCountStr = NumberToString(playerCount);
-        playerCountStr = playerCount > 100000 ? "<" + playerCountStr : playerCountStr;
-        UI::Text(playerIconGrey + " " + playerCountStr);
     }
 
     UI::EndTable();
@@ -218,101 +194,59 @@ bool RenderInfoTab(){
  * Render the table with the custom leaderboard
  */
 void RenderTab(bool showRefresh = false){
-    int columnCount = 4;
-    if(showPercentage){
-        columnCount++;
-    }
+    int columnCount = 3;
     if(showTimeDifference){
         columnCount++;
     }
     UI::BeginTable("Main", columnCount);
 
     UI::TableNextRow();
-    // Icon
-    UI::TableNextColumn();
     // Position
     UI::TableNextColumn();
-    UI::Text("Position");
+    UI::Text("Name");
     // Time
     UI::TableNextColumn();
     UI::Text("Time");
     // Desc
     UI::TableNextColumn();
-    // %
-    if(showPercentage){
-        UI::TableNextColumn();
-        UI::Text("%");
+    if(showRefresh){
+        RenderRefreshIcon();
     }
     // Time diff
     if(showTimeDifference){
         UI::TableNextColumn();
     }
-    if(showRefresh){
-        RenderRefreshIcon();
-    }
-    UI::TableNextColumn();
 
     int i = 0;
     while(i < int(leaderboardArray.Length)){
         //We skip the pb if there's none
-        if( 
+        if(
             (leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB && leaderboardArray[i].time == -1) ||
             (!showPb && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB) ){
             i++;
             continue;
         }
 
-        // If the PB happens to be exactly a configured Position and we are displaying PB,
-        // then skip the Position record because it's essentially the same entry.
-        // (This doesn't affect ties becuase the positions would be different in that case e.g. Position record at 10 and tied PB at 11.)
-        if (leaderboardArray[i].entryType == EnumLeaderboardEntryType::POSITION && leaderboardArray[i].customEquals(currentPbEntry) && showPb) {
-            i++;
-            continue;
-        }
-        // Note the above position skip logic doesn't apply to medals since we still want to show the medal description
-
-        // If the current record is a medal one, we make a display string based on the display mode
         string displayString = "";
 
-        if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::MEDAL){
-            switch(medalDisplayMode){
-                case EnumDisplayMedal::NORMAL:
-                    break;
-                case EnumDisplayMedal::IN_GREY:
-                    displayString = greyColor;
-                    break;                   
-                default:
-                    break;
-            }
-        } else if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
+        if(leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB){
             switch(personalBestDisplayMode){
                 case EnumDisplayPersonalBest::NORMAL:
                     break;
                 case EnumDisplayPersonalBest::IN_GREY:
                     displayString = greyColor;
-                    break;                   
+                    break;
                 case EnumDisplayPersonalBest::IN_GREEN:
                     displayString = greenColor;
-                    break;                   
+                    break;
                 default:
                     break;
             }
         }
 
-        //------------POSITION ICON--------
-        UI::TableNextRow();
+        //------------NAME-------------
         UI::TableNextColumn();
-        UI::Text(GetIconForPosition(leaderboardArray[i].position));
-
-        //------------POSITION-------------
-        UI::TableNextColumn();
-        if(leaderboardArray[i].position <= 0){
-            UI::Text(displayString + "-");
-        }else if(leaderboardArray[i].position > 100000){
-            UI::Text(displayString + "<" + NumberToString(leaderboardArray[i].position));
-        }else{
-            UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));
-        }
+		UI::Text(displayString + "" + leaderboardArray[i].name);
 
         //------------TIME-----------------
         UI::TableNextColumn();
@@ -322,14 +256,6 @@ void RenderTab(bool showRefresh = false){
         UI::TableNextColumn();
         if(leaderboardArray[i].desc != ""){
             UI::Text(displayString + leaderboardArray[i].desc);
-        }
-
-        //------------%--------------------
-        if(showPercentage){
-            UI::TableNextColumn();
-            if(leaderboardArray[i].percentage != 0.0f){
-                UI::Text(displayString + leaderboardArray[i].percentageDisplay);
-            }
         }
 
         //------------TIME DIFFERENCE------

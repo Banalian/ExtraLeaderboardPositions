@@ -6,33 +6,6 @@ void OnSettingsChanged(){
     }
     updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
 
-    bool foundCombo = false;
-    for(int i = 0; i < nbSizePositionToGetArray; i++){
-        if(allPositionToGet[i] < 1){
-            allPositionToGet[i] = 1;
-        }
-
-        if(allPositionToGet[i] == currentComboChoice){
-            if(currentComboChoice < 1 && currentComboChoice != -1){
-                currentComboChoice = 1;
-            }
-
-            if(currentComboChoice > 10000){
-                currentComboChoice = 10000;
-            }
-
-            foundCombo = true;
-        }
-
-        if(allPositionToGet[i] > 10000){
-            allPositionToGet[i] = 10000;
-        }
-    }
-
-    if(!foundCombo){
-        currentComboChoice = -1;
-    }
-
     if(hiddingSpeedSetting < 0){
         hiddingSpeedSetting = 0;
     }
@@ -41,36 +14,41 @@ void OnSettingsChanged(){
 
 void OnSettingsSave(Settings::Section& section){
     //save the array in the string
-    allPositionToGetStringSave = "";
+    allFriendsToGetStringSave = "";
+    allFriendsNameStringSave = "";
+	trace("OnSettingsSave");
+	trace(nbSizePositionToGetArray);
     for(int i = 0; i < nbSizePositionToGetArray; i++){
-        allPositionToGetStringSave += "" + allPositionToGet[i];
+        allFriendsToGetStringSave += "" + allFriendsToGet[i];
         if(i < nbSizePositionToGetArray - 1){
-            allPositionToGetStringSave += ",";
+            allFriendsToGetStringSave += ",";
         }
     }
-    section.SetString("allPositionToGetStringSave", allPositionToGetStringSave);
+    for(int i = 0; i < nbSizePositionToGetArray; i++){
+        allFriendsNameStringSave += "" + allFriendsName[i];
+        if(i < nbSizePositionToGetArray - 1){
+            allFriendsNameStringSave += ",";
+        }
+    }
+    section.SetString("allFriendsToGetStringSave", allFriendsToGetStringSave);
+    section.SetString("allFriendsNameStringSave", allFriendsNameStringSave);
 }
 
 void OnSettingsLoad(Settings::Section& section){
     //load the array from the string
-    allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
+    allFriendsToGetStringSave = section.GetString("allFriendsToGetStringSave");
 
-    if(allPositionToGetStringSave != ""){
-        array<string> allPositionToGetTmp = allPositionToGetStringSave.Split(",");
-        nbSizePositionToGetArray = allPositionToGetTmp.Length;
-
-        for(int i = 0; i < nbSizePositionToGetArray; i++){
-            allPositionToGet.InsertLast(Text::ParseInt(allPositionToGetTmp[i]));
-        }
-
+    if(allFriendsToGetStringSave != ""){
+        allFriendsToGet = allFriendsToGetStringSave.Split(",");
+        nbSizePositionToGetArray = allFriendsToGet.Length;
+        allFriendsName = allFriendsNameStringSave.Split(",");
+		while (allFriendsToGet.Length > allFriendsName.Length){
+			allFriendsName.InsertLast("");
+		}
     }else{
-        allPositionToGetStringSave = "1,10,100,1000,10000";
-        nbSizePositionToGetArray = 5;
-        allPositionToGet.InsertLast(1);
-        allPositionToGet.InsertLast(10);
-        allPositionToGet.InsertLast(100);
-        allPositionToGet.InsertLast(1000);
-        allPositionToGet.InsertLast(10000);
+        allFriendsToGetStringSave = "";
+        allFriendsNameStringSave = "";
+        nbSizePositionToGetArray = 0;
     }
 
     OnSettingsChanged();

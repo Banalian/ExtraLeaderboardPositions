@@ -13,6 +13,16 @@ class LeaderboardEntry{
     int position = -1;
 
     /**
+     * Player name of the entry
+     */
+    string name = "";
+
+    /**
+     * Player id of the entry
+     */
+    string id = "";
+
+    /**
      * Really short description of the entry (medal type for example, or custom description)
      */
     string desc = "";
@@ -60,6 +70,6 @@ class LeaderboardEntry{
      * Check if the entry is valid (i.e. if it has been initialized with different values than the default ones)
      */
     bool isValid(){
-        return time != -1 && position != -1 && entryType != EnumLeaderboardEntryType::UNKNOWN;
+        return time != -1 && entryType != EnumLeaderboardEntryType::UNKNOWN;
     }
 }

@@ -27,8 +27,10 @@ bool isAValidMedalTime(LeaderboardEntry@ time) {
  * Needs to be called from a yieldable function
  */
 bool MapHasNadeoLeaderboard(const string &in mapId){
-    auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/map/" + mapId);
-
+    auto info = FetchLiveEndpoint(NadeoServices::BaseURLLive() + "/api/token/map/" + mapId);
+	if(info.GetType() == Json::Type::Object){
+		currentMapId = info["mapId"];
+	}
     return info.GetType() == Json::Type::Object;
 }
 
@@ -54,20 +56,21 @@ bool UserCanUseThePlugin(){
 }
 
 
-string GetIconForPosition(int position){
-    if(position == 1){
-        return podiumIcon[0];
-    }else if(position > 1 && position <= 10){
-        return podiumIcon[1];
-    }else if(position > 10 && position <= 100){
-        return podiumIcon[2];
-    }else if(position > 100 && position <= 1000){
-        return podiumIcon[3];
-    }else if(position > 1000 && position <= 10000){
-        return podiumIcon[4];
-    }else{
-        return "";
+/**
+ * Fetch an endpoint from the Nadeo Live Services
+ * 
+ * Needs to be called from a yieldable function
+ */
+Json::Value FetchEndpoint(const string &in route) {
+    while (!NadeoServices::IsAuthenticated("NadeoServices")) {
+        yield();
     }
+    auto req = NadeoServices::Get("NadeoServices", route);
+    req.Start();
+    while(!req.Finished()) {
+        yield();
+    }
+    return Json::Parse(req.String());
 }
 
 
@@ -76,7 +79,7 @@ string GetIconForPosition(int position){
  * 
  * Needs to be called from a yieldable function
  */
-Json::Value FetchEndpoint(const string &in route) {
+Json::Value FetchLiveEndpoint(const string &in route) {
     while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) {
         yield();
     }
@@ -101,7 +104,7 @@ string TimeString(int scoreTime, bool showSign = false) {
             timeString += "+";
         }
     }
-    
+
     timeString += Time::Format(Math::Abs(scoreTime));
 
     return timeString;
@@ -140,24 +143,4 @@ bool newPBSet(int timePbLocal) {
     }else{
         return false;
     }
-}
-
-
-/**
- * return the string representation of a number based on some settings like shorter numbers, etc
- */
-string NumberToString(int number){
-    string numberString = "";
-    // explicit cast to int to avoid warning
-    int shortenAboveInt = shortenAbove;
-
-    if(number < shortenAboveInt || !shorterNumberRepresentation){
-        numberString = "" + number;
-    } else if(number < 1000000){
-        numberString = "" + number / 1000 + "k";
-    } else {
-        numberString = "" + number / 1000000 + "M";
-    }
-
-    return numberString;
 }

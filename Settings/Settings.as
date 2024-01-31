@@ -27,51 +27,21 @@ bool showPb = true;
 EnumDisplayPersonalBest personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;
 
 [Setting hidden]
-bool showPercentage = false;
-
-[Setting hidden]
-bool showMedals = true;
-
-[Setting hidden]
-bool showMedalWhenBetter = true;
-
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-[Setting hidden]
-bool showSBVilleATMedal = true;
-#endif
-#if DEPENDENCY_CHAMPIONMEDALS
-[Setting hidden]
-bool showChampionMedals = true;
-#endif
-[Setting hidden]
-bool showAT = true;
-[Setting hidden]
-bool showGold = true;
-[Setting hidden]
-bool showSilver = true;
-[Setting hidden]
-bool showBronze = true;
-
-[Setting hidden]
-EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
-
-
-[Setting hidden]
 bool showMapName = false;
 
 [Setting hidden]
 bool showMapAuthor = false;
 
 [Setting hidden]
-bool showRefreshButtonSetting = true;
-
-[Setting hidden]
 int nbSizePositionToGetArray = 1;
 
 [Setting hidden]
-string allPositionToGetStringSave = "";
+string allFriendsToGetStringSave = "";
+// unsaved counterpart allFriendsToGet is in the data file;
 
-// unsaved counterpart allPositionToGet is in the data file;
+[Setting hidden]
+string allFriendsNameStringSave = "";
+// unsaved counterpart allFriendsName is in the data file;
 
 [Setting hidden]
 bool showTimeDifference = true;
@@ -81,18 +51,3 @@ bool showColoredTimeDifference = true;
 
 [Setting hidden]
 bool inverseTimeDiffSign = false;
-
-[Setting hidden]
-int currentComboChoice = -1;
-
-[Setting hidden]
-bool shorterNumberRepresentation = false;
-
-[Setting hidden]
-uint shortenAbove = 100000;
-
-[Setting hidden]
-bool useExternalAPI = false;
-
-[Setting hidden]
-bool showPlayerCount = true;
