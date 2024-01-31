@@ -9,12 +9,6 @@ enum EnumDisplayMode
     HIDE_WHEN_DRIVING
 };
 
-enum EnumDisplayMedal
-{
-    NORMAL,
-    IN_GREY
-};
-
 enum EnumDisplayPersonalBest
 {
     NORMAL,
@@ -30,13 +24,4 @@ enum EnumLeaderboardEntryType
     POSITION,
     TIME,
     EXTERNAL // To be potentially used by other plugins wishing to add their own entries
-}
-
-enum MedalType
-{
-    NONE,
-    BRONZE,
-    SILVER,
-    GOLD,
-    AT
 }

@@ -51,13 +51,6 @@ void Update(float dt) {
         ClearLeaderboard();
     }
 
-    // update the config timer
-    timerOPConfig += dt;
-    if(timerOPConfig > updateFrequencyOPConfig){
-        timerOPConfig = 0;
-        refreshOPConfig = true;
-    }
-
     // update the loading step timer if we're refreshing the positions
     if(refreshPosition){
         loadingStepTimer += dt;
