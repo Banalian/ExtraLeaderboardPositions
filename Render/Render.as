@@ -137,7 +137,7 @@ bool RenderInfoTab(){
     UI::TableNextColumn();
     if(app.RootMap !is null){
         if(showMapName){
-            UI::Text(StripFormatCodes(app.RootMap.MapInfo.Name));
+            UI::Text(Text::StripFormatCodes(app.RootMap.MapInfo.Name));
             UI::TableNextColumn();
             UI::TableNextColumn();
             UI::TableNextColumn();
@@ -148,7 +148,7 @@ bool RenderInfoTab(){
         UI::TableNextRow();
         UI::TableNextColumn();
         if(showMapAuthor){
-            UI::Text(brightGreyColor + "Made by " + StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
+            UI::Text(brightGreyColor + "Made by " + Text::StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
         }
         UI::TableNextColumn();
         UI::TableNextColumn();
