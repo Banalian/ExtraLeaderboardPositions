@@ -262,7 +262,7 @@ void RenderPositionCustomization(){
         OnSettingsChanged();
     }
     if(UI::Button("- : Remove a position")){
-        if(nbSizePositionToGetArray > 1){
+        if(nbSizePositionToGetArray > 0){
             nbSizePositionToGetArray--;
             allPositionToGet.RemoveAt(nbSizePositionToGetArray);
             OnSettingsChanged();
