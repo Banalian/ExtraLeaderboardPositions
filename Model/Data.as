@@ -86,3 +86,6 @@ bool validMap = false;
 int maxTries = 10;
 int retryTimeLimit = 10000;
 bool failedRefresh = false;
+
+
+EnumCurrentMode currentMode = EnumCurrentMode::INVALID;

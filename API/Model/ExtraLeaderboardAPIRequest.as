@@ -42,6 +42,9 @@ namespace ExtraLeaderboardAPI
             string url = API_URL + "/leaderboard/map/" + mapId + "/records?";
             if(getPlayerCount){
                 url += "getplayercount=true&";
+                if(currentMode == EnumCurrentMode::STUNT){
+                    url += "isStunt=true&";
+                }
             }
             if(getMapInfo){
                 url += "getmapinfo=true&";
