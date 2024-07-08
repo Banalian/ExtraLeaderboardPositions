@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.4.0
+- Added support for the new Stunt mode
+- Allowed users to have no custom position in the leaderboard (compared to needing at least one)
+- Chore : API change for the strip code OP function
+
 ## 2.3.3
 - Refactor/Upgrade of the early pb update : Now the default behavior, upgraded to correctly update (Huge thanks to zanaptak for their PR!!)
 - Added an option to show the PB as either white, green or grey (Also thanks to zanaptak's PR)
