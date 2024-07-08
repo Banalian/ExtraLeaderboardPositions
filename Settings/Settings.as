@@ -81,7 +81,7 @@ string allPositionToGetStringSave = "";
 // unsaved counterpart allPositionToGet is in the data file;
 
 [Setting hidden]
-bool allPositionDataStringSave = "";
+string allPositionDataStringSave = "";
 
 // unsaved counterpart allPositionData is in the data file;
 

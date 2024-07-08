@@ -285,28 +285,28 @@ void RenderPositionCustomization(){
     UI::BeginTable("PositionData#" + uniqueId, 2);
     UI::TableNextRow();
     UI::TableNextColumn();
-    UI::BeginCombo("Icon", positionData.icon);
-
     uint tmpPos = positionData.position;
     string tmpIcon = positionData.icon;
     string tmpColor = positionData.color;
-    
-    for(uint i = 0; i < possibleIcons.Length; i++){
-        if(UI::Selectable(possibleIcons[i], positionData.icon == possibleIcons[i])){
-            UI::SetItemDefaultFocus();
-            positionData.icon = possibleIcons[i];
+    if(UI::BeginCombo("Icon", positionData.icon)){
+        for(uint i = 0; i < possibleIcons.Length; i++){
+            if(UI::Selectable(possibleIcons[i], positionData.icon == possibleIcons[i])){
+                UI::SetItemDefaultFocus();
+                positionData.icon = possibleIcons[i];
+            }
         }
+        UI::EndCombo();
     }
-    UI::EndCombo();
     UI::TableNextColumn();
-    UI::BeginCombo("Color", positionData.color);
-    for(uint i = 0; i < possibleColors.Length; i++){
-        if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.color == possibleColors[i])){
-            UI::SetItemDefaultFocus();
-            positionData.color = possibleColors[i];
+    if(UI::BeginCombo("Color", positionData.color + Icons::Square)){
+        for(uint i = 0; i < possibleColors.Length; i++){
+            if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.color == possibleColors[i])){
+                UI::SetItemDefaultFocus();
+                positionData.color = possibleColors[i];
+            }
         }
+        UI::EndCombo();
     }
-    UI::EndCombo();
     UI::EndTable();
 
     if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color){
@@ -316,8 +316,8 @@ void RenderPositionCustomization(){
     return changed;
  }
 
-[SettingsTab name="Positions customization"]
-void RenderPositionCustomization(){
+[SettingsTab name="Positions data customization"]
+void RenderPositionDataCustomization(){
 
     if(!UserCanUseThePlugin()){
         UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
@@ -327,6 +327,8 @@ void RenderPositionCustomization(){
     UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
+        trace("old allPositionDataStringSave : " + allPositionDataStringSave);
+        trace("old allPositionData : " + allPositionData.Length);
         allPositionData = array<PositionData>();
         allPositionData.InsertLast(PositionData(1, "\\$071"));
         allPositionData.InsertLast(PositionData(10, "\\$db4"));
@@ -340,11 +342,18 @@ void RenderPositionCustomization(){
                 allPositionDataStringSave += ";";
             }
         }
-        nbSizePositionDataArray = 5;
+        nbSizePositionDataArray = allPositionData.Length;
     }
 
     if(UI::Button("Refresh")){
         ForceRefresh();
+    }
+
+    for(uint i = 0; i < allPositionData.Length; i++){
+        bool changed = GetPositionData(i, allPositionData[i]);
+        if(changed){
+            OnSettingsChanged();
+        }
     }
 
     if(UI::Button("+ : Add a position")){
@@ -353,16 +362,9 @@ void RenderPositionCustomization(){
         OnSettingsChanged();
     }
     if(UI::Button("- : Remove a position")){
-        if(nbSizePositionDataArray > 1){
+        if(nbSizePositionDataArray > 0){
             nbSizePositionDataArray--;
             allPositionData.RemoveAt(nbSizePositionDataArray);
-            OnSettingsChanged();
-        }
-    }
-
-    for(int i = 0; i < nbSizePositionDataArray; i++){
-        bool changed = GetPositionData(i, allPositionData[i]);
-        if(changed){
             OnSettingsChanged();
         }
     }
