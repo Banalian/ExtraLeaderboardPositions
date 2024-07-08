@@ -235,7 +235,17 @@ void RenderTab(bool showRefresh = false){
     UI::Text("Position");
     // Time
     UI::TableNextColumn();
-    UI::Text("Time");
+    switch(currentMode){
+        case EnumCurrentMode::RACE:
+            UI::Text("Time");
+            break;
+        case EnumCurrentMode::STUNT:
+            UI::Text("Score");
+            break;
+        default:
+            UI::Text("INVALID");
+            break;
+    }
     // Desc
     UI::TableNextColumn();
     // %
@@ -314,9 +324,9 @@ void RenderTab(bool showRefresh = false){
             UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));
         }
 
-        //------------TIME-----------------
+        //------------TIME/SCORE-----------------
         UI::TableNextColumn();
-        UI::Text(displayString + TimeString(leaderboardArray[i].time));
+        UI::Text(displayString + formatTimeScore(leaderboardArray[i].time));
 
         //------------HAS DESC-------------
         UI::TableNextColumn();
@@ -342,7 +352,7 @@ void RenderTab(bool showRefresh = false){
                 //still keeping the if in case we want to print/add something here
             }else{
                 int timeDifference = leaderboardArray[i].time - timeDifferenceEntry.time;
-                string timeDifferenceString = TimeString(Math::Abs(timeDifference));
+                string timeDifferenceString = formatTimeScore(Math::Abs(timeDifference));
 
                 if(inverseTimeDiffSign){
                     if(timeDifference < 0){

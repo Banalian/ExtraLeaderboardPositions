@@ -139,6 +139,11 @@ void RefreshLeaderboard(){
             medalDesc.InsertLast("Bronze");
         }
 
+        // Invert order if we are in stunt mode
+        if(currentMode == EnumCurrentMode::STUNT){
+            medalDesc.Reverse();
+        }
+
         for(uint i = 0; i< medalEntries.Length; i++){
             medalEntries[i].desc = medalDesc[i];
         }
@@ -199,7 +204,16 @@ void RefreshLeaderboard(){
     }
 
     UpdateTimeDifferenceEntry(leaderboardArrayTmp);
-    leaderboardArrayTmp.SortAsc();
+    switch(currentMode){
+        case EnumCurrentMode::RACE:
+            leaderboardArrayTmp.SortAsc();
+            break;
+        case EnumCurrentMode::STUNT:
+            leaderboardArrayTmp.SortDesc();
+            break;
+        default:
+            break;
+    }
     leaderboardArray = leaderboardArrayTmp;
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
@@ -267,5 +281,17 @@ void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
                 break;
             }
         }
+    }
+}
+
+
+string formatTimeScore(int score) {
+    switch(currentMode){
+        case EnumCurrentMode::RACE:
+            return TimeString(score);
+        case EnumCurrentMode::STUNT:
+            return NumberToString(score);
+        default:
+            return "" + score;
     }
 }

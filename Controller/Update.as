@@ -23,7 +23,8 @@ void Update(float dt) {
         if(network.ClientManiaAppPlayground.UserMgr.Users.Length != 0){
             auto userId = network.ClientManiaAppPlayground.UserMgr.Users[0].Id;
             //get the current map pb
-            timePbLocal = scoreMgr.Map_GetRecord_v2(userId, app.RootMap.MapInfo.MapUid, "PersonalBest", "", "TimeAttack", "");
+            string mode = currentMode == EnumCurrentMode::STUNT ? "Stunt" : "TimeAttack";
+            timePbLocal = scoreMgr.Map_GetRecord_v2(userId, app.RootMap.MapInfo.MapUid, "PersonalBest", "", mode, "");
         }
 
         if (timePbLocal > 0 && currentTimePbLocal != timePbLocal) {
@@ -36,6 +37,7 @@ void Update(float dt) {
             currentMapUid = app.RootMap.MapInfo.MapUid;
             trace("Update(): new map uid: " + currentMapUid);
             playerCount = -1;
+            UpdateCurrentMode();
             ClearLeaderboard();
             ForceRefresh();
         } else if (newPBSet(currentTimePbLocal) || timer > updateFrequency) {

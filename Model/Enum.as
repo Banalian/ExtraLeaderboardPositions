@@ -40,3 +40,10 @@ enum MedalType
     GOLD,
     AT
 }
+
+enum EnumCurrentMode
+{
+    INVALID,
+    RACE,
+    STUNT
+}
