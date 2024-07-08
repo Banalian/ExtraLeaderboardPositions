@@ -6,19 +6,19 @@
     string color;
     string icon;
 
-    LeaderboardData() {
+    PositionData() {
         position = 0;
         color = greyColor;
         icon = Icons::Kenney::PodiumAlt;
     }
 
-    LeaderboardData(uint position, string color = greyColor, string icon = Icons::Kenney::PodiumAlt) {
+    PositionData(uint position, const string &in color = greyColor, const string &in icon = Icons::Kenney::PodiumAlt) {
         this.position = position;
         this.color = color;
         this.icon = icon;
     }
 
-    LeaderboardData(string data) {
+    PositionData(const string &in data) {
         Deserialize(data);
     }
 
@@ -26,7 +26,7 @@
         return position + " " + color + " " + icon;
     }
 
-    void Deserialize(string data) {
+    void Deserialize(const string &in data) {
         array<string> split = data.Split(" ");
         position = Text::ParseInt(split[0]);
         color = split[1];
@@ -34,6 +34,6 @@
     }
 
     string GetColorIcon() {
-        return color + icon;
+        return color + icon + resetColor;
     }
  }
