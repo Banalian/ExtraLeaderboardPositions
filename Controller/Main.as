@@ -25,7 +25,16 @@ void RefreshLeaderboard(){
                 leaderboardArrayTmp.InsertLast(leaderboardArray[i]);
         }
         UpdateTimeDifferenceEntry(leaderboardArrayTmp);
-        leaderboardArrayTmp.SortAsc();
+        switch(currentMode){
+            case EnumCurrentMode::RACE:
+                leaderboardArrayTmp.SortAsc();
+                break;
+            case EnumCurrentMode::STUNT:
+                leaderboardArrayTmp.SortDesc();
+                break;
+            default:
+                break;
+        };
         leaderboardArray = leaderboardArrayTmp;
 
         currentPbEntry = localPbEntry;
@@ -51,7 +60,8 @@ void RefreshLeaderboard(){
 
             LeaderboardEntry@ apiPbEntry = GetPersonalBestEntry();
 
-            if (apiPbEntry.time > 0 && apiPbEntry.time <= currentPbEntry.time) {
+            if ((currentMode == EnumCurrentMode::RACE && apiPbEntry.time > 0 && apiPbEntry.time <= currentPbEntry.time)
+                || (currentMode == EnumCurrentMode::STUNT && apiPbEntry.time > 0 && apiPbEntry.time >= currentPbEntry.time)) {
                 trace("RefreshLeaderboard(): received valid API PB time " + TimeLogString(apiPbEntry.time) + ", position " + apiPbEntry.position);
                 currentPbEntry = apiPbEntry;
                 // don't add to leaderboard yet, stage 3 will do it

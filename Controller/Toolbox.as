@@ -132,7 +132,7 @@ bool newPBSet(int timePbLocal) {
         if(currentPbEntry.time == -1){
             return true;
         }
-        if(timePbLocal < currentPbEntry.time){
+        if((timePbLocal < currentPbEntry.time && currentMode == EnumCurrentMode::RACE) || (timePbLocal > currentPbEntry.time && currentMode == EnumCurrentMode::STUNT)){
             return true;
         }else{
             return false;
