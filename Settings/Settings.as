@@ -86,6 +86,21 @@ string allPositionDataStringSave = "";
 // unsaved counterpart allPositionData is in the data file;
 
 [Setting hidden]
+string medalsPositionDataStringSave = "";
+
+// unsaved counterparts variables are in the data file;
+
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+[Setting hidden]
+string sbVillePositionDataStringSave = "";
+#endif
+
+#if DEPENDENCY_CHAMPIONMEDALS
+[Setting hidden]
+string championMedalPositionDataStringSave = "";
+#endif
+
+[Setting hidden]
 bool showTimeDifference = true;
 
 [Setting hidden]
