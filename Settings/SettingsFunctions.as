@@ -53,6 +53,32 @@ void OnSettingsSave(Settings::Section& section){
         allPositionToGetStringSave = "empty";
     }
     section.SetString("allPositionToGetStringSave", allPositionToGetStringSave);
+
+    allPositionDataStringSave = "";
+    for(int i = 0; i < nbSizePositionDataArray; i++){
+        allPositionDataStringSave += allPositionData[i].Serialize();
+        if(i < nbSizePositionDataArray - 1){
+            allPositionDataStringSave += ";";
+        }
+    }
+    section.SetString("allPositionDataStringSave", allPositionDataStringSave);
+
+    medalsPositionDataStringSave = "";
+    medalsPositionDataStringSave += currentPbPosition.Serialize() + ";";
+    medalsPositionDataStringSave += atPositionData.Serialize() + ";";
+    medalsPositionDataStringSave += goldPositionData.Serialize() + ";";
+    medalsPositionDataStringSave += silverPositionData.Serialize() + ";";
+    medalsPositionDataStringSave += bronzePositionData.Serialize();
+    section.SetString("medalsPositionDataStringSave", medalsPositionDataStringSave);
+
+#if DEPENDENCY_CHAMPIONMEDALS
+    championMedalPositionDataStringSave = championMedalPositionData.Serialize();
+    section.SetString("championMedalPositionDataStringSave", championMedalPositionDataStringSave);
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+    sbVillePositionDataStringSave = sbVillePositionData.Serialize();
+    section.SetString("sbVillePositionDataStringSave", sbVillePositionDataStringSave);
+#endif
 }
 
 void OnSettingsLoad(Settings::Section& section){
@@ -82,6 +108,58 @@ void OnSettingsLoad(Settings::Section& section){
         nbSizePositionToGetArray = 0;
         allPositionToGet = {};
     }
+
+
+    allPositionDataStringSave = section.GetString("allPositionDataStringSave");
+
+    if(allPositionDataStringSave != ""){
+        array<string> allPositionDataTmp = allPositionDataStringSave.Split(";");
+        nbSizePositionDataArray = allPositionDataTmp.Length;
+
+        for(int i = 0; i < nbSizePositionDataArray; i++){
+            PositionData positionData = PositionData(allPositionDataTmp[i]);
+            allPositionData.InsertLast(positionData);
+        }
+    }else{
+        allPositionDataStringSave = "";
+        nbSizePositionDataArray = 0;
+    }
+
+    medalsPositionDataStringSave = section.GetString("medalsPositionDataStringSave");
+    
+    if(medalsPositionDataStringSave != ""){
+        array<string> medalsPositionDataTmp = medalsPositionDataStringSave.Split(";");
+        if(medalsPositionDataTmp.Length == 5){
+            currentPbPosition = PositionData(medalsPositionDataTmp[0]);
+            atPositionData = PositionData(medalsPositionDataTmp[1]);
+            goldPositionData = PositionData(medalsPositionDataTmp[2]);
+            silverPositionData = PositionData(medalsPositionDataTmp[3]);
+            bronzePositionData = PositionData(medalsPositionDataTmp[4]);
+        }
+    }else{
+        currentPbPosition = PositionData(0, possibleColors[7], Icons::Circle);
+        atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
+        goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
+        silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
+        bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+    }
+
+#if DEPENDENCY_CHAMPIONMEDALS
+    championMedalPositionDataStringSave = section.GetString("championMedalPositionDataStringSave");
+    if(championMedalPositionDataStringSave != ""){
+        championMedalPositionData = PositionData(championMedalPositionDataStringSave);
+    }else{
+        championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+    }
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+    sbVillePositionDataStringSave = section.GetString("sbVillePositionDataStringSave");
+    if(sbVillePositionDataStringSave != ""){
+        sbVillePositionData = PositionData(sbVillePositionDataStringSave);
+    }else{
+        sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+    }
+#endif
 
     OnSettingsChanged();
 }

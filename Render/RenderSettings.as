@@ -280,14 +280,20 @@ void RenderPositionCustomization(){
 /**
  * Function to select an icon and color from the list of available ones
  */
- bool GetPositionData(int uniqueId, PositionData positionData){
+ bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
     bool changed = false;
-    UI::BeginTable("PositionData#" + uniqueId, 2);
+    UI::BeginTable("PositionData#" + uniqueId, 3);
     UI::TableNextRow();
     UI::TableNextColumn();
     uint tmpPos = positionData.position;
     string tmpIcon = positionData.icon;
     string tmpColor = positionData.color;
+    if(allowPositionChange){
+        positionData.position = UI::InputInt(positionName, positionData.position);
+    }else{
+        UI::Text(positionName);
+    }
+    UI::TableNextColumn();
     if(UI::BeginCombo("Icon", positionData.icon)){
         for(uint i = 0; i < possibleIcons.Length; i++){
             if(UI::Selectable(possibleIcons[i], positionData.icon == possibleIcons[i])){
@@ -339,7 +345,7 @@ void RenderPositionDataCustomization(){
         for(uint i = 0; i < allPositionData.Length; i++){
             allPositionDataStringSave += allPositionData[i].Serialize();
             if(i < allPositionData.Length - 1){
-                allPositionDataStringSave += ";";
+                allPositionDataStringSave +=  ";";
             }
         }
         nbSizePositionDataArray = allPositionData.Length;
@@ -349,16 +355,15 @@ void RenderPositionDataCustomization(){
         ForceRefresh();
     }
 
+
+    bool changed = false;
     for(uint i = 0; i < allPositionData.Length; i++){
-        bool changed = GetPositionData(i, allPositionData[i]);
-        if(changed){
-            OnSettingsChanged();
-        }
+        changed = GetPositionData("Custom Position " + (i+1), i, allPositionData[i], true);
     }
 
     if(UI::Button("+ : Add a position")){
         nbSizePositionDataArray++;
-        allPositionData.InsertLast(PositionData(1, "\\$071"));
+        allPositionData.InsertLast(PositionData(1));
         OnSettingsChanged();
     }
     if(UI::Button("- : Remove a position")){
@@ -367,5 +372,41 @@ void RenderPositionDataCustomization(){
             allPositionData.RemoveAt(nbSizePositionDataArray);
             OnSettingsChanged();
         }
+    }
+
+    UI::Separator();
+    UI::Text("Personal best setting");
+    if(UI::Button("Reset to default")){
+        currentPbPosition = PositionData(0, possibleColors[7], Icons::User);
+    }
+    changed = changed || GetPositionData("Personal Best", -10000, currentPbPosition);
+
+    UI::Separator();
+    UI::Text("Medals settings");
+    if(UI::Button("Reset to default")){
+        atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
+        goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
+        silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
+        bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+#if DEPENDENCY_CHAMPIONMEDALS
+        championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
+    }
+    changed = changed || GetPositionData("Author Medal", 10001, atPositionData);
+    changed = changed || GetPositionData("Gold Medal", 10002, goldPositionData);
+    changed = changed || GetPositionData("Silver Medal", 10003, silverPositionData);
+    changed = changed || GetPositionData("Bronze Medal", 10004, bronzePositionData);
+#if DEPENDENCY_CHAMPIONMEDALS
+    changed = changed || GetPositionData("Champion Medal", 10005, championMedalPositionData);
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+    changed = changed || GetPositionData("SBVille Medal", 10006, sbVillePositionData);
+#endif
+
+    if(changed){
+        OnSettingsChanged();
     }
 }
