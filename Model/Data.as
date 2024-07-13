@@ -40,6 +40,7 @@ const array<string> possibleColors = {
     "\\$444", // grey
     "\\$777", // bright grey
     "\\$77f", // blue
+    "\\$9f9", // PB green
     "\\$f77", // red
     "\\$fff", // white
 };
