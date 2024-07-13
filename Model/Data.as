@@ -33,7 +33,7 @@ const array<string> possibleIcons = {
  * List of available colors for leaderboard customisation
  */
 const array<string> possibleColors = {
-    "\\$071", // green
+    "\\$071", // AT green
     "\\$db4", // gold
     "\\$899", // silver
     "\\$964", // bronze
@@ -42,7 +42,7 @@ const array<string> possibleColors = {
     "\\$77f", // blue
     "\\$9f9", // PB green
     "\\$f77", // red
-    "\\$fff", // white
+    "\\$fff" // white
 };
 
 const array<string> loadingSteps = {
@@ -93,6 +93,19 @@ bool refreshOPConfig = false;
 array<int> allPositionToGet = {};
 
 array<PositionData> allPositionData = {};
+
+// all data to save, counterparts are in the settings file
+PositionData currentPbPosition = PositionData(0, possibleColors[7], Icons::User);
+PositionData atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
+PositionData goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
+PositionData silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
+PositionData bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+PositionData sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
+#if DEPENDENCY_CHAMPIONMEDALS
+PositionData championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
 
 
 array<LeaderboardEntry@> leaderboardArray;

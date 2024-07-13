@@ -23,13 +23,13 @@
     }
 
     string Serialize() {
-        return position + " " + color + " " + icon;
+        return color + " " + position + " " + icon;
     }
 
     void Deserialize(const string &in data) {
         array<string> split = data.Split(" ");
-        position = Text::ParseInt(split[0]);
-        color = split[1];
+        color = split[0];
+        position = Text::ParseInt(split[1]);
         icon = split[2];
     }
 
