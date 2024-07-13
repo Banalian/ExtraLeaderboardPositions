@@ -109,20 +109,3 @@ void ClearLeaderboard() {
     currentPbEntry.desc = "PB";
     timeDifferenceEntry = LeaderboardEntry();
 }
-
-
-void UpdateCurrentMode() {
-    // find the current mode (stunt or some race gamemode)
-    auto app = GetApp();
-    auto map = app.RootMap;
-    auto mapInfo = map.MapInfo;
-    string mapType = mapInfo.MapType;
-
-    if(mapType == "TrackMania\\TM_Race"){
-        currentMode = EnumCurrentMode::RACE;
-    } else if(mapType == "TrackMania\\TM_Stunt"){
-        currentMode = EnumCurrentMode::STUNT;
-    } else {
-        currentMode = EnumCurrentMode::INVALID;
-    }
-}
