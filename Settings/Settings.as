@@ -43,6 +43,10 @@ bool showSBVilleATMedal = true;
 [Setting hidden]
 bool showChampionMedals = true;
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+[Setting hidden]
+bool showWarriorMedals = true;
+#endif
 [Setting hidden]
 bool showAT = true;
 [Setting hidden]

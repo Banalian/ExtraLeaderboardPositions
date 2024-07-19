@@ -173,6 +173,15 @@ void RefreshLeaderboard(){
                 }
             }
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+                // if there's a warrior medal and the time is the warrior time, we change the entry type to medal and set the description to warrior
+                if(resp.positions[i].time == int(WarriorMedals::GetWMTime())){
+                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
+                    resp.positions[i].desc = "Warrior";
+                }
+            }
+#endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
             if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
                 // if there's a SBVille medal and the time is the the SBVille AT, we change the entry type to medal and set the description to SBVille AT

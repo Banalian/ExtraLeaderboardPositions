@@ -153,6 +153,20 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 #endif
 
+#if DEPENDENCY_WARRIORMEDALS
+        if(showWarriorMedals){
+            int warriorTime = WarriorMedals::GetWMTime();
+            if(warriorTime != 0){
+                auto warriorPosition = GetSpecificPositionEntry(warriorTime);
+                warriorPosition.desc = "Warrior";
+                warriorPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                if(isAValidMedalTime(warriorPosition)) {
+                    tmpArray.InsertLast(warriorPosition);
+                }
+            }
+        }
+#endif
+
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         if(showSBVilleATMedal){
             int SBVilleATTime = SBVilleCampaignChallenges::getChallengeTime();
