@@ -194,7 +194,7 @@ void RenderMedalSettings(){
 #if DEPENDENCY_CHAMPIONMEDALS
         showChampionMedals = UI::Checkbox("Show Champion medals", showChampionMedals);
 #endif
-#if DEPENDENCY_CHAMPIONMEDALS
+#if DEPENDENCY_WARRIORMEDALS
         showWarriorMedals = UI::Checkbox("Show Warrior medals", showWarriorMedals);
 #endif
         showAT = UI::Checkbox("Show AT", showAT);
