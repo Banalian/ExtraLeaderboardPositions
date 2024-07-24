@@ -358,11 +358,11 @@ void RenderTab(bool showRefresh = false){
                     if(timeDifference < 0){
                         UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
                     }else{
-                        UI::Text((showColoredTimeDifference ? blueColor : "") + "-" + timeDifferenceString);
+                        UI::Text((showColoredTimeDifference ? blueColor : "") + "\u2212" + timeDifferenceString);
                     }
                 }else{
                     if(timeDifference < 0){
-                        UI::Text((showColoredTimeDifference ? blueColor : "") + "-" + timeDifferenceString);
+                        UI::Text((showColoredTimeDifference ? blueColor : "") + "\u2212" + timeDifferenceString);
                     }else{
                         UI::Text((showColoredTimeDifference ? redColor : "") + "+" + timeDifferenceString);
                     }
