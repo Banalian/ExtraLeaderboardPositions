@@ -187,7 +187,7 @@ void RenderMedalSettings(){
 
     if(showMedals){
         showMedalWhenBetter = UI::Checkbox("Show medal even if you have it (if possible)", showMedalWhenBetter);
-        UI::Text("\n");
+        UI::TextWrapped("\n\tNote: if two medals share the same time, the second one will not be shown.");
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         showSBVilleATMedal = UI::Checkbox("Show SBVille AT medal", showSBVilleATMedal);
 #endif

@@ -161,9 +161,12 @@ void RefreshLeaderboard(){
 
         // Insert all entries in our temporary entry array
         for(uint i = 0; i< resp.positions.Length; i++){
-            if(resp.positions[i].time == -1){
+            if (false
+                || resp.positions[i].time == -1
+                || (i > 0 && resp.positions[i].time == resp.positions[i - 1].time)
+            )
                 continue;
-            }
+
 #if DEPENDENCY_CHAMPIONMEDALS
             if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
                 // if there's a champion medal and the time is the champion time, we change the entry type to medal and set the description to champion
