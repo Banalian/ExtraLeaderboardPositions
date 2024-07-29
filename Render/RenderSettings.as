@@ -2,7 +2,7 @@
 void RenderSettingsCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
         return;
     }
 
@@ -140,25 +140,25 @@ void RenderSettingsCustomization(){
 
 [SettingsTab name="Explanation" icon="Question" order="4"]
 void RenderSettingsExplanation(){
-    UI::Text("This plugin allows you to see more leaderboard positions.\n\n");
-    UI::Text("You can modify the positions in the \"Positions customization\" tab\n");
-    UI::Text("\nThe leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
-    UI::Text("This timer resets when you leave the map and is automatically refreshed when you join a map, or if you set a new pb on a map.");;
-    UI::Text("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
-    UI::Text("\nThe medals can also be added to the leaderboard. You can see them as \"if you had a time of X, you would be at the Y position\".\nBecause of API limitation, the medals are not shown in the leaderboard if you have them and are using the 'normal mode'.");
-    UI::Text("\nSince the 2.0 update, a new parameter has been added, allowing you to get faster refreshes and medals positions even if you have them. You may enable it in the \"General Customization\" tab.\nPlease be aware that this feature might be removed at some point, as it depends on an external service that I might not be able to keep up all year long.");
+    UI::TextWrapped("This plugin allows you to see more leaderboard positions.\n\n");
+    UI::TextWrapped("You can modify the positions in the \"Positions customization\" tab\n");
+    UI::TextWrapped("\nThe leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
+    UI::TextWrapped("This timer resets when you leave the map and is automatically refreshed when you join a map, or if you set a new pb on a map.");;
+    UI::TextWrapped("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
+    UI::TextWrapped("\nThe medals can also be added to the leaderboard. You can see them as \"if you had a time of X, you would be at the Y position\".\nBecause of API limitation, the medals are not shown in the leaderboard if you have them and are using the 'normal mode'.");
+    UI::TextWrapped("\nSince the 2.0 update, a new parameter has been added, allowing you to get faster refreshes and medals positions even if you have them. You may enable it in the \"General Customization\" tab.\nPlease be aware that this feature might be removed at some point, as it depends on an external service that I might not be able to keep up all year long.");
     UI::Dummy(vec2(0,100));
-    UI::Text("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter or any feature you would like added to this plugin.");
+    UI::TextWrapped("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter or any feature you would like added to this plugin.");
 }
 
 [SettingsTab name="Medals Position" icon="Circle" order="3"]
 void RenderMedalSettings(){
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
         return;
     }
 
-    UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
+    UI::TextWrapped("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
         showMedalWhenBetter = false;
@@ -234,11 +234,11 @@ void RenderMedalSettings(){
 void RenderPositionCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
         return;
     }
 
-    UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
+    UI::TextWrapped("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
     if(UI::Button("Reset to default")){
         allPositionToGet = {1,10,100,1000,10000};
