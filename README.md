@@ -11,6 +11,9 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.5.0
+- Added support for the plugin [Warrior Medals](https://openplanet.dev/plugin/warriormedals) (Thanks a lot to Ezio for their PR!)
+
 ## 2.4.0
 - Added support for the new Stunt mode
 - Allowed users to have no custom position in the leaderboard (compared to needing at least one)
