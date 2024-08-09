@@ -250,18 +250,6 @@ void RenderPositionCustomization(){
         ForceRefresh();
     }
 
-    for(int i = 0; i < nbSizePositionToGetArray; i++){
-        int tmp = UI::InputInt("Custom position " + (i+1), allPositionToGet[i]);
-        if(tmp != allPositionToGet[i]){
-            if(currentComboChoice == allPositionToGet[i]){
-                currentComboChoice = tmp;
-            }
-            allPositionToGet[i] = tmp;
-            OnSettingsChanged();
-        }
-    }
-
-
     if(UI::Button("+ : Add a position")){
         nbSizePositionToGetArray++;
         allPositionToGet.InsertLast(1);
@@ -271,6 +259,17 @@ void RenderPositionCustomization(){
         if(nbSizePositionToGetArray > 0){
             nbSizePositionToGetArray--;
             allPositionToGet.RemoveAt(nbSizePositionToGetArray);
+            OnSettingsChanged();
+        }
+    }
+
+    for(int i = 0; i < nbSizePositionToGetArray; i++){
+        int tmp = UI::InputInt("Custom position " + (i+1), allPositionToGet[i]);
+        if(tmp != allPositionToGet[i]){
+            if(currentComboChoice == allPositionToGet[i]){
+                currentComboChoice = tmp;
+            }
+            allPositionToGet[i] = tmp;
             OnSettingsChanged();
         }
     }
