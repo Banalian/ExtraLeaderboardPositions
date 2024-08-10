@@ -100,6 +100,10 @@ string sbVillePositionDataStringSave = "";
 string championMedalPositionDataStringSave = "";
 #endif
 
+#if DEPENDENCY_WARRIORMEDALS
+[Setting hidden]
+string warriorMedalPositionDataStringSave = "";
+
 [Setting hidden]
 bool showTimeDifference = true;
 
