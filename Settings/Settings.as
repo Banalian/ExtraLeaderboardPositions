@@ -103,6 +103,7 @@ string championMedalPositionDataStringSave = "";
 #if DEPENDENCY_WARRIORMEDALS
 [Setting hidden]
 string warriorMedalPositionDataStringSave = "";
+#endif
 
 [Setting hidden]
 bool showTimeDifference = true;
