@@ -67,7 +67,6 @@ void RenderWindows(){
     auto app = cast<CTrackMania>(GetApp());
 
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking | UI::WindowFlags::NoFocusOnAppearing;
-    bool showRefreshButton = false;
 
     if (!UI::IsOverlayShown()) {
         windowFlags |= UI::WindowFlags::NoMove;
@@ -162,7 +161,7 @@ bool RenderInfoTab(){
     if(showPlayerCountEnabled && playerCount != -1){
         // set the text to be on the right
         UI::TableNextColumn();
-        // if player count is above 10k, we display it as <10k
+        // if player count is above 100k, we display it as <100k
         string playerCountStr = NumberToString(playerCount);
         playerCountStr = playerCount > 100000 ? "<" + playerCountStr : playerCountStr;
         UI::Text(playerIconGrey + " " + playerCountStr);
@@ -312,7 +311,7 @@ void RenderTab(bool showRefresh = false){
         //------------POSITION ICON--------
         UI::TableNextRow();
         UI::TableNextColumn();
-        UI::Text(GetIconForPosition(leaderboardArray[i].position));
+        UI::Text(leaderboardArray[i].positionData.GetColorIcon());
 
         //------------POSITION-------------
         UI::TableNextColumn();

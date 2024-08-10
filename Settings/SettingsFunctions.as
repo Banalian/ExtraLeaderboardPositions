@@ -68,7 +68,7 @@ void OnSettingsSave(Settings::Section& section){
     section.SetString("allPositionDataStringSave", allPositionDataStringSave);
 
     medalsPositionDataStringSave = "";
-    medalsPositionDataStringSave += currentPbPosition.Serialize() + ";";
+    medalsPositionDataStringSave += currentPbPositionData.Serialize() + ";";
     medalsPositionDataStringSave += atPositionData.Serialize() + ";";
     medalsPositionDataStringSave += goldPositionData.Serialize() + ";";
     medalsPositionDataStringSave += silverPositionData.Serialize() + ";";
@@ -145,7 +145,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(medalsPositionDataStringSave != ""){
         array<string> medalsPositionDataTmp = medalsPositionDataStringSave.Split(";");
         if(medalsPositionDataTmp.Length == 5){
-            currentPbPosition = PositionData(medalsPositionDataTmp[0]);
+            currentPbPositionData = PositionData(medalsPositionDataTmp[0]);
             atPositionData = PositionData(medalsPositionDataTmp[1]);
             goldPositionData = PositionData(medalsPositionDataTmp[2]);
             silverPositionData = PositionData(medalsPositionDataTmp[3]);
@@ -157,7 +157,7 @@ void OnSettingsLoad(Settings::Section& section){
         resetToDefault = true;
     }
     if(resetToDefault){
-        currentPbPosition = PositionData(0, possibleColors[7], Icons::Circle);
+        currentPbPositionData = PositionData(0, possibleColors[7], Icons::Circle);
         atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
         goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
         silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);

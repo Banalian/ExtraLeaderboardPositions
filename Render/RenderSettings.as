@@ -376,9 +376,9 @@ void RenderPositionDataCustomization(){
     UI::Separator();
     UI::Text("Personal best setting");
     if(UI::Button("Reset to default")){
-        currentPbPosition = PositionData(0, possibleColors[7], Icons::User);
+        currentPbPositionData = PositionData(0, possibleColors[7], Icons::User);
     }
-    changed = changed || GetPositionData("Personal Best", -10000, currentPbPosition);
+    changed = changed || GetPositionData("Personal Best", -10000, currentPbPositionData);
 
     UI::Separator();
     UI::Text("Medals settings");
