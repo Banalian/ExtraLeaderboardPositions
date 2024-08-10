@@ -282,12 +282,13 @@ void RenderPositionCustomization(){
  */
  bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
     bool changed = false;
-    UI::BeginTable("PositionData#" + uniqueId, 3);
+    UI::BeginTable("PositionData#" + uniqueId, 4);
     UI::TableNextRow();
     UI::TableNextColumn();
     uint tmpPos = positionData.position;
     string tmpIcon = positionData.icon;
     string tmpColor = positionData.color;
+    string tmpTextColor = positionData.textColor;
     if(allowPositionChange){
         positionData.position = UI::InputInt(positionName, positionData.position);
     }else{
@@ -304,7 +305,7 @@ void RenderPositionCustomization(){
         UI::EndCombo();
     }
     UI::TableNextColumn();
-    if(UI::BeginCombo("Color", positionData.color + Icons::Square)){
+    if(UI::BeginCombo("Icon Color", positionData.color + Icons::Square)){
         for(uint i = 0; i < possibleColors.Length; i++){
             if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.color == possibleColors[i])){
                 UI::SetItemDefaultFocus();
@@ -313,9 +314,19 @@ void RenderPositionCustomization(){
         }
         UI::EndCombo();
     }
+    UI::TableNextColumn();
+    if(UI::BeginCombo("Text Color", positionData.textColor + Icons::Square)){
+        for(uint i = 0; i < possibleColors.Length; i++){
+            if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.textColor == possibleColors[i])){
+                UI::SetItemDefaultFocus();
+                positionData.textColor = possibleColors[i];
+            }
+        }
+        UI::EndCombo();
+    }
     UI::EndTable();
 
-    if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color){
+    if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color || tmpTextColor != positionData.textColor){
         changed = true;
     }
 
