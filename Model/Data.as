@@ -108,19 +108,19 @@ array<int> allPositionToGet = {};
 array<PositionData> allPositionData = {};
 
 // all data to save, counterparts are in the settings file
-PositionData currentPbPositionData = PositionData(0, pbGreenColor, Icons::User);
-PositionData atPositionData = PositionData(0, atGreenColor, Icons::Circle);
-PositionData goldPositionData = PositionData(0, goldColor, Icons::Circle);
-PositionData silverPositionData = PositionData(0, silverColor, Icons::Circle);
-PositionData bronzePositionData = PositionData(0, bronzeColor, Icons::Circle);
+PositionData currentPbPositionData = PositionData(0, pbGreenColor, Icons::User, pbGreenColor);
+PositionData atPositionData = PositionData(0, atGreenColor, Icons::Circle, greyColor3);
+PositionData goldPositionData = PositionData(0, goldColor, Icons::Circle, greyColor3);
+PositionData silverPositionData = PositionData(0, silverColor, Icons::Circle, greyColor3);
+PositionData bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, greyColor3);
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-PositionData sbVillePositionData = PositionData(0, greyColor1, Icons::Circle);
+PositionData sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_CHAMPIONMEDALS
-PositionData championMedalPositionData = PositionData(0, redColor, Icons::Circle);
+PositionData championMedalPositionData = PositionData(0, redColor, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-PositionData warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle);
+PositionData warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, greyColor3);
 #endif
 
 
