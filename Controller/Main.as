@@ -203,8 +203,8 @@ void RefreshLeaderboard(){
 
         // Make all the request in local (apart from impossible calls like medals above pb)
         array<Meta::PluginCoroutine@> coroutines;
-        for(uint i = 0; i< allPositionToGet.Length; i++){
-            auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionToGet[i]));
+        for(uint i = 0; i< allPositionData.Length; i++){
+            auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionData[i].position));
             coroutines.InsertLast(timeEntryFunc);
         }
         auto medalEntryFunc = startnew(AddMedalsEntriesCoroutine);
