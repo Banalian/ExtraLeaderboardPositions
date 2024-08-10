@@ -48,6 +48,10 @@ void OnSettingsSave(Settings::Section& section){
             allPositionToGetStringSave += ",";
         }
     }
+    //if it's still empty, set it to "empty" to avoid saving an empty string that would be considered a new install when loading
+    if(allPositionToGetStringSave == ""){
+        allPositionToGetStringSave = "empty";
+    }
     section.SetString("allPositionToGetStringSave", allPositionToGetStringSave);
 }
 
@@ -55,15 +59,8 @@ void OnSettingsLoad(Settings::Section& section){
     //load the array from the string
     allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
 
-    if(allPositionToGetStringSave != ""){
-        array<string> allPositionToGetTmp = allPositionToGetStringSave.Split(",");
-        nbSizePositionToGetArray = allPositionToGetTmp.Length;
-
-        for(int i = 0; i < nbSizePositionToGetArray; i++){
-            allPositionToGet.InsertLast(Text::ParseInt(allPositionToGetTmp[i]));
-        }
-
-    }else{
+    if(allPositionToGetStringSave == ""){
+        //empty string, should be a new install or a reset, set the default values
         allPositionToGetStringSave = "1,10,100,1000,10000";
         nbSizePositionToGetArray = 5;
         allPositionToGet.InsertLast(1);
@@ -71,6 +68,19 @@ void OnSettingsLoad(Settings::Section& section){
         allPositionToGet.InsertLast(100);
         allPositionToGet.InsertLast(1000);
         allPositionToGet.InsertLast(10000);
+    }else if(allPositionToGetStringSave != "empty"){
+        //not empty, load the values
+        array<string> allPositionToGetTmp = allPositionToGetStringSave.Split(",");
+        nbSizePositionToGetArray = allPositionToGetTmp.Length;
+
+        for(int i = 0; i < nbSizePositionToGetArray; i++){
+            allPositionToGet.InsertLast(Text::ParseInt(allPositionToGetTmp[i]));
+        }
+    } else {
+        //else for this case, the array is empty per user choice, don't insert anything
+        //still set the default values just in case
+        nbSizePositionToGetArray = 0;
+        allPositionToGet = {};
     }
 
     OnSettingsChanged();
