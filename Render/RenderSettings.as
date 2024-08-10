@@ -355,12 +355,6 @@ void RenderPositionDataCustomization(){
         ForceRefresh();
     }
 
-
-    bool changed = false;
-    for(uint i = 0; i < allPositionData.Length; i++){
-        changed = GetPositionData("Custom Position " + (i+1), i, allPositionData[i], true);
-    }
-
     if(UI::Button("+ : Add a position")){
         nbSizePositionDataArray++;
         allPositionData.InsertLast(PositionData(1));
@@ -372,6 +366,11 @@ void RenderPositionDataCustomization(){
             allPositionData.RemoveAt(nbSizePositionDataArray);
             OnSettingsChanged();
         }
+    }
+
+    bool changed = false;
+    for(uint i = 0; i < allPositionData.Length; i++){
+        changed = GetPositionData("Custom Position " + (i+1), i, allPositionData[i], true);
     }
 
     UI::Separator();

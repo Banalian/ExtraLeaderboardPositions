@@ -61,6 +61,10 @@ void OnSettingsSave(Settings::Section& section){
             allPositionDataStringSave += ";";
         }
     }
+    //if it's still empty, set it to "empty" to avoid saving an empty string that would be considered a new install when loading
+    if(allPositionDataStringSave == ""){
+        allPositionDataStringSave = "empty";
+    }
     section.SetString("allPositionDataStringSave", allPositionDataStringSave);
 
     medalsPositionDataStringSave = "";
@@ -116,7 +120,12 @@ void OnSettingsLoad(Settings::Section& section){
 
     allPositionDataStringSave = section.GetString("allPositionDataStringSave");
 
-    if(allPositionDataStringSave != ""){
+    if(allPositionDataStringSave == ""){
+        //empty string, should be a new install or a reset, set the default values
+        allPositionDataStringSave = "";
+        nbSizePositionDataArray = 0;
+    }else if(allPositionDataStringSave != "empty"){
+        //not empty, load the values
         array<string> allPositionDataTmp = allPositionDataStringSave.Split(";");
         nbSizePositionDataArray = allPositionDataTmp.Length;
 
@@ -125,12 +134,14 @@ void OnSettingsLoad(Settings::Section& section){
             allPositionData.InsertLast(positionData);
         }
     }else{
+        //else for this case, the array is empty per user choice, don't insert anything
         allPositionDataStringSave = "";
         nbSizePositionDataArray = 0;
     }
 
     medalsPositionDataStringSave = section.GetString("medalsPositionDataStringSave");
     
+    bool resetToDefault = false;
     if(medalsPositionDataStringSave != ""){
         array<string> medalsPositionDataTmp = medalsPositionDataStringSave.Split(";");
         if(medalsPositionDataTmp.Length == 5){
@@ -139,8 +150,13 @@ void OnSettingsLoad(Settings::Section& section){
             goldPositionData = PositionData(medalsPositionDataTmp[2]);
             silverPositionData = PositionData(medalsPositionDataTmp[3]);
             bronzePositionData = PositionData(medalsPositionDataTmp[4]);
+        } else {
+            resetToDefault = true;
         }
     }else{
+        resetToDefault = true;
+    }
+    if(resetToDefault){
         currentPbPosition = PositionData(0, possibleColors[7], Icons::Circle);
         atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
         goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
