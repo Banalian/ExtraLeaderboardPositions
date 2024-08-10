@@ -12,6 +12,7 @@ LeaderboardEntry@ GetPersonalBestEntry() {
     pbTimeTmp.position = -1;
     pbTimeTmp.entryType = EnumLeaderboardEntryType::PB;
     pbTimeTmp.desc = "PB";
+    pbTimeTmp.positionData = currentPbPositionData;
 
     if(!validMap){
         return pbTimeTmp;
@@ -48,6 +49,13 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
         return positionEntry;
     }
 
+    // find the related positionData
+    for (uint i = 0; i < allPositionData.Length; i++) {
+        if (allPositionData[i].position == position) {
+            positionEntry.positionData = allPositionData[i];
+            break;
+        }
+    }
     int offset = position - 1;
 
     auto app = cast<CTrackMania>(GetApp());
@@ -146,6 +154,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto championPosition = GetSpecificPositionEntry(championTime);
                 championPosition.desc = "Champion";
                 championPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                championPosition.positionData = championMedalPositionData;
                 if(isAValidMedalTime(championPosition)) {
                     tmpArray.InsertLast(championPosition);
                 }
@@ -160,6 +169,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto warriorPosition = GetSpecificPositionEntry(warriorTime);
                 warriorPosition.desc = "Warrior";
                 warriorPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                warriorPosition.positionData = warriorMedalPositionData;
                 if(isAValidMedalTime(warriorPosition)) {
                     tmpArray.InsertLast(warriorPosition);
                 }
@@ -174,6 +184,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto SBVillePosition = GetSpecificPositionEntry(SBVilleATTime);
                 SBVillePosition.desc = "SBVille AT";
                 SBVillePosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                SBVillePosition.positionData = sbVillePositionData;
                 if(isAValidMedalTime(SBVillePosition)) {
                     tmpArray.InsertLast(SBVillePosition);
                 }
@@ -187,6 +198,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto atPosition = GetSpecificPositionEntry(atTime);
                 atPosition.desc = "AT";
                 atPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                atPosition.positionData = atPositionData;
                 if(isAValidMedalTime(atPosition)) {
                     tmpArray.InsertLast(atPosition);
                 }
@@ -199,6 +211,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto goldPosition = GetSpecificPositionEntry(goldTime);
                 goldPosition.desc = "Gold";
                 goldPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                goldPosition.positionData = goldPositionData;
                 if(isAValidMedalTime(goldPosition)) {
                     tmpArray.InsertLast(goldPosition);
                 }
@@ -210,6 +223,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto silverPosition = GetSpecificPositionEntry(silverTime);
                 silverPosition.desc = "Silver";
                 silverPosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                silverPosition.positionData = silverPositionData;
                 if(isAValidMedalTime(silverPosition)) {
                     tmpArray.InsertLast(silverPosition);
                 }
@@ -221,6 +235,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
                 auto bronzePosition = GetSpecificPositionEntry(bronzeTime);
                 bronzePosition.desc = "Bronze";
                 bronzePosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                bronzePosition.positionData = bronzePositionData;
                 if(isAValidMedalTime(bronzePosition)) {
                     tmpArray.InsertLast(bronzePosition);
                 }

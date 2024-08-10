@@ -95,7 +95,7 @@ array<int> allPositionToGet = {};
 array<PositionData> allPositionData = {};
 
 // all data to save, counterparts are in the settings file
-PositionData currentPbPosition = PositionData(0, possibleColors[7], Icons::User);
+PositionData currentPbPositionData = PositionData(0, possibleColors[7], Icons::User);
 PositionData atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
 PositionData goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
 PositionData silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);

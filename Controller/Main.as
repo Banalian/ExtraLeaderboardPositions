@@ -16,6 +16,7 @@ void RefreshLeaderboard(){
         localPbEntry.position = -1;
         localPbEntry.entryType = EnumLeaderboardEntryType::PB;
         localPbEntry.desc = "PB";
+        localPbEntry.positionData = currentPbPositionData;
 
         leaderboardArrayTmp = array<LeaderboardEntry@>();
         leaderboardArrayTmp.InsertLast(localPbEntry);
@@ -135,27 +136,34 @@ void RefreshLeaderboard(){
         medalEntries.SortAsc();
 
         array<string> medalDesc = {};
+        array<PositionData@> medalPositionData = {};
         // only add the medal description if the associated medal is activated
         if(showAT){
             medalDesc.InsertLast("AT");
+            medalPositionData.InsertLast(atPositionData);
         }
         if(showGold){
             medalDesc.InsertLast("Gold");
+            medalPositionData.InsertLast(goldPositionData);
         }
         if(showSilver){
             medalDesc.InsertLast("Silver");
+            medalPositionData.InsertLast(silverPositionData);
         }
         if(showBronze){
             medalDesc.InsertLast("Bronze");
+            medalPositionData.InsertLast(bronzePositionData);
         }
 
         // Invert order if we are in stunt mode
         if(currentMode == EnumCurrentMode::STUNT){
             medalDesc.Reverse();
+            medalPositionData.Reverse();
         }
 
         for(uint i = 0; i< medalEntries.Length; i++){
             medalEntries[i].desc = medalDesc[i];
+            medalEntries[i].positionData = medalPositionData[i];
         }
 
 
@@ -173,6 +181,7 @@ void RefreshLeaderboard(){
                 if(resp.positions[i].time == int(ChampionMedals::GetCMTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "Champion";
+                    resp.positions[i].positionData = championMedalPositionData;
                 }
             }
 #endif
@@ -182,6 +191,7 @@ void RefreshLeaderboard(){
                 if(resp.positions[i].time == int(WarriorMedals::GetWMTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "Warrior";
+                    resp.positions[i].positionData = warriorMedalPositionData;
                 }
             }
 #endif
@@ -192,9 +202,18 @@ void RefreshLeaderboard(){
                 if(resp.positions[i].time == int(SBVilleCampaignChallenges::getChallengeTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "SBVille AT";
+                    resp.positions[i].positionData = sbVillePositionData;
                 }
             }
 #endif
+            // every special cases should be handled before this point
+            // now, we match the remaining entries with their position data
+            for(uint j = 0; j< allPositionData.Length; j++){
+                if(allPositionData[j].position == resp.positions[i].position){
+                    resp.positions[i].positionData = allPositionData[j];
+                    break;
+                }
+            }
             leaderboardArrayTmp.InsertLast(resp.positions[i]);
         }
     } else {

@@ -27,6 +27,11 @@ class LeaderboardEntry{
     EnumLeaderboardEntryType entryType = EnumLeaderboardEntryType::UNKNOWN;
 
     /**
+     * Frontend data for the entry (color, icon, etc...)
+     */
+    PositionData@ positionData = PositionData();
+
+    /**
      * Comparaison operator
      */
     int opCmp(LeaderboardEntry@ other){
