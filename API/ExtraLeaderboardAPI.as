@@ -104,8 +104,8 @@ namespace ExtraLeaderboardAPI
         request.mapId = currentMapUid;
         request.getPlayerCount = getPlayerCount;
         request.getMapInfo = getMapInfo;
-        for(uint i = 0; i < allPositionToGet.Length; i++){
-            request.positions.InsertLast(allPositionToGet[i]);
+        for(uint i = 0; i < allPositionData.Length; i++){
+            request.positions.InsertLast(allPositionData[i].position);
         }
 
         if(ShouldRequestMedal(MedalType::BRONZE)){
