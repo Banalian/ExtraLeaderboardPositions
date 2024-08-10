@@ -51,7 +51,7 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
 
     // find the related positionData
     for (uint i = 0; i < allPositionData.Length; i++) {
-        if (allPositionData[i].position == position) {
+        if (int(allPositionData[i].position) == position) {
             positionEntry.positionData = allPositionData[i];
             break;
         }
