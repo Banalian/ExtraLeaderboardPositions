@@ -5,11 +5,13 @@
     uint position;
     string color;
     string icon;
+    string textColor;
 
     PositionData() {
         position = 0;
         color = greyColor;
         icon = Icons::Kenney::PodiumAlt;
+        textColor = whiteColor;
     }
 
     PositionData(uint position, const string &in color = greyColor, const string &in icon = Icons::Kenney::PodiumAlt) {
@@ -23,7 +25,7 @@
     }
 
     string Serialize() {
-        return color + " " + position + " " + icon;
+        return color + " " + position + " " + icon + " " + textColor;
     }
 
     void Deserialize(const string &in data) {
@@ -31,6 +33,7 @@
         color = split[0];
         position = Text::ParseInt(split[1]);
         icon = split[2];
+        textColor = split[3];
     }
 
     string GetColorIcon() {
