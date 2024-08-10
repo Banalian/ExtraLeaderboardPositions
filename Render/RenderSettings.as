@@ -390,6 +390,9 @@ void RenderPositionDataCustomization(){
 #if DEPENDENCY_CHAMPIONMEDALS
         championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+        warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
 #endif
@@ -401,8 +404,11 @@ void RenderPositionDataCustomization(){
 #if DEPENDENCY_CHAMPIONMEDALS
     changed = changed || GetPositionData("Champion Medal", 10005, championMedalPositionData);
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+    changed = changed || GetPositionData("Warrior Medal", 10006, warriorMedalPositionData);
+#endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-    changed = changed || GetPositionData("SBVille Medal", 10006, sbVillePositionData);
+    changed = changed || GetPositionData("SBVille Medal", 10007, sbVillePositionData);
 #endif
 
     if(changed){
