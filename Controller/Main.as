@@ -209,7 +209,7 @@ void RefreshLeaderboard(){
             // every special cases should be handled before this point
             // now, we match the remaining entries with their position data
             for(uint j = 0; j< allPositionData.Length; j++){
-                if(allPositionData[j].position == resp.positions[i].position){
+                if(int(allPositionData[j].position) == resp.positions[i].position){
                     resp.positions[i].positionData = allPositionData[j];
                     break;
                 }
