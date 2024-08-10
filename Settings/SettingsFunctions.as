@@ -75,6 +75,10 @@ void OnSettingsSave(Settings::Section& section){
     championMedalPositionDataStringSave = championMedalPositionData.Serialize();
     section.SetString("championMedalPositionDataStringSave", championMedalPositionDataStringSave);
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+    warriorMedalPositionDataStringSave = warriorMedalPositionData.Serialize();
+    section.SetString("warriorMedalPositionDataStringSave", warriorMedalPositionDataStringSave);
+#endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
     sbVillePositionDataStringSave = sbVillePositionData.Serialize();
     section.SetString("sbVillePositionDataStringSave", sbVillePositionDataStringSave);
@@ -150,6 +154,14 @@ void OnSettingsLoad(Settings::Section& section){
         championMedalPositionData = PositionData(championMedalPositionDataStringSave);
     }else{
         championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+    }
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+    warriorMedalPositionDataStringSave = section.GetString("warriorMedalPositionDataStringSave");
+    if(warriorMedalPositionDataStringSave != ""){
+        warriorMedalPositionData = PositionData(warriorMedalPositionDataStringSave);
+    }else{
+        warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
     }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES

@@ -106,6 +106,9 @@ PositionData sbVillePositionData = PositionData(0, possibleColors[4], Icons::Cir
 #if DEPENDENCY_CHAMPIONMEDALS
 PositionData championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
 #endif
+#if DEPENDENCY_WARRIORMEDALS
+PositionData warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+#endif
 
 
 array<LeaderboardEntry@> leaderboardArray;
