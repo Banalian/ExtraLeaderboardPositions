@@ -31,6 +31,7 @@ const array<string> possibleIcons = {
 
 /**
  * List of available colors for leaderboard customisation
+ * Don't forget to change the named counterparts if you change the order of the colors
  */
 const array<string> possibleColors = {
     "\\$071", // AT green
@@ -39,11 +40,30 @@ const array<string> possibleColors = {
     "\\$964", // bronze
     "\\$444", // grey
     "\\$777", // bright grey
+    "\\$888", // grey (used for the leaderboard rows)
+    "\\$aaa", // another bright grey (used for the map author)
     "\\$77f", // blue
     "\\$9f9", // PB green
     "\\$f77", // red
-    "\\$fff" // white
+    "\\$fff"  // white
 };
+
+// named counterparts for the possibleColors array (for easier reference in the code)
+const string resetColor = "\\$z";
+const string atGreenColor = possibleColors[0];
+const string goldColor = possibleColors[1];
+const string silverColor = possibleColors[2];
+const string bronzeColor = possibleColors[3];
+const string greyColor1 = possibleColors[4];
+const string greyColor2 = possibleColors[5];
+const string greyColor3 = possibleColors[6];
+const string greyColor4 = possibleColors[7];
+const string blueColor = possibleColors[8];
+const string pbGreenColor = possibleColors[9];
+const string redColor = possibleColors[10];
+const string whiteColor = possibleColors[11];
+
+
 
 const array<string> loadingSteps = {
     Icons::Kenney::MoveBr,
@@ -64,18 +84,11 @@ float loadingStepDuration = 25;
 
 const string podiumIconBlue = "\\$36b" + Icons::Kenney::PodiumAlt + resetColor; // blue icon
 
-const string playerIconGrey = "\\$888" + Icons::User + resetColor; // grey icon
+const string playerIconGrey = greyColor3 + Icons::User + resetColor; // grey icon
 
-const string refreshIconWhite = "\\$fff" + Icons::Refresh + resetColor; // white icon
+const string refreshIconWhite = whiteColor + Icons::Refresh + resetColor; // white icon
 
 const string warningIcon = "\\$f00" + Icons::ExclamationTriangle + resetColor; // red icon
-
-const string resetColor = "\\$z";
-const string blueColor = "\\$77f";
-const string redColor = "\\$f77";
-const string greyColor = "\\$888";
-const string brightGreyColor = "\\$aaa";
-const string greenColor = "\\$9f9";
 
 const string pluginName = "Extra Leaderboard Positions";
 
@@ -95,19 +108,19 @@ array<int> allPositionToGet = {};
 array<PositionData> allPositionData = {};
 
 // all data to save, counterparts are in the settings file
-PositionData currentPbPositionData = PositionData(0, possibleColors[7], Icons::User);
-PositionData atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
-PositionData goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
-PositionData silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
-PositionData bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+PositionData currentPbPositionData = PositionData(0, pbGreenColor, Icons::User);
+PositionData atPositionData = PositionData(0, atGreenColor, Icons::Circle);
+PositionData goldPositionData = PositionData(0, goldColor, Icons::Circle);
+PositionData silverPositionData = PositionData(0, silverColor, Icons::Circle);
+PositionData bronzePositionData = PositionData(0, bronzeColor, Icons::Circle);
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-PositionData sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+PositionData sbVillePositionData = PositionData(0, greyColor1, Icons::Circle);
 #endif
 #if DEPENDENCY_CHAMPIONMEDALS
-PositionData championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+PositionData championMedalPositionData = PositionData(0, redColor, Icons::Circle);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-PositionData warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+PositionData warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle);
 #endif
 
 

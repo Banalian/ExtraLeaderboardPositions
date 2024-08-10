@@ -157,11 +157,11 @@ void OnSettingsLoad(Settings::Section& section){
         resetToDefault = true;
     }
     if(resetToDefault){
-        currentPbPositionData = PositionData(0, possibleColors[7], Icons::Circle);
-        atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
-        goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
-        silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
-        bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+        currentPbPositionData = PositionData(0, pbGreenColor, Icons::Circle);
+        atPositionData = PositionData(0, atGreenColor, Icons::Circle);
+        goldPositionData = PositionData(0, goldColor, Icons::Circle);
+        silverPositionData = PositionData(0, silverColor, Icons::Circle);
+        bronzePositionData = PositionData(0, bronzeColor, Icons::Circle);
     }
 
 #if DEPENDENCY_CHAMPIONMEDALS
@@ -169,7 +169,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(championMedalPositionDataStringSave != ""){
         championMedalPositionData = PositionData(championMedalPositionDataStringSave);
     }else{
-        championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        championMedalPositionData = PositionData(0, redColor, Icons::Circle);
     }
 #endif
 #if DEPENDENCY_WARRIORMEDALS
@@ -177,7 +177,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(warriorMedalPositionDataStringSave != ""){
         warriorMedalPositionData = PositionData(warriorMedalPositionDataStringSave);
     }else{
-        warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle);
     }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
@@ -185,7 +185,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(sbVillePositionDataStringSave != ""){
         sbVillePositionData = PositionData(sbVillePositionDataStringSave);
     }else{
-        sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        sbVillePositionData = PositionData(0, greyColor1, Icons::Circle);
     }
 #endif
 
