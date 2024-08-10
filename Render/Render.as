@@ -147,7 +147,7 @@ bool RenderInfoTab(){
         UI::TableNextRow();
         UI::TableNextColumn();
         if(showMapAuthor){
-            UI::Text(brightGreyColor + "Made by " + Text::StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
+            UI::Text(greyColor4 + "Made by " + Text::StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
         }
         UI::TableNextColumn();
         UI::TableNextColumn();

@@ -387,25 +387,25 @@ void RenderPositionDataCustomization(){
     UI::Separator();
     UI::Text("Personal best setting");
     if(UI::Button("Reset to default")){
-        currentPbPositionData = PositionData(0, possibleColors[7], Icons::User);
+        currentPbPositionData = PositionData(0, pbGreenColor, Icons::User, pbGreenColor);
     }
     changed = changed || GetPositionData("Personal Best", -10000, currentPbPositionData);
 
     UI::Separator();
     UI::Text("Medals settings");
     if(UI::Button("Reset to default")){
-        atPositionData = PositionData(0, possibleColors[0], Icons::Circle);
-        goldPositionData = PositionData(0, possibleColors[1], Icons::Circle);
-        silverPositionData = PositionData(0, possibleColors[2], Icons::Circle);
-        bronzePositionData = PositionData(0, possibleColors[3], Icons::Circle);
+        atPositionData = PositionData(0, atGreenColor, Icons::Circle);
+        goldPositionData = PositionData(0, goldColor, Icons::Circle);
+        silverPositionData = PositionData(0, silverColor, Icons::Circle);
+        bronzePositionData = PositionData(0, bronzeColor, Icons::Circle);
 #if DEPENDENCY_CHAMPIONMEDALS
-        championMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        championMedalPositionData = PositionData(0, redColor, Icons::Circle);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-        warriorMedalPositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle);
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        sbVillePositionData = PositionData(0, possibleColors[4], Icons::Circle);
+        sbVillePositionData = PositionData(0, greyColor1, Icons::Circle);
 #endif
     }
     changed = changed || GetPositionData("Author Medal", 10001, atPositionData);

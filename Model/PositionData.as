@@ -9,15 +9,16 @@
 
     PositionData() {
         position = 0;
-        color = greyColor;
+        color = greyColor1;
         icon = Icons::Kenney::PodiumAlt;
         textColor = whiteColor;
     }
 
-    PositionData(uint position, const string &in color = greyColor, const string &in icon = Icons::Kenney::PodiumAlt) {
+    PositionData(uint position, const string &in color = greyColor1, const string &in icon = Icons::Kenney::PodiumAlt, const string &in textColor = whiteColor) {
         this.position = position;
         this.color = color;
         this.icon = icon;
+        this.textColor = textColor;
     }
 
     PositionData(const string &in data) {
