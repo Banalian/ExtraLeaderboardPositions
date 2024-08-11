@@ -2,7 +2,7 @@
 void RenderSettingsCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
         return;
     }
 
@@ -142,7 +142,7 @@ void RenderSettingsCustomization(){
 void RenderSettingsExplanation(){
     UI::TextWrapped("This plugin allows you to see more leaderboard positions.\n\n");
     UI::TextWrapped("You can modify the positions in the \"Positions customization\" tab\n");
-    UI::TextWrapped("\nThe leaderboard is refreshed every " + refreshTimer + " minutes when in a map.");
+    UI::TextWrapped("\nThe leaderboard is refreshed every <" + refreshTimer + "> minutes when in a map.");
     UI::TextWrapped("This timer resets when you leave the map and is automatically refreshed when you join a map, or if you set a new pb on a map.");;
     UI::TextWrapped("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
     UI::TextWrapped("\nThe medals can also be added to the leaderboard. You can see them as \"if you had a time of X, you would be at the Y position\".\nBecause of API limitation, the medals are not shown in the leaderboard if you have them and are using the 'normal mode'.");
@@ -154,7 +154,7 @@ void RenderSettingsExplanation(){
 [SettingsTab name="Medals Position" icon="Circle" order="3"]
 void RenderMedalSettings(){
     if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
         return;
     }
 
@@ -230,11 +230,11 @@ void RenderMedalSettings(){
 
 }
 
-[SettingsTab name="Positions customization" icon="Kenney::PodiumAlt" order="2"]
+[SettingsTab name="Old Positions customization" icon="Kenney::PodiumAlt" order="2"]
 void RenderPositionCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
         return;
     }
 
@@ -333,11 +333,11 @@ void RenderPositionCustomization(){
     return changed;
  }
 
-[SettingsTab name="Positions data customization"]
+[SettingsTab name="Leaderboard entry customization"]
 void RenderPositionDataCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You at least need the standard edition.");
+        UI::Text("You don't have the required permissions to use this plugin. You need the gold edition.");
         return;
     }
 
