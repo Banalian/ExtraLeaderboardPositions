@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.5.1
+- Changed the order of the UI for the custom position settings. The + and - buttons are now on top of the list of custom positions instead of below, which was making it hard to add or remove multiple custom positions rapidly.
+- Fixed a bug where reloading the plugin after emptying the custom positions would put custom positions back to their default values.
+
 ## 2.5.0
 - Added support for the plugin [Warrior Medals](https://openplanet.dev/plugin/warriormedals) (Thanks a lot to Ezio for their PR!)
 
