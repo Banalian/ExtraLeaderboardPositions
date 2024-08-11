@@ -10,7 +10,7 @@ void Main(){
             yield();
         }
         if(!UserCanUseThePlugin()){
-            warn("You currently don't have the permissions to use this plugin, you at least need the standard edition");
+            warn("You currently don't have the permissions to use this plugin, You need the gold edition");
             warn("If you do have the permissions, the plugin checks every 30 seconds and should work when you finished loading into the main menu");
             timerStartDelay = 30 *1000;
             while(true){
