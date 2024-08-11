@@ -7,12 +7,12 @@ void OnSettingsChanged(){
     updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
 
     bool foundCombo = false;
-    for(int i = 0; i < nbSizePositionToGetArray; i++){
-        if(allPositionToGet[i] < 1){
-            allPositionToGet[i] = 1;
+    for(int i = 0; i < nbSizePositionDataArray; i++){
+        if(allPositionData[i].position < 1){
+            allPositionData[i].position = 1;
         }
 
-        if(allPositionToGet[i] == currentComboChoice){
+        if(allPositionData[i].position == currentComboChoice){
             if(currentComboChoice < 1 && currentComboChoice != -1){
                 currentComboChoice = 1;
             }
@@ -24,8 +24,8 @@ void OnSettingsChanged(){
             foundCombo = true;
         }
 
-        if(allPositionToGet[i] > 10000){
-            allPositionToGet[i] = 10000;
+        if(allPositionData[i].position > 10000){
+            allPositionData[i].position = 10000;
         }
     }
 
@@ -40,20 +40,6 @@ void OnSettingsChanged(){
 }
 
 void OnSettingsSave(Settings::Section& section){
-    //save the array in the string
-    allPositionToGetStringSave = "";
-    for(int i = 0; i < nbSizePositionToGetArray; i++){
-        allPositionToGetStringSave += "" + allPositionToGet[i];
-        if(i < nbSizePositionToGetArray - 1){
-            allPositionToGetStringSave += ",";
-        }
-    }
-    //if it's still empty, set it to "empty" to avoid saving an empty string that would be considered a new install when loading
-    if(allPositionToGetStringSave == ""){
-        allPositionToGetStringSave = "empty";
-    }
-    section.SetString("allPositionToGetStringSave", allPositionToGetStringSave);
-
     allPositionDataStringSave = "";
     for(int i = 0; i < nbSizePositionDataArray; i++){
         allPositionDataStringSave += allPositionData[i].Serialize();
@@ -93,28 +79,8 @@ void OnSettingsLoad(Settings::Section& section){
     //load the array from the string
     allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
 
-    if(allPositionToGetStringSave == ""){
-        //empty string, should be a new install or a reset, set the default values
-        allPositionToGetStringSave = "1,10,100,1000,10000";
-        nbSizePositionToGetArray = 5;
-        allPositionToGet.InsertLast(1);
-        allPositionToGet.InsertLast(10);
-        allPositionToGet.InsertLast(100);
-        allPositionToGet.InsertLast(1000);
-        allPositionToGet.InsertLast(10000);
-    }else if(allPositionToGetStringSave != "empty"){
-        //not empty, load the values
-        array<string> allPositionToGetTmp = allPositionToGetStringSave.Split(",");
-        nbSizePositionToGetArray = allPositionToGetTmp.Length;
-
-        for(int i = 0; i < nbSizePositionToGetArray; i++){
-            allPositionToGet.InsertLast(Text::ParseInt(allPositionToGetTmp[i]));
-        }
-    } else {
-        //else for this case, the array is empty per user choice, don't insert anything
-        //still set the default values just in case
-        nbSizePositionToGetArray = 0;
-        allPositionToGet = {};
+    if(allPositionToGetStringSave != ""){
+        // TODO: migrate to positionData
     }
 
 

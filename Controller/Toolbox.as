@@ -54,23 +54,6 @@ bool UserCanUseThePlugin(){
 }
 
 
-string GetIconForPosition(int position){
-    if(position == 1){
-        return podiumIcon[0];
-    }else if(position > 1 && position <= 10){
-        return podiumIcon[1];
-    }else if(position > 10 && position <= 100){
-        return podiumIcon[2];
-    }else if(position > 100 && position <= 1000){
-        return podiumIcon[3];
-    }else if(position > 1000 && position <= 10000){
-        return podiumIcon[4];
-    }else{
-        return "";
-    }
-}
-
-
 /**
  * Fetch an endpoint from the Nadeo Live Services
  * 
