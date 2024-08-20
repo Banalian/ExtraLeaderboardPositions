@@ -40,6 +40,7 @@ void OnSettingsChanged(){
 }
 
 void OnSettingsSave(Settings::Section& section){
+    section.SetString(lastUsedPluginVersion, Meta::ExecutingPlugin().get_Version());
     allPositionDataStringSave = "";
     for(int i = 0; i < nbSizePositionDataArray; i++){
         allPositionDataStringSave += allPositionData[i].Serialize();
@@ -76,13 +77,6 @@ void OnSettingsSave(Settings::Section& section){
 }
 
 void OnSettingsLoad(Settings::Section& section){
-    //load the array from the string
-    allPositionToGetStringSave = section.GetString("allPositionToGetStringSave");
-
-    if(allPositionToGetStringSave != ""){
-        // TODO: migrate to positionData
-    }
-
 
     allPositionDataStringSave = section.GetString("allPositionDataStringSave");
 

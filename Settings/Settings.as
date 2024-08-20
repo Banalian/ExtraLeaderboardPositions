@@ -24,9 +24,6 @@ int refreshTimer = 5;
 bool showPb = true;
 
 [Setting hidden]
-EnumDisplayPersonalBest personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;
-
-[Setting hidden]
 bool showPercentage = false;
 
 [Setting hidden]
@@ -57,10 +54,6 @@ bool showSilver = true;
 bool showBronze = true;
 
 [Setting hidden]
-EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
-
-
-[Setting hidden]
 bool showMapName = false;
 
 [Setting hidden]
@@ -70,15 +63,7 @@ bool showMapAuthor = false;
 bool showRefreshButtonSetting = true;
 
 [Setting hidden]
-int nbSizePositionToGetArray = 1;
-
-[Setting hidden]
 int nbSizePositionDataArray = 1;
-
-[Setting hidden]
-string allPositionToGetStringSave = "";
-
-// unsaved counterpart allPositionToGet is in the data file;
 
 [Setting hidden]
 string allPositionDataStringSave = "";
@@ -128,3 +113,22 @@ bool useExternalAPI = false;
 
 [Setting hidden]
 bool showPlayerCount = true;
+
+[Setting hidden]
+string lastUsedPluginVersion = "";
+
+
+
+// ----------------------------- DEPRECATED SETTINGS -----------------------------
+[Setting hidden]
+string allPositionToGetStringSave = "";
+
+// unsaved counterpart allPositionToGet is in the data file
+
+//TODO: delete
+[Setting hidden]
+int nbSizePositionToGetArray = 1;
+
+[Setting hidden]
+EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
+
