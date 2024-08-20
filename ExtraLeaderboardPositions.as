@@ -25,6 +25,7 @@ void Main(){
         }
         print("Permission granted!");
     }
+    HandleMigration();
     startupEnded = true;
     // Add the audiences you need
     NadeoServices::AddAudience("NadeoLiveServices");
