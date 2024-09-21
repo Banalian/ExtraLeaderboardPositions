@@ -132,3 +132,5 @@ int nbSizePositionToGetArray = 1;
 [Setting hidden]
 EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
 
+[Setting hidden]
+EnumDisplayPersonalBest personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;

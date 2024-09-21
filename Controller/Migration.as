@@ -7,13 +7,13 @@ void HandleMigration() {
     int patch = 0;
     auto version = lastUsedPluginVersion.Split(".");
     if (version.Length > 0) {
-        major = int(version[0]);
+        major = Text::ParseInt(version[0]);
     }
     if (version.Length > 1) {
-        minor = int(version[1]);
+        minor = Text::ParseInt(version[1]);
     }
     if (version.Length > 2) {
-        patch = int(version[2]);
+        patch = Text::ParseInt(version[2]);
     }
 
     // ---------- MIGRATION FROM * TO 2.6.0 ----------
@@ -25,7 +25,7 @@ void HandleMigration() {
         // - use personalBestDisplayMode and medalDisplayMode to set the correct values for the representation of the medals and pb data
         array<string> allPositionToGet = allPositionToGetStringSave.Split(",");
         allPositionData = {};
-        for(int i = 0; i < allPositionToGet.Length; i++){
+        for(uint i = 0; i < allPositionToGet.Length; i++){
             int position = Text::ParseInt(allPositionToGet[i]);
             PositionData data = PositionData(position);
             if(position == 1){
