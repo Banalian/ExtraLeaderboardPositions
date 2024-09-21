@@ -48,38 +48,6 @@ void RenderSettingsCustomization(){
 
     showPb = UI::Checkbox("Show personal best", showPb);
 
-    UI::BeginDisabled(!showPb);
-
-    string pbDisplayComboTitle = "Invalid state";
-
-    switch(personalBestDisplayMode){
-        case EnumDisplayPersonalBest::NORMAL:
-            pbDisplayComboTitle = "Normal";
-            break;
-        case EnumDisplayPersonalBest::IN_GREY:
-            pbDisplayComboTitle = "In grey";
-            break;
-        case EnumDisplayPersonalBest::IN_GREEN:
-            pbDisplayComboTitle = "In green";
-            break;
-    }
-
-    if(UI::BeginCombo("Personal best display mode", pbDisplayComboTitle)){
-        if(UI::Selectable("Normal", personalBestDisplayMode == EnumDisplayPersonalBest::NORMAL)){
-            personalBestDisplayMode = EnumDisplayPersonalBest::NORMAL;
-        }
-        if(UI::Selectable("In grey", personalBestDisplayMode == EnumDisplayPersonalBest::IN_GREY)){
-            personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREY;
-        }
-        if(UI::Selectable("In green", personalBestDisplayMode == EnumDisplayPersonalBest::IN_GREEN)){
-            personalBestDisplayMode = EnumDisplayPersonalBest::IN_GREEN;
-        }
-
-        UI::EndCombo();
-    }
-
-    UI::EndDisabled();
-
     UI::BeginDisabled(!useExternalAPI);
 
     UI::Text("\n\tPercentage ranking");
@@ -176,7 +144,6 @@ void RenderMedalSettings(){
         showGold = true;
         showSilver = true;
         showBronze = true;
-        medalDisplayMode = EnumDisplayMedal::NORMAL;
     }
 
     if(UI::Button("Refresh")){
@@ -203,78 +170,7 @@ void RenderMedalSettings(){
         showBronze = UI::Checkbox("Show Bronze", showBronze);
     }
 
-    UI::Text("\n\tAppearance");
-
-    // Show it as normal, greyed out and/or italic
-    string comboTitle = "Invalid state";
-
-    switch(medalDisplayMode){
-        case EnumDisplayMedal::NORMAL:
-            comboTitle = "Normal";
-            break;
-        case EnumDisplayMedal::IN_GREY:
-            comboTitle = "In grey";
-            break;
-    }
-
-    if(UI::BeginCombo("Medal display mode", comboTitle)){
-        if(UI::Selectable("Normal", medalDisplayMode == EnumDisplayMedal::NORMAL)){
-            medalDisplayMode = EnumDisplayMedal::NORMAL;
-        }
-        if(UI::Selectable("In grey", medalDisplayMode == EnumDisplayMedal::IN_GREY)){
-            medalDisplayMode = EnumDisplayMedal::IN_GREY;
-        }
-
-        UI::EndCombo();
-    }
-
 }
-
-[SettingsTab name="Old Positions customization" icon="Kenney::PodiumAlt" order="2"]
-void RenderPositionCustomization(){
-
-    if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
-        return;
-    }
-
-    UI::TextWrapped("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
-
-    if(UI::Button("Reset to default")){
-        allPositionToGet = {1,10,100,1000,10000};
-        allPositionToGetStringSave = "1,10,100,1000,10000";
-        nbSizePositionToGetArray = 5;
-    }
-
-    if(UI::Button("Refresh")){
-        ForceRefresh();
-    }
-
-    if(UI::Button("+ : Add a position")){
-        nbSizePositionToGetArray++;
-        allPositionToGet.InsertLast(1);
-        OnSettingsChanged();
-    }
-    if(UI::Button("- : Remove a position")){
-        if(nbSizePositionToGetArray > 0){
-            nbSizePositionToGetArray--;
-            allPositionToGet.RemoveAt(nbSizePositionToGetArray);
-            OnSettingsChanged();
-        }
-    }
-
-    for(int i = 0; i < nbSizePositionToGetArray; i++){
-        int tmp = UI::InputInt("Custom position " + (i+1), allPositionToGet[i]);
-        if(tmp != allPositionToGet[i]){
-            if(currentComboChoice == allPositionToGet[i]){
-                currentComboChoice = tmp;
-            }
-            allPositionToGet[i] = tmp;
-            OnSettingsChanged();
-        }
-    }
-}
-
 
 
 /**
@@ -333,7 +229,7 @@ void RenderPositionCustomization(){
     return changed;
  }
 
-[SettingsTab name="Leaderboard entry customization"]
+[SettingsTab name="Leaderboard entry customization" icon="Kenney::PodiumAlt" order="2"]
 void RenderPositionDataCustomization(){
 
     if(!UserCanUseThePlugin()){

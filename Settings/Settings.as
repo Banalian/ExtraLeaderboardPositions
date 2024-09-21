@@ -120,14 +120,12 @@ string lastUsedPluginVersion = "";
 
 
 // ----------------------------- DEPRECATED SETTINGS -----------------------------
+// Can't be removed because they're needed for the migration process
+
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
 // unsaved counterpart allPositionToGet is in the data file
-
-//TODO: delete
-[Setting hidden]
-int nbSizePositionToGetArray = 1;
 
 [Setting hidden]
 EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
