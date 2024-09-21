@@ -12,7 +12,7 @@ void OnSettingsChanged(){
             allPositionData[i].position = 1;
         }
 
-        if(allPositionData[i].position == currentComboChoice){
+        if(int(allPositionData[i].position) == currentComboChoice){
             if(currentComboChoice < 1 && currentComboChoice != -1){
                 currentComboChoice = 1;
             }
@@ -40,7 +40,7 @@ void OnSettingsChanged(){
 }
 
 void OnSettingsSave(Settings::Section& section){
-    section.SetString(lastUsedPluginVersion, Meta::ExecutingPlugin().get_Version());
+    section.SetString("lastUsedPluginVersion", Meta::ExecutingPlugin().Version);
     allPositionDataStringSave = "";
     for(int i = 0; i < nbSizePositionDataArray; i++){
         allPositionDataStringSave += allPositionData[i].Serialize();
