@@ -11,6 +11,10 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.6.0
+- Big refactor for more customization for the entries! You can now individually change the icon, color icon and the text color of each entry! Please report any bug you might find with this new feature as it's a big change. Report via Github or Discord, with logs if there's any.
+- Added a migration system to go from the old system to the new one. It should be automatic, but if you have any trouble, please report it too.
+
 ## 2.5.1
 - Changed the order of the UI for the custom position settings. The + and - buttons are now on top of the list of custom positions instead of below, which was making it hard to add or remove multiple custom positions rapidly.
 - Fixed a bug where reloading the plugin after emptying the custom positions would put custom positions back to their default values.
