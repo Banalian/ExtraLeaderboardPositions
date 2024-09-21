@@ -18,7 +18,7 @@ void HandleMigration() {
 
     // ---------- MIGRATION FROM * TO 2.6.0 ----------
     if (major < 2 || (major == 2 && minor < 6)) {
-        UI::ShowNotification("Settings migration in progress (2.6.0)...");
+        UI::ShowNotification(pluginName, "Settings migration in progress (2.6.0)...");
         // migrate allPositionToGetStringSave to the new allPositionData structure
         // multiple changes required:
         // - extract data from allPositionToGetStringSave to transfer to allPositionData
@@ -71,7 +71,7 @@ void HandleMigration() {
 #if DEPENDENCY_WARRIORMEDALS
         warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, colorToUse);
 #endif
-        UI::ShowNotification("Settings migration completed! Feel free to check the settings for new options!", 15000);
+        UI::ShowNotification(pluginName, "Settings migration completed! Feel free to check the settings for new options!", 15000);
     }
     // ---------- END OF 2.6.0 MIGRATION ----------
 }
