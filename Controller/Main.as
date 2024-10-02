@@ -223,7 +223,7 @@ void RefreshLeaderboard(){
         // Make all the request in local (apart from impossible calls like medals above pb)
         array<Meta::PluginCoroutine@> coroutines;
         for(uint i = 0; i< allPositionData.Length; i++){
-            auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionData[i].position));
+            auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, PositionInteger(allPositionData[i].position, allPositionData[i].region));
             coroutines.InsertLast(timeEntryFunc);
         }
         auto medalEntryFunc = startnew(AddMedalsEntriesCoroutine);
@@ -276,10 +276,19 @@ class Integer{
     }
 }
 
+class PositionInteger{
+    int position;
+    int region;
+    PositionInteger(int position, int region){
+        this.position = position;
+        this.region = region;
+    }
+}
+
 void SpecificTimeEntryCoroutine(ref@ position){
     // cast ref to Integer
-    Integer@ positionInt = cast<Integer@>(position);
-    LeaderboardEntry@ timeEntry = GetSpecificTimeEntry(positionInt.value);
+    PositionInteger@ positionInt = cast<PositionInteger@>(position);
+    LeaderboardEntry@ timeEntry = GetSpecificTimeEntry(positionInt.position, positionInt.region);
     if(timeEntry !is null && timeEntry.isValid()){
         leaderboardArrayTmp.InsertLast(timeEntry);
     }

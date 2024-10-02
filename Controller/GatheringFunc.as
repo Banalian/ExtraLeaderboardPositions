@@ -43,7 +43,7 @@ LeaderboardEntry@ GetPersonalBestEntry() {
 /**
  * Return the leaderboard entry of a given position
  */
-LeaderboardEntry@ GetSpecificTimeEntry(int position) {
+LeaderboardEntry@ GetSpecificTimeEntry(int position, int region) {
     LeaderboardEntry@ positionEntry = LeaderboardEntry();
     if(!validMap){
         return positionEntry;
@@ -63,19 +63,120 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
 
     //check that we're in a map
     if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
+        if (region == 0) {
+            auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?length=1&offset="+offset+"&onlyWorld=true");
 
-        if(info.GetType() != Json::Type::Null) {
-            auto tops = info["tops"];
-            if(tops.GetType() == Json::Type::Array) {
-                auto top = tops[0]["top"];
-                if(top.Length > 0) {
-                    int infoTop = top[0]["score"];
-                    positionEntry.time = infoTop;
-                    positionEntry.position = position;
-                    positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+            if(info.GetType() != Json::Type::Null) {
+                auto tops = info["tops"];
+                if(tops.GetType() == Json::Type::Array) {
+                    auto top = tops[0]["top"];
+                    if(top.Length > 0) {
+                        int infoTop = top[0]["score"];
+                        string regionName = tops[0]["zoneName"];
+                        positionEntry.time = infoTop;
+                        positionEntry.position = position;
+                        positionEntry.region = regionName;
+                        positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+                        return positionEntry;
+                    }
+                }
+            }
+        } else {
+            if (position <= 5) {
+                auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/top?onlyWorld=false");
+
+                if(info.GetType() != Json::Type::Null) {
+                    auto tops = info["tops"];
+                    if(tops.GetType() == Json::Type::Array) {
+                        if (tops.Length > region) {
+                            auto top = tops[region]["top"];
+                            if(top.Length >= position) {
+                                int infoTop = top[position-1]["score"];
+                                string regionName = tops[region]["zoneName"];
+                                positionEntry.time = infoTop;
+                                positionEntry.position = position;
+                                positionEntry.region = regionName;
+                                positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+                                return positionEntry;
+                            }
+                        }
+                    }
+                }
+            } else {
+                auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/surround/1/1?score=1");
+
+                if(info.GetType() == Json::Type::Null) {
                     return positionEntry;
                 }
+                auto tops = info["tops"];
+                if(tops.GetType() != Json::Type::Array) {
+                    return positionEntry;
+                }
+                if (tops.Length < region) {
+                    return positionEntry;
+                }
+
+                auto top = tops[region]["top"];
+                string regionName = tops[region]["zoneName"];
+                int minScore = top[1]["score"];
+
+                info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/surround/1/1?score=99999999");
+
+                if(info.GetType() == Json::Type::Null) {
+                    return positionEntry;
+                }
+                tops = info["tops"];
+                if(tops.GetType() != Json::Type::Array) {
+                    return positionEntry;
+                }
+                if (tops.Length < region) {
+                    return positionEntry;
+                }
+
+                top = tops[region]["top"];
+                int maxScore = top[0]["score"];
+
+                int curPosition = -1;
+                int curScore = -1;
+
+                while (curPosition != position) {
+                    info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+currentMapUid+"/surround/1/1?score=" + (minScore + maxScore)/2);
+
+                    if(info.GetType() == Json::Type::Null) {
+                        return positionEntry;
+                    }
+                    tops = info["tops"];
+                    if(tops.GetType() != Json::Type::Array) {
+                        return positionEntry;
+                    }
+                    if (tops.Length < region) {
+                        return positionEntry;
+                    }
+
+                    top = tops[region]["top"];
+                    curPosition = top[0]["position"];
+                    curScore = top[0]["score"];
+
+                    if (curPosition < position) {
+                        if (minScore == curScore) {
+                            break;
+                        }
+                        minScore = curScore;
+                    }
+                    if (curPosition > position) {
+                        if (maxScore == curScore) {
+                            break;
+                        }
+                        maxScore = curScore;
+                    }
+                }
+
+                positionEntry.time = curScore;
+                positionEntry.position = position;
+                positionEntry.region = regionName;
+                positionEntry.entryType = EnumLeaderboardEntryType::POSITION;
+
+                return positionEntry;
             }
         }
     }
