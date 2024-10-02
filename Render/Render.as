@@ -217,7 +217,7 @@ bool RenderInfoTab(){
  * Render the table with the custom leaderboard
  */
 void RenderTab(bool showRefresh = false){
-    int columnCount = 4;
+    int columnCount = 5;
     if(showPercentage){
         columnCount++;
     }
@@ -232,6 +232,8 @@ void RenderTab(bool showRefresh = false){
     // Position
     UI::TableNextColumn();
     UI::Text("Position");
+    UI::TableNextColumn();
+    UI::Text("Region");
     // Time
     UI::TableNextColumn();
     switch(currentMode){
@@ -297,6 +299,8 @@ void RenderTab(bool showRefresh = false){
         }else{
             UI::Text(displayString + "" + NumberToString(leaderboardArray[i].position));
         }
+        UI::TableNextColumn();
+        UI::Text(displayString + leaderboardArray[i].region);
 
         //------------TIME/SCORE-----------------
         UI::TableNextColumn();

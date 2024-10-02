@@ -178,10 +178,11 @@ void RenderMedalSettings(){
  */
  bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
     bool changed = false;
-    UI::BeginTable("PositionData#" + uniqueId, 4);
+    UI::BeginTable("PositionData#" + uniqueId, 5);
     UI::TableNextRow();
     UI::TableNextColumn();
     uint tmpPos = positionData.position;
+    uint tmpRegion = positionData.region;
     string tmpIcon = positionData.icon;
     string tmpColor = positionData.color;
     string tmpTextColor = positionData.textColor;
@@ -191,6 +192,10 @@ void RenderMedalSettings(){
         UI::Text(positionName);
     }
     UI::TableNextColumn();
+    if(allowPositionChange){
+        positionData.region = UI::InputInt("Region", positionData.region);
+        UI::TableNextColumn();
+    }
     if(UI::BeginCombo("Icon", positionData.icon)){
         for(uint i = 0; i < possibleIcons.Length; i++){
             if(UI::Selectable(possibleIcons[i], positionData.icon == possibleIcons[i])){
@@ -222,7 +227,7 @@ void RenderMedalSettings(){
     }
     UI::EndTable();
 
-    if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color || tmpTextColor != positionData.textColor){
+    if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color || tmpTextColor != positionData.textColor || tmpRegion != positionData.region){
         changed = true;
     }
 

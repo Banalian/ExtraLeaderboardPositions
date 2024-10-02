@@ -13,6 +13,11 @@ class LeaderboardEntry{
     int position = -1;
 
     /**
+     * Region of the entry
+     */
+    string region = "";
+
+    /**
      * Really short description of the entry (medal type for example, or custom description)
      */
     string desc = "";
@@ -57,7 +62,7 @@ class LeaderboardEntry{
      * Custom Equality operator (only checks the position and the time compared to the regular equality operator)
      */
     bool customEquals(LeaderboardEntry@ other){
-        return position == other.position && time == other.time;
+        return position == other.position && time == other.time && region == other.region;
     }
 
 
