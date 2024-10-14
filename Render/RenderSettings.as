@@ -8,6 +8,7 @@ void RenderSettingsCustomization(){
 
     if(UI::Button("Reset to default")){
         showRefreshButtonSetting = true;
+        showTableHeaders = true;
         hiddingSpeedSetting = 1.0f;
         refreshTimer = 5;
         showPb = true;
@@ -22,6 +23,8 @@ void RenderSettingsCustomization(){
     }
 
     showRefreshButtonSetting = UI::Checkbox("Add refresh button to UI (only appears when OP Overlay is on)", showRefreshButtonSetting);
+
+    showTableHeaders = UI::Checkbox("Display the headers? (Position, Time, %, etc...)", showTableHeaders);
 
     UI::Text("\n\tExternal API");
 

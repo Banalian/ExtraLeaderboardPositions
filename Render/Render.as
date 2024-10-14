@@ -213,19 +213,7 @@ bool RenderInfoTab(){
     }
 }
 
-/**
- * Render the table with the custom leaderboard
- */
-void RenderTab(bool showRefresh = false){
-    int columnCount = 4;
-    if(showPercentage){
-        columnCount++;
-    }
-    if(showTimeDifference){
-        columnCount++;
-    }
-    UI::BeginTable("Main", columnCount);
-
+void RenderHeaders(bool showRefresh = false){
     UI::TableNextRow();
     // Icon
     UI::TableNextColumn();
@@ -260,6 +248,25 @@ void RenderTab(bool showRefresh = false){
         RenderRefreshIcon();
     }
     UI::TableNextColumn();
+
+}
+
+/**
+ * Render the table with the custom leaderboard
+ */
+void RenderTab(bool showRefresh = false){
+    int columnCount = 4;
+    if(showPercentage){
+        columnCount++;
+    }
+    if(showTimeDifference){
+        columnCount++;
+    }
+    UI::BeginTable("Main", columnCount);
+
+    if(showTableHeaders){
+        RenderHeaders(showRefresh);
+    }
 
     int i = 0;
     while(i < int(leaderboardArray.Length)){
