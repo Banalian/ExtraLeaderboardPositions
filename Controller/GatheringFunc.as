@@ -18,23 +18,34 @@ LeaderboardEntry@ GetPersonalBestEntry() {
         return pbTimeTmp;
     }
 
-    //check that we're in a map
-    if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
-
-        auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
-
-        if(info.GetType() != Json::Type::Null) {
-            auto tops = info["tops"];
-            if(tops.GetType() == Json::Type::Array) {
-                auto top = tops[0]["top"];
-                if(top.Length > 0) {
-                    pbTimeTmp.time = top[0]["score"];
-                    pbTimeTmp.position = top[0]["position"];
-                }
-            }
-        }
+    // same code as above, but with early returns to avoid nesting
+    if (network.ClientManiaAppPlayground is null || network.ClientManiaAppPlayground.Playground is null || network.ClientManiaAppPlayground.Playground.Map is null) {
+        // not in a map
+        return pbTimeTmp;
     }
+
+    string mapid = network.ClientManiaAppPlayground.Playground.Map.MapInfo.MapUid;
+    auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/"+mapid+"/surround/0/0?onlyWorld=true");
+    if(info.GetType() == Json::Type::Null) {
+        // error fetching data
+        return pbTimeTmp;
+    }
+
+    auto tops = info["tops"];
+    if(tops.GetType() != Json::Type::Array || tops.Length == 0) {
+        // error fetching data, empty object or array
+        return pbTimeTmp;
+    }
+
+    auto top = tops[0]["top"];
+    if(top.Length == 0) {
+        // error fetching data, empty array
+        return pbTimeTmp;
+    }
+
+    pbTimeTmp.time = top[0]["score"];
+    pbTimeTmp.position = top[0]["position"];
+    trace("Nadeo returned: score: " + tostring(pbTimeTmp.time) + " position: " + tostring(pbTimeTmp.position));
 
     return pbTimeTmp;
 }
