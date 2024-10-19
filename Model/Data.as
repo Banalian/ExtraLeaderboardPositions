@@ -150,3 +150,6 @@ bool failedRefresh = false;
 
 
 EnumCurrentMode currentMode = EnumCurrentMode::INVALID;
+
+// hopefully temporary, until there's an API change to the surround endpoint.
+bool forceRefreshAfterSurroundFail = false;

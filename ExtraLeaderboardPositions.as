@@ -38,6 +38,8 @@ void Main(){
     // Load the config to use the External API or not
     ExtraLeaderboardAPI::LoadURLConfig();
 
+    LoadOPConfig();
+
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
@@ -70,6 +72,31 @@ void Main(){
     }
 
 #endif
+}
+
+/**
+ * Load OP Config
+ */
+void LoadOPConfig(){
+    Net::HttpRequest@ req = Net::HttpRequest();
+        req.Url = "openplanet.dev/plugin/extraleaderboardpositions/config/globalsettings";
+        req.Method = Net::HttpMethod::Get;
+        
+        req.Start();
+        while(!req.Finished()){
+            yield();
+        }
+        if(req.ResponseCode() != 200){
+            warn("Error loading plugin config : " + req.ResponseCode() + " - " + req.Error());
+            return;
+        }
+
+        // get the json object from the response
+        auto response = Json::Parse(req.String());
+        auto config = response["config"];
+
+        auto forceRefreshAPI = config["forceRefreshAfterSurroundFail"];
+        forceRefreshAfterSurroundFail = forceRefreshAPI == "true";
 }
 
 /**

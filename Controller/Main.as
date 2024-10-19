@@ -75,9 +75,22 @@ void RefreshLeaderboard(){
             retryElapsedTime = Time::get_Now() - retryStartTime;
         }
         if (!retrySuccess) {
-            print("RefreshLeaderboard(): Failed to refresh the online PB " + counterTries + " times in " + retryElapsedTime + "ms, stopping the PB refresh.");
-            failedRefresh = true;
+            if (forceRefreshAfterSurroundFail) {
+                print("RefreshLeaderboard(): Failed to refresh the online PB " + counterTries + " times in " + retryElapsedTime + "ms. We don't fail the refresh for now, might be because of the surround endpoint changes.");
+                trace("Fallback: call surround with the local pb time");
+                LeaderboardEntry@ tmpEntry = GetSpecificPositionEntry(currentTimePbLocal);
+                if (tmpEntry !is null && tmpEntry.isValid()){
+                    // Fake the position to be the PB position
+                    tmpEntry.entryType = EnumLeaderboardEntryType::PB;
+                    tmpEntry.desc = "PB";
+                    currentPbEntry = tmpEntry;
+                }
+            } else {
+                print("RefreshLeaderboard(): Failed to refresh the online PB " + counterTries + " times in " + retryElapsedTime + "ms, stopping the PB refresh.");
+                failedRefresh = true;
+            }
         }
+        yield();
     }
 
     // Stage 3: Get all remaining positions from API.
