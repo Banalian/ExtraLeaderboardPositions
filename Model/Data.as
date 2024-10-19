@@ -3,6 +3,7 @@
 const array<string> invalidGamemodes = {
     "TM_Royal_Online",
     "TM_RoyalTimeAttack_Online",
+    "TM_RoyalTimeAttack_Local",
     "TM_RoyalValidation_Local"
 };
 
