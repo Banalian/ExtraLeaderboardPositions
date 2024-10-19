@@ -40,6 +40,8 @@ void Main(){
 
     LoadOPConfig();
 
+    LoadCustomData();
+
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
@@ -73,6 +75,22 @@ void Main(){
 
 #endif
 }
+
+
+/**
+ * Load custom data
+ */
+void LoadCustomData(){
+#if DEPENDENCY_CHAMPIONMEDALS
+    championColor = "\\$f47";
+    possibleColors.InsertLast(championColor);
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+    warriorColor =  WarriorMedals::GetColorStr();
+    possibleColors.InsertLast(warriorColor);
+#endif
+}
+
 
 /**
  * Load OP Config

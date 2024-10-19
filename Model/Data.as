@@ -34,7 +34,7 @@ const array<string> possibleIcons = {
  * List of available colors for leaderboard customisation
  * Don't forget to change the named counterparts if you change the order of the colors
  */
-const array<string> possibleColors = {
+array<string> possibleColors = {
     "\\$071", // AT green
     "\\$db4", // gold
     "\\$899", // silver
@@ -63,6 +63,12 @@ const string blueColor = possibleColors[8];
 const string pbGreenColor = possibleColors[9];
 const string redColor = possibleColors[10];
 const string whiteColor = possibleColors[11];
+#if DEPENDENCY_CHAMPIONMEDALS
+string championColor = "";
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+string warriorColor = "";
+#endif
 
 
 
@@ -118,10 +124,10 @@ PositionData bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, gr
 PositionData sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_CHAMPIONMEDALS
-PositionData championMedalPositionData = PositionData(0, redColor, Icons::Circle, greyColor3);
+PositionData championMedalPositionData = PositionData(0, championColor, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-PositionData warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, greyColor3);
+PositionData warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
 #endif
 
 

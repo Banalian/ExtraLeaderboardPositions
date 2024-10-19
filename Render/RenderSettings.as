@@ -298,10 +298,10 @@ void RenderPositionDataCustomization(){
         silverPositionData = PositionData(0, silverColor, Icons::Circle, greyColor3);
         bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, greyColor3);
 #if DEPENDENCY_CHAMPIONMEDALS
-        championMedalPositionData = PositionData(0, redColor, Icons::Circle, greyColor3);
+        championMedalPositionData = PositionData(0, championColor, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-        warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, greyColor3);
+        warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);

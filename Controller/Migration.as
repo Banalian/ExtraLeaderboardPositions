@@ -16,9 +16,12 @@ void HandleMigration() {
         patch = Text::ParseInt(version[2]);
     }
 
+    bool migrationNeeded = false;
+
     // ---------- MIGRATION FROM * TO 2.6.0 ----------
     if (major < 2 || (major == 2 && minor < 6)) {
         UI::ShowNotification(pluginName, "Settings migration in progress (2.6.0)...");
+        migrationNeeded = true;
         // migrate allPositionToGetStringSave to the new allPositionData structure
         // multiple changes required:
         // - extract data from allPositionToGetStringSave to transfer to allPositionData
@@ -66,12 +69,35 @@ void HandleMigration() {
         sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, colorToUse);
 #endif
 #if DEPENDENCY_CHAMPIONMEDALS
-        championMedalPositionData = PositionData(0, redColor, Icons::Circle, colorToUse);
+        championMedalPositionData = PositionData(0, championColor, Icons::Circle, colorToUse);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-        warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, colorToUse);
+        warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, colorToUse);
 #endif
-        UI::ShowNotification(pluginName, "Settings migration completed! Feel free to check the settings for new options!", 15000);
     }
     // ---------- END OF 2.6.0 MIGRATION ----------
+
+    // ---------- MIGRATION FROM 2.6.0 TO 2.6.1 ----------
+    if (major == 2 && minor == 6 && patch < 1) {
+        UI::ShowNotification(pluginName, "Settings migration in progress (2.6.1)...");
+        migrationNeeded = true;
+        // if they use a custom medal plugin, modify the icon color to match the plugin's color (if they were using the default color)
+        //CM : red color
+        //WM : blue color
+#if DEPENDENCY_CHAMPIONMEDALS
+        if (championMedalPositionData.color == redColor) {
+            championMedalPositionData.color = championColor;
+        }
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        if (warriorMedalPositionData.color == blueColor) {
+            warriorMedalPositionData.color = warriorColor;
+        }
+#endif
+    }
+    // ---------- END OF 2.6.1 MIGRATION ----------
+
+    if (migrationNeeded) {
+        UI::ShowNotification(pluginName, "Settings migration completed! Feel free to check the settings for new options!", 15000);
+    }
 }

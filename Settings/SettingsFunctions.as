@@ -129,7 +129,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(championMedalPositionDataStringSave != ""){
         championMedalPositionData = PositionData(championMedalPositionDataStringSave);
     }else{
-        championMedalPositionData = PositionData(0, redColor, Icons::Circle, greyColor3);
+        championMedalPositionData = PositionData(0, championColor, Icons::Circle, greyColor3);
     }
 #endif
 #if DEPENDENCY_WARRIORMEDALS
@@ -137,7 +137,7 @@ void OnSettingsLoad(Settings::Section& section){
     if(warriorMedalPositionDataStringSave != ""){
         warriorMedalPositionData = PositionData(warriorMedalPositionDataStringSave);
     }else{
-        warriorMedalPositionData = PositionData(0, blueColor, Icons::Circle, greyColor3);
+        warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
     }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
