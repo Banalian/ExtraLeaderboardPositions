@@ -119,6 +119,13 @@ bool CanRefresh(){
         return false;
     }
 
+    //check that we're in a supported type of mode
+    if(currentMode == EnumCurrentMode::INVALID
+        || currentMode == EnumCurrentMode::PLATFORM
+    ){
+        return false;
+    }
+
     //we don't want to update the times if we know the current refresh has already failed.
     //This should not deadlock because other parts of the plugin will be able to unlock this
     if(failedRefresh){

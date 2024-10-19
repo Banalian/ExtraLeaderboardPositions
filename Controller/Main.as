@@ -349,6 +349,8 @@ void UpdateCurrentMode() {
         currentMode = EnumCurrentMode::RACE;
     } else if(mapType == "TrackMania\\TM_Stunt"){
         currentMode = EnumCurrentMode::STUNT;
+    } else if(mapType == "TrackMania\\TM_Platform"){
+        currentMode = EnumCurrentMode::PLATFORM;
     } else {
         currentMode = EnumCurrentMode::INVALID;
     }

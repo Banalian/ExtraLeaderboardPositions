@@ -64,6 +64,10 @@ void RenderRefreshButton(){
 
 
 void RenderWindows(){
+    //we don't want to show the window if we're in an unsupported gamemode
+    if(currentMode == EnumCurrentMode::INVALID){
+        return;
+    }
     auto app = cast<CTrackMania>(GetApp());
 
     int windowFlags = UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoCollapse | UI::WindowFlags::AlwaysAutoResize | UI::WindowFlags::NoDocking | UI::WindowFlags::NoFocusOnAppearing;

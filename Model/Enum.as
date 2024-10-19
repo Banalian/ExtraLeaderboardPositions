@@ -45,5 +45,6 @@ enum EnumCurrentMode
 {
     INVALID,
     RACE,
-    STUNT
+    STUNT,
+    PLATFORM
 }
