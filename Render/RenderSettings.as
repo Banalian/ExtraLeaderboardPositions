@@ -2,7 +2,7 @@
 void RenderSettingsCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You need a paid subscription.");
         return;
     }
 
@@ -125,7 +125,7 @@ void RenderSettingsExplanation(){
 [SettingsTab name="Medals Position" icon="Circle" order="3"]
 void RenderMedalSettings(){
     if(!UserCanUseThePlugin()){
-        UI::TextWrapped("You don't have the required permissions to use this plugin. You need the gold edition.");
+        UI::TextWrapped("You don't have the required permissions to use this plugin. You need a paid subscription.");
         return;
     }
 
