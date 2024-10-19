@@ -179,49 +179,69 @@ void RefreshLeaderboard(){
             medalEntries[i].positionData = medalPositionData[i];
         }
 
-
+        // store info about if we found a medal already (to allow multiple medals with the same score)
+        //#if
+        //bool <plugin>medalFound = false;
+        //#endif
+#if DEPENDENCY_CHAMPIONMEDALS
+        bool championMedalFound = false;
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        bool warriorMedalFound = false;
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        bool sbVilleMedalFound = false;
+#endif
         // Insert all entries in our temporary entry array
         for(uint i = 0; i< resp.positions.Length; i++){
-            if (false
-                || resp.positions[i].time == -1
-                || (i > 0 && resp.positions[i].time == resp.positions[i - 1].time)
-            )
+            if (resp.positions[i].time == -1)
                 continue;
 
+            bool alreadyHandled = false;
+
 #if DEPENDENCY_CHAMPIONMEDALS
-            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+            if(!championMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
                 // if there's a champion medal and the time is the champion time, we change the entry type to medal and set the description to champion
                 if(resp.positions[i].time == int(ChampionMedals::GetCMTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "Champion";
                     resp.positions[i].positionData = championMedalPositionData;
+                    championMedalFound = true;
+                    alreadyHandled = true;
                 }
             }
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+            if(!warriorMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
                 // if there's a warrior medal and the time is the warrior time, we change the entry type to medal and set the description to warrior
                 if(resp.positions[i].time == int(WarriorMedals::GetWMTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "Warrior";
                     resp.positions[i].positionData = warriorMedalPositionData;
+                    warriorMedalFound = true;
+                    alreadyHandled = true;
                 }
             }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-            if((resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+            if(!sbVilleMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
                 // if there's a SBVille medal and the time is the the SBVille AT, we change the entry type to medal and set the description to SBVille AT
                 // both medals should not be activated at the same time, so we can safely do this
                 if(resp.positions[i].time == int(SBVilleCampaignChallenges::getChallengeTime())){
                     resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
                     resp.positions[i].desc = "SBVille AT";
                     resp.positions[i].positionData = sbVillePositionData;
+                    sbVilleMedalFound = true;
+                    alreadyHandled = true;
                 }
             }
 #endif
             // every special cases should be handled before this point
             // now, we match the remaining entries with their position data
             for(uint j = 0; j< allPositionData.Length; j++){
+                if(alreadyHandled){
+                    break;
+                }
                 if(int(allPositionData[j].position) == resp.positions[i].position){
                     resp.positions[i].positionData = allPositionData[j];
                     break;
