@@ -18,9 +18,8 @@ LeaderboardEntry@ GetPersonalBestEntry() {
         return pbTimeTmp;
     }
 
-    // same code as above, but with early returns to avoid nesting
+    // Check that we're in a map
     if (network.ClientManiaAppPlayground is null || network.ClientManiaAppPlayground.Playground is null || network.ClientManiaAppPlayground.Playground.Map is null) {
-        // not in a map
         return pbTimeTmp;
     }
 
