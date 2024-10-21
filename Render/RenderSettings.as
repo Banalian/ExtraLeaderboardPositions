@@ -96,10 +96,10 @@ void RenderSettingsCustomization(){
             currentComboChoice = -1;
             UI::SetItemDefaultFocus();
         }
-        for(int i = 0; i < int(allPositionToGet.Length); i++){
-            string text = "Position " + allPositionToGet[i];
-            if(UI::Selectable(text, currentComboChoice == allPositionToGet[i])){
-                currentComboChoice = allPositionToGet[i];
+        for(int i = 0; i < int(allPositionData.Length); i++){
+            string text = "Position " + allPositionData[i].position;
+            if(UI::Selectable(text, currentComboChoice == allPositionData[i].position)){
+                currentComboChoice = allPositionData[i].position;
             }
         }
         UI::EndCombo();
@@ -112,7 +112,7 @@ void RenderSettingsCustomization(){
 [SettingsTab name="Explanation" icon="Question" order="4"]
 void RenderSettingsExplanation(){
     UI::TextWrapped("This plugin allows you to see more leaderboard positions.\n\n");
-    UI::TextWrapped("You can modify the positions in the \"Positions customization\" tab\n");
+    UI::TextWrapped("You can modify the positions in the \"Leaderboard Entry Customization\" tab\n");
     UI::TextWrapped("\nThe leaderboard is refreshed every <" + refreshTimer + "> minutes when in a map.");
     UI::TextWrapped("This timer resets when you leave the map and is automatically refreshed when you join a map, or if you set a new pb on a map.");;
     UI::TextWrapped("\nThe plugin also allows you to see the time difference between a given position and all the other one.");
@@ -157,7 +157,6 @@ void RenderMedalSettings(){
 
     if(showMedals){
         showMedalWhenBetter = UI::Checkbox("Show medal even if you have it (if possible)", showMedalWhenBetter);
-        UI::TextWrapped("\n\tNote: if two medals share the same time, the second one will not be shown.");
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         showSBVilleATMedal = UI::Checkbox("Show SBVille AT medal", showSBVilleATMedal);
 #endif

@@ -128,8 +128,6 @@ string lastUsedPluginVersion = "";
 [Setting hidden]
 string allPositionToGetStringSave = "";
 
-// unsaved counterpart allPositionToGet is in the data file
-
 [Setting hidden]
 EnumDisplayMedal medalDisplayMode = EnumDisplayMedal::NORMAL;
 
