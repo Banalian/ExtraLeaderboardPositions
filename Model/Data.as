@@ -21,6 +21,7 @@ const array<string> podiumIcon = {
  * List of available icons for leaderboard customisation
  */
 const array<string> possibleIcons = {
+    "Custom", // Custom icon
     Icons::Kenney::Podium,
     Icons::Kenney::PodiumAlt,
     Icons::Circle,
@@ -35,6 +36,7 @@ const array<string> possibleIcons = {
  * Don't forget to change the named counterparts if you change the order of the colors
  */
 array<string> possibleColors = {
+    "Custom", // Custom color
     "\\$071", // AT green
     "\\$db4", // gold
     "\\$899", // silver
@@ -51,18 +53,18 @@ array<string> possibleColors = {
 
 // named counterparts for the possibleColors array (for easier reference in the code)
 const string resetColor = "\\$z";
-const string atGreenColor = possibleColors[0];
-const string goldColor = possibleColors[1];
-const string silverColor = possibleColors[2];
-const string bronzeColor = possibleColors[3];
-const string greyColor1 = possibleColors[4];
-const string greyColor2 = possibleColors[5];
-const string greyColor3 = possibleColors[6];
-const string greyColor4 = possibleColors[7];
-const string blueColor = possibleColors[8];
-const string pbGreenColor = possibleColors[9];
-const string redColor = possibleColors[10];
-const string whiteColor = possibleColors[11];
+const string atGreenColor = possibleColors[1];
+const string goldColor = possibleColors[2];
+const string silverColor = possibleColors[3];
+const string bronzeColor = possibleColors[4];
+const string greyColor1 = possibleColors[5];
+const string greyColor2 = possibleColors[6];
+const string greyColor3 = possibleColors[7];
+const string greyColor4 = possibleColors[8];
+const string blueColor = possibleColors[9];
+const string pbGreenColor = possibleColors[10];
+const string redColor = possibleColors[11];
+const string whiteColor = possibleColors[12];
 #if DEPENDENCY_CHAMPIONMEDALS
 string championColor = "";
 #endif

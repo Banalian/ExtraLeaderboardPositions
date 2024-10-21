@@ -38,6 +38,6 @@
     }
 
     string GetColorIcon() {
-        return color + icon + resetColor;
+        return color.Replace("Custom", "") + icon.Replace("Custom", "") + resetColor;
     }
  }

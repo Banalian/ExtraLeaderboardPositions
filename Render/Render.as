@@ -292,7 +292,7 @@ void RenderTab(bool showRefresh = false){
         // Note the above position skip logic doesn't apply to medals since we still want to show the medal description
 
         // If the current record is a medal one, we make a display string based on the display mode
-        string displayString = leaderboardArray[i].positionData.textColor;
+        string displayString = leaderboardArray[i].positionData.textColor.Replace("Custom", "");
 
         //------------POSITION ICON--------
         UI::TableNextRow();
