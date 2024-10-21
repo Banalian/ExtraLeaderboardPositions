@@ -98,7 +98,7 @@ void RenderSettingsCustomization(){
         }
         for(int i = 0; i < int(allPositionData.Length); i++){
             string text = "Position " + allPositionData[i].position;
-            if(UI::Selectable(text, currentComboChoice == allPositionData[i].position)){
+            if(UI::Selectable(text, currentComboChoice == int(allPositionData[i].position))){
                 currentComboChoice = allPositionData[i].position;
             }
         }

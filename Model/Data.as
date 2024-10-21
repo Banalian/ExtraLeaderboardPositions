@@ -7,16 +7,6 @@ const array<string> invalidGamemodes = {
     "TM_RoyalValidation_Local"
 };
 
-const array<string> podiumIcon = {
-    "\\$071" + Icons::Kenney::PodiumAlt, // 1st : green
-    "\\$db4" + Icons::Kenney::PodiumAlt, // 10th and below : gold
-    "\\$899" + Icons::Kenney::PodiumAlt, // 100th and below : silver
-    "\\$964" + Icons::Kenney::PodiumAlt, // 1000th and below : bronze
-	"\\$444" + Icons::Kenney::PodiumAlt, // 10000th and below : grey
-    ""                                   // above 10k : No icon
-};
-
-
 /**
  * List of available icons for leaderboard customisation
  */
@@ -157,5 +147,4 @@ bool failedRefresh = false;
 
 EnumCurrentMode currentMode = EnumCurrentMode::INVALID;
 
-// hopefully temporary, until there's an API change to the surround endpoint.
 bool forceRefreshAfterSurroundFail = false;
