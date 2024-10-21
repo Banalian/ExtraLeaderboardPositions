@@ -144,3 +144,24 @@ string NumberToString(int number){
 
     return numberString;
 }
+
+
+string Vec3ColorToString(const vec3 &in color){
+    return Text::FormatOpenplanetColor(color);
+}
+
+vec3 StringToVec3Color(const string &in color){
+    //take the last 3 characters of the string (value between 0 and F for each char)
+    //and convert them to a float between 0 and 1
+    if(color.Length < 3){
+        return vec3();
+    }
+    const string r = color.SubStr(color.Length - 3, 1);
+    const string g = color.SubStr(color.Length - 2, 1);
+    const string b = color.SubStr(color.Length - 1, 1);
+    return vec3(
+        Text::ParseUInt(r, 16),
+        Text::ParseUInt(g, 16),
+        Text::ParseUInt(b, 16)
+    ) / 15.0f;
+}

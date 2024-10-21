@@ -35,6 +35,7 @@ const array<string> possibleIcons = {
  * Don't forget to change the named counterparts if you change the order of the colors
  */
 array<string> possibleColors = {
+    "Custom", // Custom color
     "\\$071", // AT green
     "\\$db4", // gold
     "\\$899", // silver

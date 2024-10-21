@@ -180,6 +180,8 @@ void RenderMedalSettings(){
  */
  bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
     bool changed = false;
+    bool isCustomIconColor = true;
+    bool isCustomTextColor = true;
     UI::BeginTable("PositionData#" + uniqueId, 4);
     UI::TableNextRow();
     UI::TableNextColumn();
@@ -205,23 +207,67 @@ void RenderMedalSettings(){
     UI::TableNextColumn();
     if(UI::BeginCombo("Icon Color", positionData.color + Icons::Square)){
         for(uint i = 0; i < possibleColors.Length; i++){
-            if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.color == possibleColors[i])){
+            string label = i == 0 ? "Custom" : possibleColors[i] + Icons::Square;
+            if(UI::Selectable(label, positionData.color == possibleColors[i])){
                 UI::SetItemDefaultFocus();
-                positionData.color = possibleColors[i];
+                if(i==0){
+                    positionData.color = "";
+                } else {
+                    positionData.color = possibleColors[i];
+                }
             }
         }
         UI::EndCombo();
     }
+
     UI::TableNextColumn();
     if(UI::BeginCombo("Text Color", positionData.textColor + Icons::Square)){
         for(uint i = 0; i < possibleColors.Length; i++){
-            if(UI::Selectable(possibleColors[i] + Icons::Square, positionData.textColor == possibleColors[i])){
+            string label = i == 0 ? "Custom" : possibleColors[i] + Icons::Square;
+            if(UI::Selectable(label, positionData.textColor == possibleColors[i])){
                 UI::SetItemDefaultFocus();
-                positionData.textColor = possibleColors[i];
+                if(i==0){
+                    positionData.textColor = "";
+                } else {
+                    positionData.textColor = possibleColors[i];
+                }
             }
         }
         UI::EndCombo();
     }
+
+    // check if the color is a custom one by seeing if it's in the possibleColors array
+    for(uint i = 0; i < possibleColors.Length; i++){
+        if(positionData.color == possibleColors[i]){
+            isCustomIconColor = false;
+            break;
+        }
+    }
+    for(uint i = 0; i < possibleColors.Length; i++){
+        if(positionData.textColor == possibleColors[i]){
+            isCustomTextColor = false;
+            break;
+        }
+    }
+
+    if (isCustomIconColor || isCustomTextColor){
+        UI::TableNextRow();
+        UI::TableNextColumn();
+        UI::TableNextColumn();
+        UI::TableNextColumn();
+        if(isCustomIconColor){
+            vec3 baseColor = positionData.color == "" ? vec3(0, 0, 0) : StringToVec3Color(positionData.color);
+            auto vecIconColor = UI::InputColor3("Custom Icon Color", baseColor);
+            positionData.color = Vec3ColorToString(vecIconColor);
+        }
+        UI::TableNextColumn();
+        if(isCustomTextColor){
+            vec3 baseColor = positionData.textColor == "" ? vec3(0, 0, 0) : StringToVec3Color(positionData.textColor);
+            auto vecTextColor = UI::InputColor3("Custom Text Color", baseColor);
+            positionData.textColor = Vec3ColorToString(vecTextColor);
+        }
+    }
+
     UI::EndTable();
 
     if(tmpPos != positionData.position || tmpIcon != positionData.icon || tmpColor != positionData.color || tmpTextColor != positionData.textColor){
@@ -231,7 +277,7 @@ void RenderMedalSettings(){
     return changed;
  }
 
-[SettingsTab name="Leaderboard entry customization" icon="Kenney::PodiumAlt" order="2"]
+[SettingsTab name="Leaderboard Entry Customization" icon="Kenney::PodiumAlt" order="2"]
 void RenderPositionDataCustomization(){
 
     if(!UserCanUseThePlugin()){
