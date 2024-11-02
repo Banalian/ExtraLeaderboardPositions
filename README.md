@@ -11,6 +11,14 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.6.1
+- Added an option to choose a custom color for the icon and text of each entry in the leaderboard.
+- Added "support" for Platform (hides the plugin when in platform mode since there's no leaderboard).
+- Added an option to disable the headers (name of the columns like Time, % etc...) in the leaderboard.
+- Fix a bug where the plugin sometimes isn't able to get your PB in a map if you PBed without getting a new medal (unless you got a new PB after AT).
+- Fix custom medals like Champion not having their correct color.
+- Internal change to allow multiple custom medals to appear at the same time when using the external API.
+
 ## 2.6.0
 - Big refactor for more customization for the entries! You can now individually change the icon, color icon and the text color of each entry! Please report any bug you might find with this new feature as it's a big change. Report via Github or Discord, with logs if there's any.
 - Added a migration system to go from the old system to the new one. It should be automatic, but if you have any trouble, please report it too.
