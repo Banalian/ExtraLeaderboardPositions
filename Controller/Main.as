@@ -83,6 +83,7 @@ void RefreshLeaderboard(){
                     // Fake the position to be the PB position
                     tmpEntry.entryType = EnumLeaderboardEntryType::PB;
                     tmpEntry.desc = "PB";
+                    tmpEntry.positionData = currentPbPositionData;
                     currentPbEntry = tmpEntry;
                 }
             } else {
