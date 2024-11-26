@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+
+## 2.6.2
+- Added support for the plugin [s314ke Medals](https://openplanet.dev/plugin/s314kemedals)
+- Fixed an issue where the pb leaderboard entry would sometimes miss its data (color/icon etc...)
+
 ## 2.6.1
 - Added an option to choose a custom color for the icon and text of each entry in the leaderboard.
 - Added "support" for Platform (hides the plugin when in platform mode since there's no leaderboard).
