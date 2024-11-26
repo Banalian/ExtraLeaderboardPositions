@@ -192,6 +192,9 @@ void RefreshLeaderboard(){
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         bool sbVilleMedalFound = false;
 #endif
+#if DEPENDENCY_S314KEMEDALS
+        bool s314keMedalFound = false;
+#endif
         // Insert all entries in our temporary entry array
         for(uint i = 0; i< resp.positions.Length; i++){
             if (resp.positions[i].time == -1)
@@ -232,6 +235,19 @@ void RefreshLeaderboard(){
                     resp.positions[i].desc = "SBVille AT";
                     resp.positions[i].positionData = sbVillePositionData;
                     sbVilleMedalFound = true;
+                    alreadyHandled = true;
+                }
+            }
+#endif
+#if DEPENDENCY_S314KEMEDALS
+            if(!s314keMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
+                // if there's a S314ke medal and the time is the the S314ke medal, we change the entry type to medal and set the description to S314ke
+                // both medals should not be activated at the same time, so we can safely do this
+                if(resp.positions[i].time == int(s314keMedals::GetS314keMedalTime())){
+                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
+                    resp.positions[i].desc = "S314ke";
+                    resp.positions[i].positionData = s314keMedalPositionData;
+                    s314keMedalFound = true;
                     alreadyHandled = true;
                 }
             }

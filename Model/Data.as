@@ -118,6 +118,9 @@ PositionData championMedalPositionData = PositionData(0, championColor, Icons::C
 #if DEPENDENCY_WARRIORMEDALS
 PositionData warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
 #endif
+#if DEPENDENCY_S314KEMEDALS
+PositionData s314keMedalPositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
+#endif
 
 
 array<LeaderboardEntry@> leaderboardArray;

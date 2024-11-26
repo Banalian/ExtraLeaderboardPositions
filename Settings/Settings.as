@@ -47,6 +47,10 @@ bool showChampionMedals = true;
 [Setting hidden]
 bool showWarriorMedals = true;
 #endif
+#if DEPENDENCY_S314KEMEDALS
+[Setting hidden]
+bool showS314keMedals = true;
+#endif
 [Setting hidden]
 bool showAT = true;
 [Setting hidden]
@@ -91,6 +95,11 @@ string championMedalPositionDataStringSave = "";
 #if DEPENDENCY_WARRIORMEDALS
 [Setting hidden]
 string warriorMedalPositionDataStringSave = "";
+#endif
+
+#if DEPENDENCY_S314KEMEDALS
+[Setting hidden]
+string s314keMedalPositionDataStringSave = "";
 #endif
 
 [Setting hidden]

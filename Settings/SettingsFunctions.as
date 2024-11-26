@@ -74,6 +74,10 @@ void OnSettingsSave(Settings::Section& section){
     sbVillePositionDataStringSave = sbVillePositionData.Serialize();
     section.SetString("sbVillePositionDataStringSave", sbVillePositionDataStringSave);
 #endif
+#if DEPENDENCY_S314KEMEDALS
+    s314keMedalPositionDataStringSave = s314keMedalPositionData.Serialize();
+    section.SetString("s314keMedalPositionDataStringSave", s314keMedalPositionDataStringSave);
+#endif
 }
 
 void OnSettingsLoad(Settings::Section& section){
@@ -146,6 +150,14 @@ void OnSettingsLoad(Settings::Section& section){
         sbVillePositionData = PositionData(sbVillePositionDataStringSave);
     }else{
         sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
+    }
+#endif
+#if DEPENDENCY_S314KEMEDALS
+    s314keMedalPositionDataStringSave = section.GetString("s314keMedalPositionDataStringSave");
+    if(s314keMedalPositionDataStringSave != ""){
+        s314keMedalPositionData = PositionData(s314keMedalPositionDataStringSave);
+    }else{
+        s314keMedalPositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
     }
 #endif
 

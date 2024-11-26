@@ -156,6 +156,19 @@ namespace ExtraLeaderboardAPI
             request.scores.InsertLast(sbVilleTime);
         }
 #endif
+#if DEPENDENCY_S314KEMEDALS
+        // Same as above
+        int s314keTime = s314keMedals::GetS314keMedalTime();
+        if(
+            s314keTime != 0 && // if the medal exists
+            showMedals && showS314keMedals && // if the user wants to show it
+            (((s314keTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
+    
+        ){
+            request.scores.InsertLast(s314keTime);
+        }
+#endif
+
 
         return request;
     }

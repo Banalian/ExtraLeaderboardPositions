@@ -202,6 +202,21 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         }
 #endif
 
+#if DEPENDENCY_S314KEMEDALS
+        if(showS314keMedals){
+            int s314keTime = s314keMedals::GetS314keMedalTime();
+            if(s314keTime != 0){
+                auto s314kePosition = GetSpecificPositionEntry(s314keTime);
+                s314kePosition.desc = "S314ke";
+                s314kePosition.entryType = EnumLeaderboardEntryType::MEDAL;
+                s314kePosition.positionData = s314keMedalPositionData;
+                if(isAValidMedalTime(s314kePosition)) {
+                    tmpArray.InsertLast(s314kePosition);
+                }
+            }
+        }
+#endif
+
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
         if(showAT){
             if(atTime < currentPbEntry.time || currentPbEntry.time == -1){

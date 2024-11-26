@@ -143,6 +143,9 @@ void RenderMedalSettings(){
 #if DEPENDENCY_WARRIORMEDALS
         showWarriorMedals = true;
 #endif
+#if DEPENDENCY_S314KEMEDALS
+        showS314keMedals = true;
+#endif
         showAT = true;
         showGold = true;
         showSilver = true;
@@ -165,6 +168,9 @@ void RenderMedalSettings(){
 #endif
 #if DEPENDENCY_WARRIORMEDALS
         showWarriorMedals = UI::Checkbox("Show Warrior medals", showWarriorMedals);
+#endif
+#if DEPENDENCY_S314KEMEDALS
+        showS314keMedals = UI::Checkbox("Show S314ke medals", showS314keMedals);
 #endif
         showAT = UI::Checkbox("Show AT", showAT);
         showGold = UI::Checkbox("Show Gold", showGold);
@@ -360,6 +366,9 @@ void RenderPositionDataCustomization(){
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
 #endif
+#if DEPENDENCY_S314KEMEDALS
+        s314keMedalPositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
+#endif
     }
     changed = changed || GetPositionData("Author Medal", 10001, atPositionData);
     changed = changed || GetPositionData("Gold Medal", 10002, goldPositionData);
@@ -373,6 +382,9 @@ void RenderPositionDataCustomization(){
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
     changed = changed || GetPositionData("SBVille Medal", 10007, sbVillePositionData);
+#endif
+#if DEPENDENCY_S314KEMEDALS
+    changed = changed || GetPositionData("S314ke Medal", 10008, s314keMedalPositionData);
 #endif
 
     if(changed){
