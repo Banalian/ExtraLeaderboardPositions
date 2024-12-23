@@ -160,7 +160,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 #if DEPENDENCY_CHAMPIONMEDALS
         if(showChampionMedals){
             int championTime = ChampionMedals::GetCMTime();
-            if(championTime != 0){
+            if((championTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
                 auto championPosition = GetSpecificPositionEntry(championTime);
                 championPosition.desc = "Champion";
                 championPosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -175,7 +175,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 #if DEPENDENCY_WARRIORMEDALS
         if(showWarriorMedals){
             int warriorTime = WarriorMedals::GetWMTime();
-            if(warriorTime != 0){
+            if((warriorTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
                 auto warriorPosition = GetSpecificPositionEntry(warriorTime);
                 warriorPosition.desc = "Warrior";
                 warriorPosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -190,7 +190,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
         if(showSBVilleATMedal){
             int SBVilleATTime = SBVilleCampaignChallenges::getChallengeTime();
-            if(SBVilleATTime != 0){
+            if((SBVilleATTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
                 auto SBVillePosition = GetSpecificPositionEntry(SBVilleATTime);
                 SBVillePosition.desc = "SBVille AT";
                 SBVillePosition.entryType = EnumLeaderboardEntryType::MEDAL;
@@ -205,7 +205,7 @@ array<LeaderboardEntry@> GetMedalsEntries(){
 #if DEPENDENCY_S314KEMEDALS
         if(showS314keMedals){
             int s314keTime = s314keMedals::GetS314keMedalTime();
-            if(s314keTime != 0){
+            if(( s314keTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
                 auto s314kePosition = GetSpecificPositionEntry(s314keTime);
                 s314kePosition.desc = "S314ke";
                 s314kePosition.entryType = EnumLeaderboardEntryType::MEDAL;
