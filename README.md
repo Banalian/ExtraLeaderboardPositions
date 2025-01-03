@@ -11,6 +11,8 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.6.3
+- Fixed an issue where the plugin would display erroneous data without the external API for custom medals if you had a better time than the medal time.
 
 ## 2.6.2
 - Added support for the plugin [s314ke Medals](https://openplanet.dev/plugin/s314kemedals)
