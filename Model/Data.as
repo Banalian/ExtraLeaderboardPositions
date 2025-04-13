@@ -98,7 +98,7 @@ float updateFrequency = refreshTimer*60*1000; // = minutes * One minute in sec *
 bool refreshPosition = false;
 
 float timerOPConfig = 0;
-float updateFrequencyOPConfig = 5*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
+float updateFrequencyOPConfig = 30*60*1000; // = minutes * One minute in sec * 1000 milliseconds per second
 bool refreshOPConfig = false;
 
 array<PositionData> allPositionData = {};
