@@ -150,7 +150,6 @@ array<LeaderboardEntry@> GetMedalsEntries(){
     int silverTime;
     int bronzeTime;
 
-
     if(network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         atTime = map.TMObjective_AuthorTime;
         goldTime = map.TMObjective_GoldTime;
@@ -158,117 +157,40 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         bronzeTime = map.TMObjective_BronzeTime;
 
 #if DEPENDENCY_CHAMPIONMEDALS
-        if(showChampionMedals){
-            int championTime = ChampionMedals::GetCMTime();
-            if((championTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
-                auto championPosition = GetSpecificPositionEntry(championTime);
-                championPosition.desc = "Champion";
-                championPosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                championPosition.positionData = championMedalPositionData;
-                if(isAValidMedalTime(championPosition)) {
-                    tmpArray.InsertLast(championPosition);
-                }
-            }
-        }
+        AddMedalPosition(showChampionMedals, ChampionMedals::GetCMTime(), "Champion", championMedalPositionData, tmpArray);
 #endif
-
 #if DEPENDENCY_WARRIORMEDALS
-        if(showWarriorMedals){
-            int warriorTime = WarriorMedals::GetWMTime();
-            if((warriorTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
-                auto warriorPosition = GetSpecificPositionEntry(warriorTime);
-                warriorPosition.desc = "Warrior";
-                warriorPosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                warriorPosition.positionData = warriorMedalPositionData;
-                if(isAValidMedalTime(warriorPosition)) {
-                    tmpArray.InsertLast(warriorPosition);
-                }
-            }
-        }
+        AddMedalPosition(showWarriorMedals, WarriorMedals::GetWMTime(), "Warrior", warriorMedalPositionData, tmpArray);
 #endif
-
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        if(showSBVilleATMedal){
-            int SBVilleATTime = SBVilleCampaignChallenges::getChallengeTime();
-            if((SBVilleATTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
-                auto SBVillePosition = GetSpecificPositionEntry(SBVilleATTime);
-                SBVillePosition.desc = "SBVille AT";
-                SBVillePosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                SBVillePosition.positionData = sbVillePositionData;
-                if(isAValidMedalTime(SBVillePosition)) {
-                    tmpArray.InsertLast(SBVillePosition);
-                }
-            }
-        }
+        AddMedalPosition(showSBVilleATMedal, SBVilleCampaignChallenges::getChallengeTime(), "SBVille AT", sbVillePositionData, tmpArray);
 #endif
-
 #if DEPENDENCY_S314KEMEDALS
-        if(showS314keMedals){
-            int s314keTime = s314keMedals::GetS314keMedalTime();
-            if(( s314keTime != 0) && (atTime < currentPbEntry.time || currentPbEntry.time == -1)){
-                auto s314kePosition = GetSpecificPositionEntry(s314keTime);
-                s314kePosition.desc = "S314ke";
-                s314kePosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                s314kePosition.positionData = s314keMedalPositionData;
-                if(isAValidMedalTime(s314kePosition)) {
-                    tmpArray.InsertLast(s314kePosition);
-                }
-            }
-        }
+        AddMedalPosition(showS314keMedals, s314keMedals::GetS314keMedalTime(), "S314ke", s314keMedalPositionData, tmpArray);
 #endif
 
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
-        if(showAT){
-            if(atTime < currentPbEntry.time || currentPbEntry.time == -1){
-                auto atPosition = GetSpecificPositionEntry(atTime);
-                atPosition.desc = "AT";
-                atPosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                atPosition.positionData = atPositionData;
-                if(isAValidMedalTime(atPosition)) {
-                    tmpArray.InsertLast(atPosition);
-                }
-            }
-            
-        }
-
-        if(showGold){
-            if(goldTime < currentPbEntry.time || currentPbEntry.time == -1){
-                auto goldPosition = GetSpecificPositionEntry(goldTime);
-                goldPosition.desc = "Gold";
-                goldPosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                goldPosition.positionData = goldPositionData;
-                if(isAValidMedalTime(goldPosition)) {
-                    tmpArray.InsertLast(goldPosition);
-                }
-            }
-        }
-
-        if(showSilver){
-            if(silverTime < currentPbEntry.time || currentPbEntry.time == -1){
-                auto silverPosition = GetSpecificPositionEntry(silverTime);
-                silverPosition.desc = "Silver";
-                silverPosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                silverPosition.positionData = silverPositionData;
-                if(isAValidMedalTime(silverPosition)) {
-                    tmpArray.InsertLast(silverPosition);
-                }
-            }
-        }
-
-        if(showBronze){
-            if(bronzeTime < currentPbEntry.time || currentPbEntry.time == -1){
-                auto bronzePosition = GetSpecificPositionEntry(bronzeTime);
-                bronzePosition.desc = "Bronze";
-                bronzePosition.entryType = EnumLeaderboardEntryType::MEDAL;
-                bronzePosition.positionData = bronzePositionData;
-                if(isAValidMedalTime(bronzePosition)) {
-                    tmpArray.InsertLast(bronzePosition);
-                }
-            }
-        }
-
+        AddMedalPosition(showAT, atTime, "AT", atPositionData, tmpArray);
+        AddMedalPosition(showGold, goldTime, "Gold", goldPositionData, tmpArray);
+        AddMedalPosition(showSilver, silverTime, "Silver", silverPositionData, tmpArray);
+        AddMedalPosition(showBronze, bronzeTime, "Bronze", bronzePositionData, tmpArray);
     }
 
     return tmpArray;
 
+}
+
+
+void AddMedalPosition(bool showMedal, int medalTime, const string &in desc, PositionData &positionData, array<LeaderboardEntry@> &tmpArray) {
+    if (showMedal) {
+        if ((medalTime != 0) && (medalTime < currentPbEntry.time || currentPbEntry.time == -1)) {
+            auto position = GetSpecificPositionEntry(medalTime);
+            position.desc = desc;
+            position.entryType = EnumLeaderboardEntryType::MEDAL;
+            position.positionData = positionData;
+            if (isAValidMedalTime(position)) {
+                tmpArray.InsertLast(position);
+            }
+        }
+    }
 }

@@ -38,7 +38,20 @@ enum MedalType
     BRONZE,
     SILVER,
     GOLD,
-    AT
+    AT,
+#if DEPENDENCY_S314KEMEDALS
+    S314KE,
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+    WARRIOR,
+#endif
+#if DEPENDENCY_CHAMPIONMEDALS
+    CHAMPION,
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+    SBVILLE,
+#endif
+    COUNT
 }
 
 enum EnumCurrentMode

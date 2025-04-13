@@ -16,7 +16,7 @@ namespace ExtraLeaderboardAPI
         Net::HttpRequest@ req = Net::HttpRequest();
         req.Url = "openplanet.dev/plugin/extraleaderboardpositions/config/urls";
         req.Method = Net::HttpMethod::Get;
-        
+
         req.Start();
         while(!req.Finished()){
             yield();
@@ -108,71 +108,21 @@ namespace ExtraLeaderboardAPI
             request.positions.InsertLast(allPositionData[i].position);
         }
 
-        if(ShouldRequestMedal(MedalType::BRONZE)){
-            request.medals.InsertLast(MedalType::BRONZE);
-        }
-        if(ShouldRequestMedal(MedalType::SILVER)){
-            request.medals.InsertLast(MedalType::SILVER);
-        }
-        if(ShouldRequestMedal(MedalType::GOLD)){
-            request.medals.InsertLast(MedalType::GOLD);
-        }
-        if(ShouldRequestMedal(MedalType::AT)){
-            request.medals.InsertLast(MedalType::AT);
-        }
-#if DEPENDENCY_CHAMPIONMEDALS
-        // We rewrite the logic of the ShouldRequestMedal function since we don't want to modify the medal enum
-        int champTime = ChampionMedals::GetCMTime();
-        if(
-            champTime != 0 && // if the medal exists
-            showMedals && showChampionMedals && // if the user wants to show it
-            (((champTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
-    
-        ){
-            request.scores.InsertLast(champTime);
-        }
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        // We rewrite the logic of the ShouldRequestMedal function since we don't want to modify the medal enum
-        int warTime = WarriorMedals::GetWMTime();
-        if(
-            warTime != 0 && // if the medal exists
-            showMedals && showWarriorMedals && // if the user wants to show it
-            (((warTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
-    
-        ){
-            request.scores.InsertLast(warTime);
-        }
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        // Same as above
-        int sbVilleTime = SBVilleCampaignChallenges::getChallengeTime();
-        if(
-            sbVilleTime != 0 && // if the medal exists
-            showMedals && showSBVilleATMedal && // if the user wants to show it
-            (((sbVilleTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
-    
-        ){
-            request.scores.InsertLast(sbVilleTime);
-        }
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        // Same as above
-        int s314keTime = s314keMedals::GetS314keMedalTime();
-        if(
-            s314keTime != 0 && // if the medal exists
-            showMedals && showS314keMedals && // if the user wants to show it
-            (((s314keTime < currentPbEntry.time) || currentPbEntry.time == -1) || showMedalWhenBetter) // if the medal is better than the PB or if the user wants to show it anyway
-    
-        ){
-            request.scores.InsertLast(s314keTime);
-        }
-#endif
 
+        for(uint i = 1; i <= MedalType::AT; i++){
+            if(ShouldRequestMedal(MedalType(i))){
+                request.medals.InsertLast(MedalType(i));
+            }
+        }
+        // This is the same as above, but for custom medals
+        for(uint i = MedalType::AT + 1; i < MedalType::COUNT; i++){
+            if(ShouldRequestMedal(MedalType(i))){
+                request.scores.InsertLast(GetCustomMedalTime(MedalType(i)));
+            }
+        }
 
         return request;
     }
-    
 }
 
 
@@ -206,6 +156,33 @@ bool ShouldRequestMedal(MedalType medal){
                 shouldShow = showAT;
                 medalTime = map.TMObjective_AuthorTime;
                 break;
+#if DEPENDENCY_CHAMPIONMEDALS
+        case MedalType::CHAMPION:
+                shouldShow = showChampionMedals;
+                medalTime = ChampionMedals::GetCMTime();
+                break;
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        case MedalType::WARRIOR:
+                shouldShow = showWarriorMedals;
+                medalTime = WarriorMedals::GetWMTime();
+                break;
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        case MedalType::SBVILLE:
+                shouldShow = showSBVilleATMedal;
+                medalTime = SBVilleCampaignChallenges::getChallengeTime();
+                break;
+#endif
+#if DEPENDENCY_S314KEMEDALS
+        case MedalType::S314KE:
+                shouldShow = showS314keMedals;
+                medalTime = s314keMedals::GetS314keMedalTime();
+                break;
+#endif
+        default:
+                error("Unknown medal type :" + medal);
+                return false;
     }
 
     // Check if the medal is better than the PB or if the user wants to show it anyway
@@ -213,5 +190,59 @@ bool ShouldRequestMedal(MedalType medal){
         shouldShow =  medalTime < currentPbEntry.time || showMedalWhenBetter;
     }
 
+    if( medalTime <= 0 
+        && ( false
+#if DEPENDENCY_CHAMPIONMEDALS
+        || medal == MedalType::CHAMPION
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        || medal == MedalType::WARRIOR
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        || medal == MedalType::SBVILLE
+#endif
+#if DEPENDENCY_S314KEMEDALS
+        || medal == MedalType::S314KE
+#endif
+        )
+    ){
+        // If the medal is not set, we don't show it
+        // base medals are always set, but might be hidden. this will be handled elsewhere
+        shouldShow = false;
+    }
+
     return shouldShow;
+}
+
+int GetCustomMedalTime(MedalType medal){
+    if(medal <= MedalType::AT || medal >= MedalType::COUNT){
+        error("GetCustomMedalTime: medal is not a custom medal : " + medal);
+        return -1;
+    }
+
+    switch(medal){
+#if DEPENDENCY_CHAMPIONMEDALS
+        case MedalType::CHAMPION:
+            return ChampionMedals::GetCMTime();
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        case MedalType::WARRIOR:
+            return WarriorMedals::GetWMTime();
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        case MedalType::SBVILLE:
+            return SBVilleCampaignChallenges::getChallengeTime();
+#endif
+#if DEPENDENCY_S314KEMEDALS
+        case MedalType::S314KE:
+            return s314keMedals::GetS314keMedalTime();
+#endif
+        case MedalType::COUNT:
+            // This should never happen, it's here to appease the compiler since without any dependency, the switch is empty
+            error("GetCustomMedalTime: medal is not a custom medal : " + medal);
+            return -1;
+        default:
+            error("GetCustomMedalTime: medal is not a custom medal : " + medal);
+            return -1;
+    }
 }
