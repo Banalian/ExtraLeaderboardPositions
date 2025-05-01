@@ -21,8 +21,9 @@ void RenderMenu() {
 
 // ############################## WINDOW RENDER #############################
 
-void Render() {
+uint64 lastMovement = Time::get_Now();
 
+void Render() {
     if(!UserCanUseThePlugin()){
         return;
     }
@@ -36,10 +37,17 @@ void Render() {
     if(displayMode == EnumDisplayMode::HIDE_WHEN_DRIVING){
         auto state = VehicleState::ViewingPlayerState();
         if(state is null) return;
-        float currentSpeed = state.WorldVel.Length() * 3.6;
-        if(currentSpeed >= hiddingSpeedSetting) return;
 
-        RenderWindows();
+        uint64 now = Time::get_Now();
+
+        float currentSpeed = state.WorldVel.Length() * 3.6;
+        if(currentSpeed >= hiddingSpeedSetting) {
+            lastMovement = now;
+            return;
+        }
+
+        if(now - lastMovement > 1000)
+            RenderWindows();
     }
 }
 
@@ -112,13 +120,13 @@ void RenderWindows(){
 
 /**
  * Render the info tab
- * 
+ *
  * returns true if the refresh icon was rendered
  */
 bool RenderInfoTab(){
 
     // used to avoid showing extra blank space when player count is still checked while external api is unchecked
-    auto showPlayerCountEnabled = showPlayerCount && useExternalAPI; 
+    auto showPlayerCountEnabled = showPlayerCount && useExternalAPI;
 
     // if we don't show anything, we don't render the tab
     if(!(showMapName || showMapAuthor || showPlayerCountEnabled)){
@@ -151,7 +159,7 @@ bool RenderInfoTab(){
         UI::TableNextRow();
         UI::TableNextColumn();
         if(showMapAuthor){
-            UI::Text(greyColor4 + "Made by " + Text::StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));    
+            UI::Text(greyColor4 + "Made by " + Text::StripFormatCodes(app.RootMap.MapInfo.AuthorNickName));
         }
         UI::TableNextColumn();
         UI::TableNextColumn();
@@ -275,7 +283,7 @@ void RenderTab(bool showRefresh = false){
     int i = 0;
     while(i < int(leaderboardArray.Length)){
         //We skip the pb if there's none
-        if( 
+        if(
             (leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB && leaderboardArray[i].time == -1) ||
             (!showPb && leaderboardArray[i].entryType == EnumLeaderboardEntryType::PB) ){
             i++;
