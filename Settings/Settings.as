@@ -17,6 +17,9 @@ bool showSeparator = true;
 [Setting hidden]
 float hiddingSpeedSetting = 1.0f;
 
+[Setting hidden description="Time (milliseconds) before unhiding the overlay (only if Display Mode is set to HIDE_WHEN_DRIVING)"]
+int unhideDelay = 500;
+
 [Setting hidden name="Refresh timer (minutes)" description="The amount of time between automatic refreshes of the leaderboard. Must be over 0." min=1]
 int refreshTimer = 5;
 

@@ -46,7 +46,7 @@ void Render() {
             return;
         }
 
-        if(now - lastMovement > 1000)
+        if(now - lastMovement > unhideDelay)
             RenderWindows();
     }
 }

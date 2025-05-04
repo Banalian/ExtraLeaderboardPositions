@@ -43,6 +43,11 @@ void RenderSettingsCustomization(){
         hiddingSpeedSetting = 0;
     }
 
+    unhideDelay = UI::InputInt("(ms) Unhide delay (if the hide when driving mode is active)", unhideDelay, 100);
+    if(unhideDelay < 0){
+        unhideDelay = 0;
+    }
+
     UI::Text("\n\tTimer");
 
     refreshTimer = UI::InputInt("Refresh timer every X (minutes)", refreshTimer);
