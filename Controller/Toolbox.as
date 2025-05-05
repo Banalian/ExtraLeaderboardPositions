@@ -84,7 +84,7 @@ string TimeString(int scoreTime, bool showSign = false) {
             timeString += "+";
         }
     }
-    
+
     timeString += Time::Format(Math::Abs(scoreTime));
 
     return timeString;
@@ -165,4 +165,22 @@ vec3 StringToVec3Color(const string &in color){
         Text::ParseUInt(g, 16),
         Text::ParseUInt(b, 16)
     ) / 15.0f;
+}
+
+/**
+ * Check if the player is idle or not, based on the speed and the time since the last movement
+ */
+bool IsIdle(){
+    auto state = VehicleState::ViewingPlayerState();
+    if(state is null) return false;
+
+    uint64 now = Time::get_Now();
+
+    float currentSpeed = state.WorldVel.Length() * 3.6;
+    if(currentSpeed >= hiddingSpeedSetting) {
+        lastMovement = now;
+        return false;
+    }
+
+    return now - lastMovement > unhideDelay;
 }
