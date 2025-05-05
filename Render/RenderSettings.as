@@ -43,7 +43,7 @@ void RenderSettingsCustomization(){
         hiddingSpeedSetting = 0;
     }
 
-    unhideDelay = UI::InputInt("(ms) Unhide delay (if the hide when driving mode is active)", unhideDelay, 100);
+    unhideDelay = UI::InputInt("Delay (in ms) to wait before showing the window if you're below the hiding speed", unhideDelay, 100);
     if(unhideDelay < 0){
         unhideDelay = 0;
     }

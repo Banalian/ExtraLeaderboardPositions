@@ -137,6 +137,9 @@ int currentTimePbLocal = -1;
 // Position filled in later by API call.
 LeaderboardEntry@ currentPbEntry = LeaderboardEntry();
 
+// Last time the car was above the speed threshold
+uint64 lastMovement = Time::get_Now();
+
 float timerStartDelay = 30 *1000; // 30 seconds
 bool startupEnded = false;
 
