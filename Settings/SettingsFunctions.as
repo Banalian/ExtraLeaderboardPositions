@@ -104,7 +104,7 @@ void OnSettingsLoad(Settings::Section& section){
     }
 
     medalsPositionDataStringSave = section.GetString("medalsPositionDataStringSave");
-    
+
     bool resetToDefault = false;
     if(medalsPositionDataStringSave != ""){
         array<string> medalsPositionDataTmp = medalsPositionDataStringSave.Split(";");

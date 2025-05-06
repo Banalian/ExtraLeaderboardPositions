@@ -99,7 +99,7 @@ void LoadOPConfig(){
     Net::HttpRequest@ req = Net::HttpRequest();
         req.Url = "openplanet.dev/plugin/extraleaderboardpositions/config/globalsettings";
         req.Method = Net::HttpMethod::Get;
-        
+
         req.Start();
         while(!req.Finished()){
             yield();

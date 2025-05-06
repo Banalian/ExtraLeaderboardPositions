@@ -63,7 +63,7 @@ namespace ExtraLeaderboardAPI
                 response.silverTime = mapInfo.Get("silverTime");
                 response.bronzeTime = mapInfo.Get("bronzeTime");
             }
-            
+
             auto positions = input.Get("positions");
 
             response.positions = {};
@@ -103,7 +103,6 @@ namespace ExtraLeaderboardAPI
             }
             return output;
         }
-    
-        
+
     }
 }

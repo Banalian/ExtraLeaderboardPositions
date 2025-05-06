@@ -181,9 +181,6 @@ void RefreshLeaderboard(){
         }
 
         // store info about if we found a medal already (to allow multiple medals with the same score)
-        //#if
-        //bool <plugin>medalFound = false;
-        //#endif
 #if DEPENDENCY_CHAMPIONMEDALS
         bool championMedalFound = false;
 #endif

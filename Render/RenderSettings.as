@@ -295,7 +295,7 @@ void RenderMedalSettings(){
     }
 
     return changed;
- }
+}
 
 [SettingsTab name="Leaderboard Entry Customization" icon="Kenney::PodiumAlt" order="2"]
 void RenderPositionDataCustomization(){
