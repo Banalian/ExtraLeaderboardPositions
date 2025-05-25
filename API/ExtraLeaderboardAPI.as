@@ -115,9 +115,18 @@ namespace ExtraLeaderboardAPI
             }
         }
         // This is the same as above, but for custom medals
-        for(uint i = MedalType::AT + 1; i < MedalType::COUNT; i++){
-            if(ShouldRequestMedal(MedalType(i))){
-                request.scores.InsertLast(GetCustomMedalTime(MedalType(i)));
+        for(int i = MedalType::AT + 1; i < MedalType::COUNT; i++){
+            MedalType medal = MedalType(i);
+            try
+            {
+                if(ShouldRequestMedal(medal)){
+                    request.scores.InsertLast(GetCustomMedalTime(medal));
+                }
+            }
+            catch
+            {
+                warn("Error getting custom medal time for medal type: " + MedalTypeToString(medal) + ", skipping it.");
+                warn("Error: " + getExceptionInfo());
             }
         }
 

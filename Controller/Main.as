@@ -194,7 +194,7 @@ void RefreshLeaderboard(){
         bool s314keMedalFound = false;
 #endif
         // Insert all entries in our temporary entry array
-        for(uint i = 0; i< resp.positions.Length; i++){
+        for(uint i = 0; i < resp.positions.Length; i++){
             if (resp.positions[i].time == -1)
                 continue;
 

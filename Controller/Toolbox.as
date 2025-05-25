@@ -167,6 +167,37 @@ vec3 StringToVec3Color(const string &in color){
     ) / 15.0f;
 }
 
+string MedalTypeToString(MedalType medal) {
+    switch(medal) {
+        case MedalType::BRONZE:
+            return "Bronze";
+        case MedalType::SILVER:
+            return "Silver";
+        case MedalType::GOLD:
+            return "Gold";
+        case MedalType::AT:
+            return "Author Time";
+#if DEPENDENCY_CHAMPIONMEDALS
+        case MedalType::CHAMPION:
+            return "Champion";
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        case MedalType::WARRIOR:
+            return "Warrior";
+#endif
+#if DEPENDENCY_S314KEMEDALS
+        case MedalType::S314KE:
+            return "S314ke";
+#endif
+#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
+        case MedalType::SBVILLE:
+            return "SBVille AT";
+#endif
+        default:
+            return "Custom Medal";
+    }
+}
+
 /**
  * Check if the player is idle or not, based on the speed and the time since the last movement
  */

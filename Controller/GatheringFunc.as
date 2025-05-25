@@ -156,17 +156,18 @@ array<LeaderboardEntry@> GetMedalsEntries(){
         silverTime = map.TMObjective_SilverTime;
         bronzeTime = map.TMObjective_BronzeTime;
 
+        // we only do a try here because we don't want to fail the refresh if the dependencies somehow throw an error
 #if DEPENDENCY_CHAMPIONMEDALS
-        AddMedalPosition(showChampionMedals, ChampionMedals::GetCMTime(), "Champion", championMedalPositionData, tmpArray);
+        TryAddMedalPosition(showChampionMedals, ChampionMedals::GetCMTime(), "Champion", championMedalPositionData, tmpArray);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-        AddMedalPosition(showWarriorMedals, WarriorMedals::GetWMTime(), "Warrior", warriorMedalPositionData, tmpArray);
+        TryAddMedalPosition(showWarriorMedals, WarriorMedals::GetWMTime(), "Warrior", warriorMedalPositionData, tmpArray);
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        AddMedalPosition(showSBVilleATMedal, SBVilleCampaignChallenges::getChallengeTime(), "SBVille AT", sbVillePositionData, tmpArray);
+        TryAddMedalPosition(showSBVilleATMedal, SBVilleCampaignChallenges::getChallengeTime(), "SBVille AT", sbVillePositionData, tmpArray);
 #endif
 #if DEPENDENCY_S314KEMEDALS
-        AddMedalPosition(showS314keMedals, s314keMedals::GetS314keMedalTime(), "S314ke", s314keMedalPositionData, tmpArray);
+        TryAddMedalPosition(showS314keMedals, s314keMedals::GetS314keMedalTime(), "S314ke", s314keMedalPositionData, tmpArray);
 #endif
 
         // We get the positions of the 4 medals and add them if they are valid and if we need to show them
@@ -192,5 +193,17 @@ void AddMedalPosition(bool showMedal, int medalTime, const string &in desc, Posi
                 tmpArray.InsertLast(position);
             }
         }
+    }
+}
+
+void TryAddMedalPosition(bool showMedal, int medalTime, const string &in desc, PositionData &positionData, array<LeaderboardEntry@> &tmpArray) {
+    try 
+    {
+        AddMedalPosition(showMedal, medalTime, desc, positionData, tmpArray);
+    }
+    catch
+    {
+        warn("Something went wrong while trying to add the " + desc + " medal position. Skipping it.");
+        warn("Error message : " + getExceptionInfo());
     }
 }
