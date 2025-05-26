@@ -1,5 +1,8 @@
 // File containing various unrelated functions that are general enough.
 
+// used as a representation of a call to a optional dependency to request a medal time
+funcdef uint MedalTimeFunc();
+
 /**
  * Check if the current LeaderboardEntry is a valid medal time or not, for the "normal" mode if the user has a better time than the medal
  */

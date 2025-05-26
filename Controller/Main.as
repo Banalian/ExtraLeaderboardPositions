@@ -201,53 +201,29 @@ void RefreshLeaderboard(){
             bool alreadyHandled = false;
 
 #if DEPENDENCY_CHAMPIONMEDALS
-            if(!championMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
-                // if there's a champion medal and the time is the champion time, we change the entry type to medal and set the description to champion
-                if(resp.positions[i].time == int(ChampionMedals::GetCMTime())){
-                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
-                    resp.positions[i].desc = "Champion";
-                    resp.positions[i].positionData = championMedalPositionData;
-                    championMedalFound = true;
-                    alreadyHandled = true;
-                }
-            }
+            championMedalFound = TryProcessMedal(resp.positions[i], "Champion", 
+                                           championMedalPositionData, ChampionMedals::GetCMTime);
+            alreadyHandled = championMedalFound;
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-            if(!warriorMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
-                // if there's a warrior medal and the time is the warrior time, we change the entry type to medal and set the description to warrior
-                if(resp.positions[i].time == int(WarriorMedals::GetWMTime())){
-                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
-                    resp.positions[i].desc = "Warrior";
-                    resp.positions[i].positionData = warriorMedalPositionData;
-                    warriorMedalFound = true;
-                    alreadyHandled = true;
-                }
+            if (!warriorMedalFound && !alreadyHandled) {
+                warriorMedalFound = TryProcessMedal(resp.positions[i], "Warrior", 
+                                               warriorMedalPositionData, WarriorMedals::GetWMTime);
+                alreadyHandled = warriorMedalFound;
             }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-            if(!sbVilleMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
-                // if there's a SBVille medal and the time is the the SBVille AT, we change the entry type to medal and set the description to SBVille AT
-                // both medals should not be activated at the same time, so we can safely do this
-                if(resp.positions[i].time == int(SBVilleCampaignChallenges::getChallengeTime())){
-                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
-                    resp.positions[i].desc = "SBVille AT";
-                    resp.positions[i].positionData = sbVillePositionData;
-                    sbVilleMedalFound = true;
-                    alreadyHandled = true;
-                }
+            if (!sbVilleMedalFound && !alreadyHandled) {
+                sbVilleMedalFound = TryProcessMedal(resp.positions[i], "SBVille AT", 
+                                               sbVillePositionData, SBVilleCampaignChallenges::getChallengeTime);
+                alreadyHandled = sbVilleMedalFound;
             }
 #endif
 #if DEPENDENCY_S314KEMEDALS
-            if(!s314keMedalFound && (resp.positions[i].entryType == EnumLeaderboardEntryType::TIME)){
-                // if there's a S314ke medal and the time is the the S314ke medal, we change the entry type to medal and set the description to S314ke
-                // both medals should not be activated at the same time, so we can safely do this
-                if(resp.positions[i].time == int(s314keMedals::GetS314keMedalTime())){
-                    resp.positions[i].entryType = EnumLeaderboardEntryType::MEDAL;
-                    resp.positions[i].desc = "S314ke";
-                    resp.positions[i].positionData = s314keMedalPositionData;
-                    s314keMedalFound = true;
-                    alreadyHandled = true;
-                }
+            if (!s314keMedalFound && !alreadyHandled) {
+                s314keMedalFound = TryProcessMedal(resp.positions[i], "S314ke", 
+                                               s314keMedalPositionData, s314keMedals::GetS314keMedalTime);
+                alreadyHandled = s314keMedalFound;
             }
 #endif
             // every special cases should be handled before this point
@@ -312,6 +288,26 @@ void RefreshLeaderboard(){
     }
     print(RefreshEndMessage);
 }
+
+
+bool TryProcessMedal(LeaderboardEntry@ entry, const string &in medalName, 
+                    PositionData@ posData, MedalTimeFunc@ getMedalTimeFunc) {
+    if (entry.entryType == EnumLeaderboardEntryType::TIME) {
+        try {
+            uint medalTime = getMedalTimeFunc();
+            if (entry.time == int(medalTime)) {
+                entry.entryType = EnumLeaderboardEntryType::MEDAL;
+                entry.desc = medalName;
+                entry.positionData = posData;
+                return true;
+            }
+        } catch {
+            warn("Error getting " + medalName + " medal time: " + getExceptionInfo());
+        }
+    }
+    return false;
+}
+
 
 /**
  * Hack class to be able to have handles
