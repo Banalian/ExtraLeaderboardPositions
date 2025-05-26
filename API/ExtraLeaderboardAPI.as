@@ -9,6 +9,7 @@ namespace ExtraLeaderboardAPI
     int maxTriesAPI = 3;
     bool failedAPI = false;
 
+
     /**
      * load the configuration of the plugin.
      */
@@ -40,6 +41,7 @@ namespace ExtraLeaderboardAPI
             Active = false;
         }
     }
+
 
     /**
      *  Return a list of LeaderboardEntry objects, given a map id and a list of requests
@@ -91,6 +93,7 @@ namespace ExtraLeaderboardAPI
         ExtraLeaderboardAPIResponse@ result = ExtraLeaderboardAPIResponse();
         return result.fromJson(response);
     }
+
 
     /**
      * Prepare the ExtraLeaderboardAPIRequest object based on current parameters
@@ -222,6 +225,7 @@ bool ShouldRequestMedal(MedalType medal){
 
     return shouldShow;
 }
+
 
 int GetCustomMedalTime(MedalType medal){
     if(medal <= MedalType::AT || medal >= MedalType::COUNT){

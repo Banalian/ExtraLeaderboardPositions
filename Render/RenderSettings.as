@@ -114,6 +114,7 @@ void RenderSettingsCustomization(){
 
 }
 
+
 [SettingsTab name="Explanation" icon="Question" order="4"]
 void RenderSettingsExplanation(){
     UI::TextWrapped("This plugin allows you to see more leaderboard positions.\n\n");
@@ -126,6 +127,7 @@ void RenderSettingsExplanation(){
     UI::Dummy(vec2(0,100));
     UI::TextWrapped("Made by Banalian.\nContact me on Discord (you can find me on the OpenPlanet Discord) if you have any questions or suggestions !\nYou can also use the github page to post about any issue you might encounter or any feature you would like added to this plugin.");
 }
+
 
 [SettingsTab name="Medals Position" icon="Circle" order="3"]
 void RenderMedalSettings(){
@@ -296,6 +298,7 @@ void RenderMedalSettings(){
 
     return changed;
 }
+
 
 [SettingsTab name="Leaderboard Entry Customization" icon="Kenney::PodiumAlt" order="2"]
 void RenderPositionDataCustomization(){

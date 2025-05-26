@@ -39,6 +39,7 @@ void OnSettingsChanged(){
 
 }
 
+
 void OnSettingsSave(Settings::Section& section){
     section.SetString("lastUsedPluginVersion", Meta::ExecutingPlugin().Version);
     allPositionDataStringSave = "";
@@ -79,6 +80,7 @@ void OnSettingsSave(Settings::Section& section){
     section.SetString("s314keMedalPositionDataStringSave", s314keMedalPositionDataStringSave);
 #endif
 }
+
 
 void OnSettingsLoad(Settings::Section& section){
 

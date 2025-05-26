@@ -201,27 +201,27 @@ void RefreshLeaderboard(){
             bool alreadyHandled = false;
 
 #if DEPENDENCY_CHAMPIONMEDALS
-            championMedalFound = TryProcessMedal(resp.positions[i], "Champion", 
+            championMedalFound = TryProcessMedal(resp.positions[i], "Champion",
                                            championMedalPositionData, ChampionMedals::GetCMTime);
             alreadyHandled = championMedalFound;
 #endif
 #if DEPENDENCY_WARRIORMEDALS
             if (!warriorMedalFound && !alreadyHandled) {
-                warriorMedalFound = TryProcessMedal(resp.positions[i], "Warrior", 
+                warriorMedalFound = TryProcessMedal(resp.positions[i], "Warrior",
                                                warriorMedalPositionData, WarriorMedals::GetWMTime);
                 alreadyHandled = warriorMedalFound;
             }
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
             if (!sbVilleMedalFound && !alreadyHandled) {
-                sbVilleMedalFound = TryProcessMedal(resp.positions[i], "SBVille AT", 
+                sbVilleMedalFound = TryProcessMedal(resp.positions[i], "SBVille AT",
                                                sbVillePositionData, SBVilleCampaignChallenges::getChallengeTime);
                 alreadyHandled = sbVilleMedalFound;
             }
 #endif
 #if DEPENDENCY_S314KEMEDALS
             if (!s314keMedalFound && !alreadyHandled) {
-                s314keMedalFound = TryProcessMedal(resp.positions[i], "S314ke", 
+                s314keMedalFound = TryProcessMedal(resp.positions[i], "S314ke",
                                                s314keMedalPositionData, s314keMedals::GetS314keMedalTime);
                 alreadyHandled = s314keMedalFound;
             }
@@ -319,6 +319,7 @@ class Integer{
     }
 }
 
+
 void SpecificTimeEntryCoroutine(ref@ position){
     // cast ref to Integer
     Integer@ positionInt = cast<Integer@>(position);
@@ -327,6 +328,7 @@ void SpecificTimeEntryCoroutine(ref@ position){
         leaderboardArrayTmp.InsertLast(timeEntry);
     }
 }
+
 
 void AddMedalsEntriesCoroutine(){
     array<LeaderboardEntry@> entries = GetMedalsEntries();
@@ -337,6 +339,7 @@ void AddMedalsEntriesCoroutine(){
     }
 }
 
+
 void SpecificPositionEntryCoroutine(ref@ time){
     // cast ref to Integer
     Integer@ timeInt = cast<Integer@>(time);
@@ -345,6 +348,7 @@ void SpecificPositionEntryCoroutine(ref@ time){
         leaderboardArrayTmp.InsertLast(positionEntry);
     }
 }
+
 
 void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
     if (currentComboChoice == -1) {
@@ -368,6 +372,7 @@ void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
     }
 }
 
+
 void UpdateCurrentMode() {
     // find the current mode (stunt or some race gamemode)
     auto app = GetApp();
@@ -385,6 +390,7 @@ void UpdateCurrentMode() {
         currentMode = EnumCurrentMode::INVALID;
     }
 }
+
 
 string formatTimeScore(int score) {
     switch(currentMode){

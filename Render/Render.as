@@ -37,6 +37,7 @@ void Render() {
     }
 }
 
+
 void RenderInterface(){
     if(!UserCanUseThePlugin()){
         return;
@@ -46,6 +47,7 @@ void RenderInterface(){
         RenderWindows();
     }
 }
+
 
 // Render the refresh button after we check if it's visible
 void RenderRefreshButton(){
@@ -103,6 +105,7 @@ void RenderWindows(){
         UI::End();
     }
 }
+
 
 /**
  * Render the info tab
@@ -170,6 +173,7 @@ bool RenderInfoTab(){
     return refreshWasRendered;
 }
 
+
 /**
  * Render the refresh icon if we're refreshing
  */
@@ -211,6 +215,7 @@ bool RenderInfoTab(){
     }
 }
 
+
 void RenderHeaders(bool showRefresh = false){
     UI::TableNextRow();
     // Icon
@@ -249,6 +254,7 @@ void RenderHeaders(bool showRefresh = false){
 
 }
 
+
 /**
  * Render the table with the custom leaderboard
  */
@@ -278,7 +284,7 @@ void RenderTab(bool showRefresh = false){
 
         // If the PB happens to be exactly a configured Position and we are displaying PB,
         // then skip the Position record because it's essentially the same entry.
-        // (This doesn't affect ties becuase the positions would be different in that case e.g. Position record at 10 and tied PB at 11.)
+        // (This doesn't affect ties because the positions would be different in that case e.g. Position record at 10 and tied PB at 11.)
         if (leaderboardArray[i].entryType == EnumLeaderboardEntryType::POSITION && leaderboardArray[i].customEquals(currentPbEntry) && showPb) {
             i++;
             continue;

@@ -93,6 +93,7 @@ LeaderboardEntry@ GetSpecificTimeEntry(int position) {
     return positionEntry;
 }
 
+
 /**
  *  Return the position of a given time. You still need to check if the time is valid (i.e. if it's different from the top 1, or from the PB)
  */
@@ -195,6 +196,7 @@ void AddMedalPosition(bool showMedal, int medalTime, const string &in desc, Posi
         }
     }
 }
+
 
 void TryAddMedalPosition(bool showMedal, int medalTime, const string &in desc, PositionData &positionData, array<LeaderboardEntry@> &tmpArray) {
     try 

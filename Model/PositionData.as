@@ -1,7 +1,7 @@
 /**
  * Represent a position entry we want to display/get
  */
- class PositionData {
+class PositionData {
     uint position;
     string color;
     string icon;
@@ -40,4 +40,4 @@
     string GetColorIcon() {
         return color.Replace("Custom", "") + icon.Replace("Custom", "") + resetColor;
     }
- }
+}

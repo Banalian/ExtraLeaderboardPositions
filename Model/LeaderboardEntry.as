@@ -60,7 +60,6 @@ class LeaderboardEntry{
         return position == other.position && time == other.time;
     }
 
-
     /**
      * Check if the entry is valid (i.e. if it has been initialized with different values than the default ones)
      */
