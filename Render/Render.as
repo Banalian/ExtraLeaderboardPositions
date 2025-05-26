@@ -37,6 +37,7 @@ void Render() {
     }
 }
 
+
 void RenderInterface(){
     if(!UserCanUseThePlugin()){
         return;
@@ -46,6 +47,7 @@ void RenderInterface(){
         RenderWindows();
     }
 }
+
 
 // Render the refresh button after we check if it's visible
 void RenderRefreshButton(){
@@ -103,6 +105,7 @@ void RenderWindows(){
         UI::End();
     }
 }
+
 
 /**
  * Render the info tab
@@ -170,6 +173,7 @@ bool RenderInfoTab(){
     return refreshWasRendered;
 }
 
+
 /**
  * Render the refresh icon if we're refreshing
  */
@@ -211,6 +215,7 @@ bool RenderInfoTab(){
     }
 }
 
+
 void RenderHeaders(bool showRefresh = false){
     UI::TableNextRow();
     // Icon
@@ -248,6 +253,7 @@ void RenderHeaders(bool showRefresh = false){
     UI::TableNextColumn();
 
 }
+
 
 /**
  * Render the table with the custom leaderboard

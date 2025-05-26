@@ -3,6 +3,7 @@
 // used as a representation of a call to a optional dependency to request a medal time
 funcdef uint MedalTimeFunc();
 
+
 /**
  * Check if the current LeaderboardEntry is a valid medal time or not, for the "normal" mode if the user has a better time than the medal
  */
@@ -35,6 +36,7 @@ bool MapHasNadeoLeaderboard(const string &in mapId){
     return info.GetType() == Json::Type::Object;
 }
 
+
 /**
  * Force a refresh of the leaderboard ( requested by the user )
  * also remove the "failed request" lock
@@ -47,6 +49,7 @@ void ForceRefresh(){
         refreshPosition = true;
     }
 }
+
 
 /**
  * Check if the user can use the plugin or not, based on different conditions
@@ -93,6 +96,7 @@ string TimeString(int scoreTime, bool showSign = false) {
     return timeString;
 }
 
+
 /**
  * Format the time for logging with both integer value and readable string representation
  */
@@ -102,6 +106,7 @@ string TimeLogString(int time) {
     else
         return time + "";
 }
+
 
 /**
  * Check if the new time is a new PB
@@ -153,6 +158,7 @@ string Vec3ColorToString(const vec3 &in color){
     return Text::FormatOpenplanetColor(color);
 }
 
+
 vec3 StringToVec3Color(const string &in color){
     //take the last 3 characters of the string (value between 0 and F for each char)
     //and convert them to a float between 0 and 1
@@ -169,6 +175,7 @@ vec3 StringToVec3Color(const string &in color){
         Text::ParseUInt(b, 16)
     ) / 15.0f;
 }
+
 
 string MedalTypeToString(MedalType medal) {
     switch(medal) {
@@ -200,6 +207,7 @@ string MedalTypeToString(MedalType medal) {
             return "Custom Medal";
     }
 }
+
 
 /**
  * Check if the player is idle or not, based on the speed and the time since the last movement

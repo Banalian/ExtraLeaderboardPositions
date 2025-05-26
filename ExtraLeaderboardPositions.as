@@ -1,6 +1,5 @@
 // ############################## MAIN #############################
 
-
 void Main(){
 #if TMNEXT
 
@@ -12,14 +11,14 @@ void Main(){
         if(!UserCanUseThePlugin()){
             warn("You currently don't have the permissions to use this plugin, You need a paid subscription.");
             warn("If you do have the permissions, the plugin checks every 30 seconds and should work when you finished loading into the main menu");
-            timerStartDelay = 30 *1000;
+            timerStartDelay = 30 * 1000;
             while(true){
                 yield();
                 if(timerStartDelay < 0){
                     if(UserCanUseThePlugin()){
                         break;
                     }
-                    timerStartDelay = 30 *1000;
+                    timerStartDelay = 30 * 1000;
                 }
             }
         }
@@ -78,7 +77,7 @@ void Main(){
 
 
 /**
- * Load custom data
+ * Load custom data. Should only be called once at the start of the plugin.
  */
 void LoadCustomData(){
 #if DEPENDENCY_CHAMPIONMEDALS
@@ -117,6 +116,7 @@ void LoadOPConfig(){
         forceRefreshAfterSurroundFail = forceRefreshAPI == "true";
 }
 
+
 /**
  * Checks if we are in a position to refresh the times or not
  */
@@ -152,6 +152,7 @@ bool CanRefresh(){
 
     return true;
 }
+
 
 void ClearLeaderboard() {
     if(leaderboardArray.Length > 0){
