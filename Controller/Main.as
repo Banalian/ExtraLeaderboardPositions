@@ -340,16 +340,6 @@ void AddMedalsEntriesCoroutine(){
 }
 
 
-void SpecificPositionEntryCoroutine(ref@ time){
-    // cast ref to Integer
-    Integer@ timeInt = cast<Integer@>(time);
-    LeaderboardEntry@ positionEntry = GetSpecificPositionEntry(timeInt.value);
-    if(positionEntry !is null && positionEntry.isValid()){
-        leaderboardArrayTmp.InsertLast(positionEntry);
-    }
-}
-
-
 void UpdateTimeDifferenceEntry(array<LeaderboardEntry@> arrayTmp) {
     if (currentComboChoice == -1) {
         // timeDifferenceEntry is the entry that has entryType Pb
