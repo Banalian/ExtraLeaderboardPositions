@@ -1,6 +1,5 @@
 // File containing all enums used by the plugin
 
-
 enum EnumDisplayMode
 {
     ALWAYS,
@@ -9,11 +8,13 @@ enum EnumDisplayMode
     HIDE_WHEN_DRIVING
 };
 
+
 enum EnumDisplayMedal
 {
     NORMAL,
     IN_GREY
 };
+
 
 enum EnumDisplayPersonalBest
 {
@@ -21,6 +22,7 @@ enum EnumDisplayPersonalBest
     IN_GREY,
     IN_GREEN
 };
+
 
 enum EnumLeaderboardEntryType
 {
@@ -30,7 +32,7 @@ enum EnumLeaderboardEntryType
     POSITION,
     TIME,
     EXTERNAL // To be potentially used by other plugins wishing to add their own entries
-}
+};
 
 enum MedalType
 {
@@ -52,7 +54,7 @@ enum MedalType
     SBVILLE,
 #endif
     COUNT
-}
+};
 
 enum EnumCurrentMode
 {
@@ -60,4 +62,4 @@ enum EnumCurrentMode
     RACE,
     STUNT,
     PLATFORM
-}
+};
