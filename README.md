@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.6.5
+- Reworked the hide when driving option to have less flickering when accelerating then reversing. (Thanks to DropKickDrum for the PR!)
+- Internal refactors to cleanup code.
+- Fixed an issue where without the external API, custom medals would dissapear when you got the Author Medal.
+
 ## 2.6.4
 - Increased the delay between calls to Openplanet to get some dynamic data from 5 minutes to 30.
 
