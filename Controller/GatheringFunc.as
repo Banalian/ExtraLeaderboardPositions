@@ -146,36 +146,12 @@ array<LeaderboardEntry@> GetMedalsEntries(){
     auto network = cast<CTrackManiaNetwork>(app.Network);
     auto map = app.RootMap;
 
-    int atTime;
-    int goldTime;
-    int silverTime;
-    int bronzeTime;
-
     if(network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
-        atTime = map.TMObjective_AuthorTime;
-        goldTime = map.TMObjective_GoldTime;
-        silverTime = map.TMObjective_SilverTime;
-        bronzeTime = map.TMObjective_BronzeTime;
-
-        // we only do a try here because we don't want to fail the refresh if the dependencies somehow throw an error
-#if DEPENDENCY_CHAMPIONMEDALS
-        TryAddMedalPosition(showChampionMedals, ChampionMedals::GetCMTime(), "Champion", championMedalPositionData, tmpArray);
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        TryAddMedalPosition(showWarriorMedals, WarriorMedals::GetWMTime(), "Warrior", warriorMedalPositionData, tmpArray);
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        TryAddMedalPosition(showSBVilleATMedal, SBVilleCampaignChallenges::getChallengeTime(), "SBVille AT", sbVillePositionData, tmpArray);
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        TryAddMedalPosition(showS314keMedals, s314keMedals::GetS314keMedalTime(), "S314ke", s314keMedalPositionData, tmpArray);
-#endif
-
-        // We get the positions of the 4 medals and add them if they are valid and if we need to show them
-        AddMedalPosition(showAT, atTime, "AT", atPositionData, tmpArray);
-        AddMedalPosition(showGold, goldTime, "Gold", goldPositionData, tmpArray);
-        AddMedalPosition(showSilver, silverTime, "Silver", silverPositionData, tmpArray);
-        AddMedalPosition(showBronze, bronzeTime, "Bronze", bronzePositionData, tmpArray);
+        for(int i = MedalType::NONE + 1; i < MedalType::COUNT; i++){
+            MedalType medal = MedalType(i);
+            auto medalHandler = GetMedalHandler(medal);
+            TryAddMedalPosition(medalHandler.ShouldShowMedal(), medalHandler.GetMedalTime(), medalHandler.GetDesc(), medalHandler.GetPositionData(), tmpArray);
+        }
     }
 
     return tmpArray;
