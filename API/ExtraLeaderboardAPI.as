@@ -111,19 +111,20 @@ namespace ExtraLeaderboardAPI
             request.positions.InsertLast(allPositionData[i].position);
         }
 
-
-        for(uint i = 1; i <= MedalType::AT; i++){
-            if(ShouldRequestMedal(MedalType(i))){
-                request.medals.InsertLast(MedalType(i));
-            }
-        }
         // This is the same as above, but for custom medals
-        for(int i = MedalType::AT + 1; i < MedalType::COUNT; i++){
+        for(int i = MedalType::NONE + 1; i < MedalType::COUNT; i++){
             MedalType medal = MedalType(i);
+            auto medalHandler = GetMedalHandler(medal);
             try
             {
                 if(ShouldRequestMedal(medal)){
-                    request.scores.InsertLast(GetCustomMedalTime(medal));
+                    if (medal <= MedalType::AT) {
+                        request.medals.InsertLast(medal);
+                    } 
+                    else
+                    {
+                        request.scores.InsertLast(medalHandler.GetMedalTime());
+                    }
                 }
             }
             catch
@@ -149,53 +150,9 @@ bool ShouldRequestMedal(MedalType medal){
     auto app = GetApp();
     auto map = app.RootMap;
 
-    bool shouldShow = false;
-    int medalTime = -1;
-    switch(medal){
-        case MedalType::BRONZE:
-               shouldShow = showBronze;
-               medalTime = map.TMObjective_BronzeTime;
-               break;
-         case MedalType::SILVER:
-               shouldShow = showSilver;
-                medalTime = map.TMObjective_SilverTime;
-               break;
-        case MedalType::GOLD:
-                shouldShow = showGold;
-                medalTime = map.TMObjective_GoldTime;
-                break;
-        case MedalType::AT:
-                shouldShow = showAT;
-                medalTime = map.TMObjective_AuthorTime;
-                break;
-#if DEPENDENCY_CHAMPIONMEDALS
-        case MedalType::CHAMPION:
-                shouldShow = showChampionMedals;
-                medalTime = ChampionMedals::GetCMTime();
-                break;
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        case MedalType::WARRIOR:
-                shouldShow = showWarriorMedals;
-                medalTime = WarriorMedals::GetWMTime();
-                break;
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        case MedalType::SBVILLE:
-                shouldShow = showSBVilleATMedal;
-                medalTime = SBVilleCampaignChallenges::getChallengeTime();
-                break;
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        case MedalType::S314KE:
-                shouldShow = showS314keMedals;
-                medalTime = s314keMedals::GetS314keMedalTime();
-                break;
-#endif
-        default:
-                error("Unknown medal type :" + medal);
-                return false;
-    }
+    auto medalHandler = GetMedalHandler(medal);
+    bool shouldShow = medalHandler.ShouldShowMedal();
+    int medalTime = medalHandler.GetMedalTime();
 
     // Check if the medal is better than the PB or if the user wants to show it anyway
     if(shouldShow && currentPbEntry.time != -1){
@@ -224,38 +181,4 @@ bool ShouldRequestMedal(MedalType medal){
     }
 
     return shouldShow;
-}
-
-
-int GetCustomMedalTime(MedalType medal){
-    if(medal <= MedalType::AT || medal >= MedalType::COUNT){
-        error("GetCustomMedalTime: medal is not a custom medal : " + medal);
-        return -1;
-    }
-
-    switch(medal){
-#if DEPENDENCY_CHAMPIONMEDALS
-        case MedalType::CHAMPION:
-            return ChampionMedals::GetCMTime();
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        case MedalType::WARRIOR:
-            return WarriorMedals::GetWMTime();
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        case MedalType::SBVILLE:
-            return SBVilleCampaignChallenges::getChallengeTime();
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        case MedalType::S314KE:
-            return s314keMedals::GetS314keMedalTime();
-#endif
-        case MedalType::COUNT:
-            // This should never happen, it's here to appease the compiler since without any dependency, the switch is empty
-            error("GetCustomMedalTime: medal is not a custom medal : " + medal);
-            return -1;
-        default:
-            error("GetCustomMedalTime: medal is not a custom medal : " + medal);
-            return -1;
-    }
 }
