@@ -244,7 +244,7 @@ void RefreshLeaderboard(){
         playerCount = -1;
 
         // Make all the request in local (apart from impossible calls like medals above pb)
-        array<Meta::PluginCoroutine@> coroutines;
+        array<awaitable@> coroutines;
         for(uint i = 0; i< allPositionData.Length; i++){
             auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionData[i].position));
             coroutines.InsertLast(timeEntryFunc);
