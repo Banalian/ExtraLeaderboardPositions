@@ -34,7 +34,14 @@ interface MedalHandler {
      * @return PositionData
      */
     PositionData@ GetPositionData();
+
+    /**
+     * Get the default position data for the medal.
+     * @return PositionData
+     */
+    PositionData GetDefaultPositionData();
 }
+
 
 /**
  * Factory method to get the appropriate medal handler based on the medal type.

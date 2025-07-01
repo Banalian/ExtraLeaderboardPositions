@@ -124,10 +124,12 @@ void OnSettingsLoad(Settings::Section& section){
     }
     if(resetToDefault){
         currentPbPositionData = PositionData(0, pbGreenColor, Icons::Circle, pbGreenColor);
-        atPositionData = PositionData(0, atGreenColor, Icons::Circle, greyColor3);
-        goldPositionData = PositionData(0, goldColor, Icons::Circle, greyColor3);
-        silverPositionData = PositionData(0, silverColor, Icons::Circle, greyColor3);
-        bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, greyColor3);
+        for(uint medal = MedalType::BRONZE; medal <= MedalType::AT; medal++){
+            auto medalHandler = GetMedalHandler(MedalType(medal));
+            PositionData defaultPosData = medalHandler.GetDefaultPositionData();
+            auto positionData = medalHandler.GetPositionData();
+            positionData.SetFrom(defaultPosData);
+        }
     }
 
 #if DEPENDENCY_CHAMPIONMEDALS

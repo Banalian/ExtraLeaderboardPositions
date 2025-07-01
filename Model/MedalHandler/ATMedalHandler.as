@@ -21,4 +21,8 @@ class ATMedalHandler: MedalHandler {
     PositionData@ GetPositionData() override{
         return atPositionData;
     }
+
+    PositionData GetDefaultPositionData() override{
+        return PositionData(0, atGreenColor, Icons::Circle, greyColor3);
+    }
 }

@@ -21,4 +21,8 @@ class BronzeMedalHandler: MedalHandler {
     PositionData@ GetPositionData() override{
         return bronzePositionData;
     }
+
+    PositionData GetDefaultPositionData() override{
+        return PositionData(0, bronzeColor, Icons::Circle, greyColor3);
+    }
 }

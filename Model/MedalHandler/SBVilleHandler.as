@@ -20,5 +20,9 @@ class SBVilleCampaignChallengesHandler: MedalHandler {
     PositionData@ GetPositionData() override{
         return sbVillePositionData;
     }
+
+    PositionData GetDefaultPositionData() override{
+        return PositionData(0, greyColor1, Icons::Circle, greyColor3);
+    }
 }
 #endif

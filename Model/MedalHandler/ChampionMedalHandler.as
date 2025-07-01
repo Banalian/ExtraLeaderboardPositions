@@ -20,5 +20,9 @@ class ChampionMedalHandler: MedalHandler {
     PositionData@ GetPositionData() override{
         return championMedalPositionData;
     }
+
+    PositionData GetDefaultPositionData() override{
+        return PositionData(0, championColor, Icons::Circle, greyColor3)
+    }
 }
 #endif
