@@ -22,7 +22,7 @@ class ChampionMedalHandler: MedalHandler {
     }
 
     PositionData GetDefaultPositionData() override{
-        return PositionData(0, championColor, Icons::Circle, greyColor3)
+        return PositionData(0, championColor, Icons::Circle, greyColor3);
     }
 }
 #endif

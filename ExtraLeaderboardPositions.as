@@ -125,7 +125,7 @@ bool CanRefresh(){
     auto network = cast<CTrackManiaNetwork>(app.Network);
 
     //check that we're in a map
-    if (network.ClientManiaAppPlayground is null || network.ClientManiaAppPlayground.Playground is null || network.ClientManiaAppPlayground.Playground.Map is null){
+    if(network.ClientManiaAppPlayground is null || network.ClientManiaAppPlayground.Playground is null || network.ClientManiaAppPlayground.Playground.Map is null){
         return false;
     }
 

@@ -113,10 +113,10 @@ PositionData bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, gr
 PositionData sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_CHAMPIONMEDALS
-PositionData championMedalPositionData = PositionData(0, championColor, Icons::Circle, greyColor3);
+PositionData championMedalPositionData = PositionData(0, "\\$f47", Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-PositionData warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
+PositionData warriorMedalPositionData = PositionData(0, "\\$3CF", Icons::Circle, greyColor3);
 #endif
 #if DEPENDENCY_S314KEMEDALS
 PositionData s314keMedalPositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
