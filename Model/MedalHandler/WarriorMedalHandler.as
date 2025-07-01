@@ -21,6 +21,10 @@ class WarriorMedalHandler: MedalHandler {
         return warriorMedalPositionData;
     }
 
+    void SetPositionData(PositionData@ positionData) override{
+        warriorMedalPositionData = positionData;
+    }
+
     PositionData GetDefaultPositionData() override{
         return PositionData(0, WarriorMedals::GetColorStr(), Icons::Circle, greyColor3);
     }

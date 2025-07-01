@@ -22,6 +22,10 @@ class ATMedalHandler: MedalHandler {
         return atPositionData;
     }
 
+    void SetPositionData(PositionData@ positionData) override{
+        atPositionData = positionData;
+    }
+
     PositionData GetDefaultPositionData() override{
         return PositionData(0, atGreenColor, Icons::Circle, greyColor3);
     }

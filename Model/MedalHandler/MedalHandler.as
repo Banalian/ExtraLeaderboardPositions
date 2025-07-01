@@ -36,6 +36,12 @@ interface MedalHandler {
     PositionData@ GetPositionData();
 
     /**
+     * Set the position data for the medal.
+     * @param positionData PositionData to set
+     */
+    void SetPositionData(PositionData@ positionData);
+
+    /**
      * Get the default position data for the medal.
      * @return PositionData
      */

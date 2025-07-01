@@ -310,7 +310,7 @@ void RenderPositionDataCustomization(){
 
     UI::Text("The UI will be updated when the usual conditions are met (see Explanation) or if you press the refresh button.");
 
-    if(UI::Button("Reset to default")){
+    if(UI::Button("Reset positions to default")){
         trace("old allPositionDataStringSave : " + allPositionDataStringSave);
         trace("old allPositionData : " + allPositionData.Length);
         allPositionData = array<PositionData>();
@@ -353,19 +353,17 @@ void RenderPositionDataCustomization(){
 
     UI::Separator();
     UI::Text("Personal best setting");
-    if(UI::Button("Reset to default")){
+    if(UI::Button("Reset pb to default")){
         currentPbPositionData = PositionData(0, pbGreenColor, Icons::User, pbGreenColor);
     }
     changed = changed || GetPositionData("Personal Best", -10000, currentPbPositionData);
 
     UI::Separator();
     UI::Text("Medals settings");
-    if(UI::Button("Reset to default")){
+    if(UI::Button("Reset medals to default")){
         for(uint medal = MedalType::BRONZE; medal < MedalType::COUNT; medal++){
             auto medalHandler = GetMedalHandler(MedalType(medal));
-            PositionData defaultPositionData = medalHandler.GetDefaultPositionData();
-            auto positionData = medalHandler.GetPositionData();
-            positionData.SetFrom(defaultPositionData);
+            medalHandler.SetPositionData(medalHandler.GetDefaultPositionData());
         }
     }
     changed = changed || GetPositionData("Author Medal", 10001, atPositionData);

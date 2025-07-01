@@ -126,9 +126,7 @@ void OnSettingsLoad(Settings::Section& section){
         currentPbPositionData = PositionData(0, pbGreenColor, Icons::Circle, pbGreenColor);
         for(uint medal = MedalType::BRONZE; medal <= MedalType::AT; medal++){
             auto medalHandler = GetMedalHandler(MedalType(medal));
-            PositionData defaultPosData = medalHandler.GetDefaultPositionData();
-            auto positionData = medalHandler.GetPositionData();
-            positionData.SetFrom(defaultPosData);
+            medalHandler.SetPositionData(medalHandler.GetDefaultPositionData());
         }
     }
 
