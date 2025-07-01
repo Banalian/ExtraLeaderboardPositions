@@ -1,0 +1,24 @@
+class ATMedalHandler: CustomMedalHandler {
+
+    MedalType GetCurrentMedalType() override{
+        return MedalType::AT;
+    }
+
+    string GetDesc() override{
+        return "AT";
+    }
+
+    int GetMedalTime() override{
+        auto app = cast<CTrackMania>(GetApp());
+        auto map = app.RootMap;
+        return map.TMObjective_AuthorTime;
+    }
+
+    bool ShouldShowMedal() override{
+        return showAT;
+    }
+
+    PositionData@ GetPositionData() override{
+        return atPositionData;
+    }
+}
