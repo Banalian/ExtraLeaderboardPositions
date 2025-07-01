@@ -180,19 +180,10 @@ void RefreshLeaderboard(){
             medalEntries[i].positionData = medalPositionData[i];
         }
 
-        // store info about if we found a medal already (to allow multiple medals with the same score)
-#if DEPENDENCY_CHAMPIONMEDALS
-        bool championMedalFound = false;
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        bool warriorMedalFound = false;
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        bool sbVilleMedalFound = false;
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        bool s314keMedalFound = false;
-#endif
+        // Track which medals have been found (indexed by medal type, only for custom medals)
+        uint customMedalStart = MedalType::AT + 1;
+        array<bool> medalFound(MedalType::COUNT - customMedalStart, false);
+
         // Insert all entries in our temporary entry array
         for(uint i = 0; i < resp.positions.Length; i++){
             if (resp.positions[i].time == -1)
@@ -200,32 +191,15 @@ void RefreshLeaderboard(){
 
             bool alreadyHandled = false;
 
-#if DEPENDENCY_CHAMPIONMEDALS
-            championMedalFound = TryProcessMedal(resp.positions[i], "Champion",
-                                           championMedalPositionData, ChampionMedals::GetCMTime);
-            alreadyHandled = championMedalFound;
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-            if (!warriorMedalFound && !alreadyHandled) {
-                warriorMedalFound = TryProcessMedal(resp.positions[i], "Warrior",
-                                               warriorMedalPositionData, WarriorMedals::GetWMTime);
-                alreadyHandled = warriorMedalFound;
+            // Try to process each special medal type using the handlers
+            for (uint medalType = customMedalStart; medalType < MedalType::COUNT; medalType++) {
+                uint medalIndex = medalType - customMedalStart;
+                if (!medalFound[medalIndex] && !alreadyHandled) {
+                    auto handler = GetMedalHandler(MedalType(medalType));
+                    medalFound[medalIndex] = TryProcessMedalWithHandler(resp.positions[i], handler);
+                    alreadyHandled = medalFound[medalIndex];
+                }
             }
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-            if (!sbVilleMedalFound && !alreadyHandled) {
-                sbVilleMedalFound = TryProcessMedal(resp.positions[i], "SBVille AT",
-                                               sbVillePositionData, SBVilleCampaignChallenges::getChallengeTime);
-                alreadyHandled = sbVilleMedalFound;
-            }
-#endif
-#if DEPENDENCY_S314KEMEDALS
-            if (!s314keMedalFound && !alreadyHandled) {
-                s314keMedalFound = TryProcessMedal(resp.positions[i], "S314ke",
-                                               s314keMedalPositionData, s314keMedals::GetS314keMedalTime);
-                alreadyHandled = s314keMedalFound;
-            }
-#endif
             // every special cases should be handled before this point
             // now, we match the remaining entries with their position data
             for(uint j = 0; j< allPositionData.Length; j++){
@@ -290,19 +264,24 @@ void RefreshLeaderboard(){
 }
 
 
-bool TryProcessMedal(LeaderboardEntry@ entry, const string &in medalName, 
-                    PositionData@ posData, MedalTimeFunc@ getMedalTimeFunc) {
+/**
+ * Try to process a medal using a medal handler.
+ * @param entry The leaderboard entry to process
+ * @param handler The medal handler to use
+ * @return true if the entry was processed as this medal type
+ */
+bool TryProcessMedalWithHandler(LeaderboardEntry@ entry, MedalHandler@ handler) {
     if (entry.entryType == EnumLeaderboardEntryType::TIME) {
         try {
-            uint medalTime = getMedalTimeFunc();
-            if (entry.time == int(medalTime)) {
+            int medalTime = handler.GetMedalTime();
+            if (entry.time == medalTime) {
                 entry.entryType = EnumLeaderboardEntryType::MEDAL;
-                entry.desc = medalName;
-                entry.positionData = posData;
+                entry.desc = handler.GetDesc();
+                entry.positionData = handler.GetPositionData();
                 return true;
             }
         } catch {
-            warn("Error getting " + medalName + " medal time: " + getExceptionInfo());
+            warn("Error getting " + handler.GetDesc() + " medal time: " + getExceptionInfo());
         }
     }
     return false;
