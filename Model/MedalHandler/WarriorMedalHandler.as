@@ -1,5 +1,5 @@
 #if DEPENDENCY_WARRIORMEDALS
-class WarriorMedalHandler: CustomMedalHandler {
+class WarriorMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::WARRIOR;

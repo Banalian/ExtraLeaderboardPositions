@@ -5,7 +5,7 @@
  * Interface for handling any medal in the plugin.
  * Each medal type should implement this interface to provide its specific logic.
  */
-interface CustomMedalHandler {
+interface MedalHandler {
     /**
      * Get the medal type.
      * @return MedalType
@@ -39,9 +39,9 @@ interface CustomMedalHandler {
 /**
  * Factory method to get the appropriate medal handler based on the medal type.
  * @param medal The type of medal.
- * @return CustomMedalHandler corresponding to the medal type.
+ * @return MedalHandler corresponding to the medal type.
  */
-CustomMedalHandler@ GetMedalHandler(MedalType medal) {
+MedalHandler@ GetMedalHandler(MedalType medal) {
     switch(medal) {
         case MedalType::BRONZE:
             return BronzeMedalHandler();
