@@ -177,35 +177,11 @@ vec3 StringToVec3Color(const string &in color){
 }
 
 
-string MedalTypeToString(MedalType medal) {
-    switch(medal) {
-        case MedalType::BRONZE:
-            return "Bronze";
-        case MedalType::SILVER:
-            return "Silver";
-        case MedalType::GOLD:
-            return "Gold";
-        case MedalType::AT:
-            return "Author Time";
-#if DEPENDENCY_CHAMPIONMEDALS
-        case MedalType::CHAMPION:
-            return "Champion";
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        case MedalType::WARRIOR:
-            return "Warrior";
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        case MedalType::S314KE:
-            return "S314ke";
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        case MedalType::SBVILLE:
-            return "SBVille AT";
-#endif
-        default:
-            return "Custom Medal";
+bool IsCustomMedal(MedalType medal){
+    if(medal > MedalType::AT && medal < MedalType::COUNT){
+        return true;
     }
+    return false;
 }
 
 
@@ -219,7 +195,7 @@ bool IsIdle(){
     uint64 now = Time::get_Now();
 
     float currentSpeed = state.WorldVel.Length() * 3.6;
-    if(currentSpeed >= hiddingSpeedSetting) {
+    if(currentSpeed >= hiddingSpeedSetting){
         lastMovement = now;
         return false;
     }

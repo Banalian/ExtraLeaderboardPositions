@@ -268,8 +268,7 @@ CustomMedalHandler@ GetMedalHandler(MedalType medal) {
             return SBVilleCampaignChallengesHandler();
 #endif
         default:
-            // throw new Exception("No handler for medal type: " + MedalTypeToString(medal));
-            throw("Unhandled medal type: " + MedalTypeToString(medal));
+            throw("Unhandled medal type: type'" + medal + "', no Handler defined for it.");
     }
     return null; // Fallback for the compiler, should never be reached
 }
