@@ -348,7 +348,7 @@ void RenderPositionDataCustomization(){
 
     bool changed = false;
     for(uint i = 0; i < allPositionData.Length; i++){
-        changed = GetPositionData("Custom Position " + (i+1), i, allPositionData[i], true);
+        changed = GetPositionData("Custom Position " + (i+1), i, allPositionData[i], true) || changed;
     }
 
     UI::Separator();
@@ -356,7 +356,7 @@ void RenderPositionDataCustomization(){
     if(UI::Button("Reset pb to default")){
         currentPbPositionData = PositionData(0, pbGreenColor, Icons::User, pbGreenColor);
     }
-    changed = changed || GetPositionData("Personal Best", -10000, currentPbPositionData);
+    changed = GetPositionData("Personal Best", -10000, currentPbPositionData) || changed;
 
     UI::Separator();
     UI::Text("Medals settings");
@@ -366,21 +366,21 @@ void RenderPositionDataCustomization(){
             medalHandler.SetPositionData(medalHandler.GetDefaultPositionData());
         }
     }
-    changed = changed || GetPositionData("Author Medal", 10001, atPositionData);
-    changed = changed || GetPositionData("Gold Medal", 10002, goldPositionData);
-    changed = changed || GetPositionData("Silver Medal", 10003, silverPositionData);
-    changed = changed || GetPositionData("Bronze Medal", 10004, bronzePositionData);
+    changed = GetPositionData("Author Medal", 10001, atPositionData) || changed;
+    changed = GetPositionData("Gold Medal", 10002, goldPositionData) || changed;
+    changed = GetPositionData("Silver Medal", 10003, silverPositionData) || changed;
+    changed = GetPositionData("Bronze Medal", 10004, bronzePositionData) || changed;
 #if DEPENDENCY_CHAMPIONMEDALS
-    changed = changed || GetPositionData("Champion Medal", 10005, championMedalPositionData);
+    changed = GetPositionData("Champion Medal", 10005, championMedalPositionData) || changed;
 #endif
 #if DEPENDENCY_WARRIORMEDALS
-    changed = changed || GetPositionData("Warrior Medal", 10006, warriorMedalPositionData);
+    changed = GetPositionData("Warrior Medal", 10006, warriorMedalPositionData) || changed;
 #endif
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-    changed = changed || GetPositionData("SBVille Medal", 10007, sbVillePositionData);
+    changed = GetPositionData("SBVille Medal", 10007, sbVillePositionData) || changed;
 #endif
 #if DEPENDENCY_S314KEMEDALS
-    changed = changed || GetPositionData("S314ke Medal", 10008, s314keMedalPositionData);
+    changed = GetPositionData("S314ke Medal", 10008, s314keMedalPositionData) || changed;
 #endif
 
     if(changed){

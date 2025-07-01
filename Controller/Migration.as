@@ -64,9 +64,8 @@ void HandleMigration() {
         for(uint medal = MedalType::BRONZE; medal < MedalType::COUNT; medal++){
             auto medalHandler = GetMedalHandler(MedalType(medal));
             PositionData defaultPosData = medalHandler.GetDefaultPositionData();
-            auto positionData = medalHandler.GetPositionData();
-            positionData.SetFrom(defaultPosData);
-            positionData.color = colorToUse;
+            defaultPosData.color = colorToUse;
+            medalHandler.SetPositionData(defaultPosData);
         }
     }
     // ---------- END OF 2.6.0 MIGRATION ----------
