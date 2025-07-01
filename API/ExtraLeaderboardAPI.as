@@ -129,7 +129,7 @@ namespace ExtraLeaderboardAPI
             }
             catch
             {
-                warn("Error getting custom medal time for medal type: " + MedalTypeToString(medal) + ", skipping it.");
+                warn("Error getting custom medal time for medal type: " + medalHandler.GetDesc() + ", skipping it.");
                 warn("Error: " + getExceptionInfo());
             }
         }
@@ -145,7 +145,7 @@ namespace ExtraLeaderboardAPI
  * Isn't in toolbox since it's some "private" function only used in this namespace(and above function)
  */
 bool ShouldRequestMedal(MedalType medal){
-    if (!showMedals) return false;
+    if(!showMedals) return false;
 
     auto app = GetApp();
     auto map = app.RootMap;
@@ -159,22 +159,7 @@ bool ShouldRequestMedal(MedalType medal){
         shouldShow =  medalTime < currentPbEntry.time || showMedalWhenBetter;
     }
 
-    if( medalTime <= 0 
-        && ( false
-#if DEPENDENCY_CHAMPIONMEDALS
-        || medal == MedalType::CHAMPION
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        || medal == MedalType::WARRIOR
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        || medal == MedalType::SBVILLE
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        || medal == MedalType::S314KE
-#endif
-        )
-    ){
+    if(medalTime <= 0 && IsCustomMedal(medal)){
         // If the medal is not set, we don't show it
         // base medals are always set, but might be hidden. this will be handled elsewhere
         shouldShow = false;
