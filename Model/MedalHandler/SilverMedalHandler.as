@@ -21,4 +21,8 @@ class SilverMedalHandler: MedalHandler {
     PositionData@ GetPositionData() override{
         return silverPositionData;
     }
+
+    PositionData GetDefaultPositionData() override{
+        return PositionData(0, silverColor, Icons::Circle, greyColor3);
+    }
 }

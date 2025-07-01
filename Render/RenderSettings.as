@@ -314,11 +314,11 @@ void RenderPositionDataCustomization(){
         trace("old allPositionDataStringSave : " + allPositionDataStringSave);
         trace("old allPositionData : " + allPositionData.Length);
         allPositionData = array<PositionData>();
-        allPositionData.InsertLast(PositionData(1, "\\$071"));
-        allPositionData.InsertLast(PositionData(10, "\\$db4"));
-        allPositionData.InsertLast(PositionData(100, "\\$899"));
-        allPositionData.InsertLast(PositionData(1000, "\\$964"));
-        allPositionData.InsertLast(PositionData(10000, "\\$444"));
+        allPositionData.InsertLast(PositionData(1, atGreenColor));
+        allPositionData.InsertLast(PositionData(10, goldColor));
+        allPositionData.InsertLast(PositionData(100, silverColor));
+        allPositionData.InsertLast(PositionData(1000, bronzeColor));
+        allPositionData.InsertLast(PositionData(10000, greyColor1));
         allPositionDataStringSave = "";
         for(uint i = 0; i < allPositionData.Length; i++){
             allPositionDataStringSave += allPositionData[i].Serialize();
@@ -361,22 +361,12 @@ void RenderPositionDataCustomization(){
     UI::Separator();
     UI::Text("Medals settings");
     if(UI::Button("Reset to default")){
-        atPositionData = PositionData(0, atGreenColor, Icons::Circle, greyColor3);
-        goldPositionData = PositionData(0, goldColor, Icons::Circle, greyColor3);
-        silverPositionData = PositionData(0, silverColor, Icons::Circle, greyColor3);
-        bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, greyColor3);
-#if DEPENDENCY_CHAMPIONMEDALS
-        championMedalPositionData = PositionData(0, championColor, Icons::Circle, greyColor3);
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, greyColor3);
-#endif
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
-#endif
-#if DEPENDENCY_S314KEMEDALS
-        s314keMedalPositionData = PositionData(0, greyColor1, Icons::Circle, greyColor3);
-#endif
+        for(uint medal = MedalType::BRONZE; medal < MedalType::COUNT; medal++){
+            auto medalHandler = GetMedalHandler(MedalType(medal));
+            PositionData defaultPositionData = medalHandler.GetDefaultPositionData();
+            auto positionData = medalHandler.GetPositionData();
+            positionData.SetFrom(defaultPositionData);
+        }
     }
     changed = changed || GetPositionData("Author Medal", 10001, atPositionData);
     changed = changed || GetPositionData("Gold Medal", 10002, goldPositionData);

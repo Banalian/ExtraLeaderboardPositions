@@ -61,19 +61,13 @@ void HandleMigration() {
         }else{
             colorToUse = greyColor3;
         }
-        atPositionData = PositionData(0, atGreenColor, Icons::Circle, colorToUse);
-        goldPositionData = PositionData(0, goldColor, Icons::Circle, colorToUse);
-        silverPositionData = PositionData(0, silverColor, Icons::Circle, colorToUse);
-        bronzePositionData = PositionData(0, bronzeColor, Icons::Circle, colorToUse);
-#if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-        sbVillePositionData = PositionData(0, greyColor1, Icons::Circle, colorToUse);
-#endif
-#if DEPENDENCY_CHAMPIONMEDALS
-        championMedalPositionData = PositionData(0, championColor, Icons::Circle, colorToUse);
-#endif
-#if DEPENDENCY_WARRIORMEDALS
-        warriorMedalPositionData = PositionData(0, warriorColor, Icons::Circle, colorToUse);
-#endif
+        for(uint medal = MedalType::BRONZE; medal < MedalType::COUNT; medal++){
+            auto medalHandler = GetMedalHandler(MedalType(medal));
+            PositionData defaultPosData = medalHandler.GetDefaultPositionData();
+            auto positionData = medalHandler.GetPositionData();
+            positionData.SetFrom(defaultPosData);
+            positionData.color = colorToUse;
+        }
     }
     // ---------- END OF 2.6.0 MIGRATION ----------
 

@@ -40,4 +40,14 @@ class PositionData {
     string GetColorIcon() {
         return color.Replace("Custom", "") + icon.Replace("Custom", "") + resetColor;
     }
+
+    /**
+     * Convenience method to set the position data
+     */
+    void SetFrom(const PositionData &in other) {
+        this.position = other.position;
+        this.color = other.color;
+        this.icon = other.icon;
+        this.textColor = other.textColor;
+    }
 }
