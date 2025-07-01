@@ -1,4 +1,4 @@
-class SilverMedalHandler: CustomMedalHandler {
+class SilverMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::SILVER;

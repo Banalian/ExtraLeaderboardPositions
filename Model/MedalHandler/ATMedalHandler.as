@@ -1,4 +1,4 @@
-class ATMedalHandler: CustomMedalHandler {
+class ATMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::AT;

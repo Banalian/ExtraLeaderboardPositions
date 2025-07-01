@@ -1,5 +1,5 @@
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
-class SBVilleCampaignChallengesHandler: CustomMedalHandler {
+class SBVilleCampaignChallengesHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::SBVILLE;

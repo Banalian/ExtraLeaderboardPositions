@@ -1,5 +1,5 @@
 #if DEPENDENCY_S314KEMEDALS
-class S314keMedalHandler: CustomMedalHandler {
+class S314keMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::S314KE;

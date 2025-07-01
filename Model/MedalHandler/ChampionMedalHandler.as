@@ -1,5 +1,5 @@
 #if DEPENDENCY_CHAMPIONMEDALS
-class ChampionMedalHandler: CustomMedalHandler {
+class ChampionMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::CHAMPION;

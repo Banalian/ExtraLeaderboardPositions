@@ -1,4 +1,4 @@
-class BronzeMedalHandler: CustomMedalHandler {
+class BronzeMedalHandler: MedalHandler {
 
     MedalType GetCurrentMedalType() override{
         return MedalType::BRONZE;
