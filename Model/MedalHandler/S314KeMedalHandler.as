@@ -21,6 +21,10 @@ class S314keMedalHandler: MedalHandler {
         return s314keMedalPositionData;
     }
 
+    void SetPositionData(PositionData@ positionData) override{
+        s314keMedalPositionData = positionData;
+    }
+
     PositionData GetDefaultPositionData() override{
         return PositionData(0, greyColor1, Icons::Circle, greyColor3);
     }
