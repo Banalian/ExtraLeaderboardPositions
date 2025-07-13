@@ -191,7 +191,7 @@ void RenderMedalSettings(){
 /**
  * Function to select an icon and color from the list of available ones
  */
- bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
+bool GetPositionData(const string &in positionName, int uniqueId, PositionData& positionData, bool allowPositionChange = false){
     bool changed = false;
     bool isCustomIcon = false;
     bool isCustomIconColor = false;
@@ -304,7 +304,7 @@ void RenderMedalSettings(){
 void RenderPositionDataCustomization(){
 
     if(!UserCanUseThePlugin()){
-        UI::Text("You don't have the required permissions to use this plugin. You need the gold edition.");
+        UI::Text("You don't have the required permissions to use this plugin. You need a paid subscription.");
         return;
     }
 

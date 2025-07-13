@@ -40,7 +40,7 @@ void Update(float dt) {
             UpdateCurrentMode();
             ClearLeaderboard();
             ForceRefresh();
-        } else if (newPBSet(currentTimePbLocal) || timer > updateFrequency) {
+        } else if (NewPBSet(currentTimePbLocal) || timer > updateFrequency) {
             ForceRefresh();
         } else {
             timer += dt;

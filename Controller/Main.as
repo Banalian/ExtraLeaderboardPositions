@@ -359,15 +359,3 @@ void UpdateCurrentMode() {
         currentMode = EnumCurrentMode::INVALID;
     }
 }
-
-
-string formatTimeScore(int score) {
-    switch(currentMode){
-        case EnumCurrentMode::RACE:
-            return TimeString(score);
-        case EnumCurrentMode::STUNT:
-            return NumberToString(score);
-        default:
-            return "" + score;
-    }
-}

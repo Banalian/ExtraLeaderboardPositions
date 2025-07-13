@@ -166,7 +166,7 @@ void AddMedalPosition(bool showMedal, int medalTime, const string &in desc, Posi
             position.desc = desc;
             position.entryType = EnumLeaderboardEntryType::MEDAL;
             position.positionData = positionData;
-            if (isAValidMedalTime(position)) {
+            if (IsAValidMedalTime(position)) {
                 tmpArray.InsertLast(position);
             }
         }
