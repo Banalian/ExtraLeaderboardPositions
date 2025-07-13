@@ -50,4 +50,8 @@ class PositionData {
         this.icon = other.icon;
         this.textColor = other.textColor;
     }
+
+    bool opEquals(const PositionData &in other) {
+        return position == other.position && color == other.color && icon == other.icon && textColor == other.textColor;
+    }
 }
