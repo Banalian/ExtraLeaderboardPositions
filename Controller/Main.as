@@ -106,10 +106,11 @@ void RefreshLeaderboard(){
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
 
         bool needPlayerCount = showPlayerCount || showPercentage;
+        bool getMapInfo = showMedals && ( showAT || showGold || showSilver || showBronze);
         ExtraLeaderboardAPI::ExtraLeaderboardAPIRequest@ req = null;
         try
         {
-           @req = ExtraLeaderboardAPI::PrepareRequest(needPlayerCount);
+           @req = ExtraLeaderboardAPI::PrepareRequest(needPlayerCount, getMapInfo);
         }
         catch
         {
@@ -150,23 +151,28 @@ void RefreshLeaderboard(){
         medalEntries.SortAsc();
 
         array<string> medalDesc = {};
+        array<int> medalScores = {};
         array<PositionData@> medalPositionData = {};
         // only add the medal description if the associated medal is activated
         if(showAT){
             medalDesc.InsertLast("AT");
             medalPositionData.InsertLast(atPositionData);
+            medalScores.InsertLast(resp.authorTime);
         }
         if(showGold){
             medalDesc.InsertLast("Gold");
             medalPositionData.InsertLast(goldPositionData);
+            medalScores.InsertLast(resp.goldTime);
         }
         if(showSilver){
             medalDesc.InsertLast("Silver");
             medalPositionData.InsertLast(silverPositionData);
+            medalScores.InsertLast(resp.silverTime);
         }
         if(showBronze){
             medalDesc.InsertLast("Bronze");
             medalPositionData.InsertLast(bronzePositionData);
+            medalScores.InsertLast(resp.bronzeTime);
         }
 
         // Invert order if we are in stunt mode
@@ -178,6 +184,9 @@ void RefreshLeaderboard(){
         for(uint i = 0; i< medalEntries.Length; i++){
             medalEntries[i].desc = medalDesc[i];
             medalEntries[i].positionData = medalPositionData[i];
+            // re-set the time to the one from the API
+            // this is important because times might have bogus values when they're secret medals
+            medalEntries[i].time = medalScores[i];
         }
 
         // Track which medals have been found (indexed by medal type, only for custom medals)
