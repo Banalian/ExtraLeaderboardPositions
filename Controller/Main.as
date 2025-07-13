@@ -263,12 +263,15 @@ void RefreshLeaderboard(){
     }
     leaderboardArray = leaderboardArrayTmp;
 
+    RefreshUME();
+
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
     if(ExtraLeaderboardAPI::Active && useExternalAPI && !ExtraLeaderboardAPI::failedAPI){
         RefreshEndMessage += " (using the external API, with request id : " + respLog.requestID +  ")";
     } else {
         RefreshEndMessage += " (using local Nadeo API calls)";
     }
+
     print(RefreshEndMessage);
 }
 
