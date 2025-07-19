@@ -7,11 +7,13 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
     int position;
     PositionData@ positionData;
     int offset;
+    bool usePreviousUME;
 
     PositionMedal(int position, PositionData@ positionData, int offset = 0) {
         this.position = position;
         @this.positionData = positionData;
         this.offset = offset;
+        this.usePreviousUME = !usePositionDataForUME;
     }
 
     UltimateMedalsExtended::Config GetConfig() override {
@@ -20,7 +22,11 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
         c.icon = positionData.GetColorIcon();
         c.nameColor = positionData.textColor;
         c.sortPriority = 191 - offset; // 191 is the default for position medals, after that a worse position is below (so 191 beats 190)
-        c.usePreviousColor = false;
+        bool latestUsePreviousUME = !usePositionDataForUME; // we don't use the internal value to be sure to be up-to-date with the setting
+        c.usePreviousColor = latestUsePreviousUME;
+        c.usePreviousIcon = latestUsePreviousUME;
+        c.usePreviousOverlayColor = latestUsePreviousUME;
+        c.usePreviousOverlayIcon = latestUsePreviousUME;
         c.shareIcon = false;
         return c;
     }
@@ -109,7 +115,10 @@ void RefreshUME() {
                 existingMedal.offset = i;
             }
 
-            if(needsUpdate){
+            // We need to batch update the medals if usePositionDataForUME was changed
+            needsUpdate = needsUpdate || (existingMedal.usePreviousUME != !usePositionDataForUME);
+
+            if(needsUpdate) {
                 // Update the medal in Ultimate Medals Extended only if it has changed
                 UltimateMedalsExtended::AddMedal(existingMedal);
             }

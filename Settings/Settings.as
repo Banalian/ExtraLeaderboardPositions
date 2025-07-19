@@ -132,7 +132,13 @@ bool showPlayerCount = true;
 [Setting hidden]
 string lastUsedPluginVersion = "";
 
+#if DEPENDENCY_ULTIMATEMEDALSEXTENDED
+[Setting hidden]
+bool exportToUME = true;
 
+[Setting hidden]
+bool usePositionDataForUME = true;
+#endif
 
 // ----------------------------- DEPRECATED SETTINGS -----------------------------
 // Can't be removed because they're needed for the migration process
