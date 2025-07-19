@@ -36,6 +36,18 @@ void RenderSettingsCustomization(){
 
     UI::EndDisabled();
 
+#if DEPENDENCY_ULTIMATEMEDALSEXTENDED
+    UI::Text("\n\tUltimate Medals Extended Support");
+
+    exportToUME = UI::Checkbox("Add custom positions to Ultimate Medals Extended (if available)", exportToUME);
+
+    UI::BeginDisabled(!exportToUME);
+
+    usePositionDataForUME = UI::Checkbox("Use custom position's customization for Ultimate Medals Extended", usePositionDataForUME);
+
+    UI::EndDisabled();
+
+#endif
     UI::Text("\n\tDisplay mode customizations");
 
     hiddingSpeedSetting = UI::InputFloat("Hide if speed is above X (if the hide when driving mode is active)", hiddingSpeedSetting);
