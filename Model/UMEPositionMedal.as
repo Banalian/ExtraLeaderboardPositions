@@ -69,6 +69,11 @@ void ClearUME() {
 
 
 void RefreshUME() {
+    if(!exportToUME){
+        ClearUME();
+        return;
+    }
+
     for(int i = UMEMedals.Length - 1; i >= 0; i--){
         // Remove the medal only if it does not exist anymore
         // This is to ensure that we do not remove medals that are still valid
