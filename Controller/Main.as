@@ -263,10 +263,12 @@ void RefreshLeaderboard(){
     }
     leaderboardArray = leaderboardArrayTmp;
 
-    if(exportToUME){
+    try{
         RefreshUME();
-    } else {
-        ClearUME();
+    }
+    catch {
+        error("Error while refreshing Ultimate Medals Extended: " + getExceptionInfo());
+        // we don't fail the refresh, but we log the error
     }
 
     string RefreshEndMessage = "Refreshed the leaderboard in " + (Time::get_Now() - startTime) + "ms";
