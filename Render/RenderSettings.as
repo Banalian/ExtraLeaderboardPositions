@@ -36,18 +36,6 @@ void RenderSettingsCustomization(){
 
     UI::EndDisabled();
 
-#if DEPENDENCY_ULTIMATEMEDALSEXTENDED
-    UI::Text("\n\tUltimate Medals Extended Support");
-
-    exportToUME = UI::Checkbox("Add custom positions to Ultimate Medals Extended (if available)", exportToUME);
-
-    UI::BeginDisabled(!exportToUME);
-
-    usePositionDataForUME = UI::Checkbox("Use custom position's customization for Ultimate Medals Extended", usePositionDataForUME);
-
-    UI::EndDisabled();
-
-#endif
     UI::Text("\n\tDisplay mode customizations");
 
     hiddingSpeedSetting = UI::InputFloat("Hide if speed is above X (if the hide when driving mode is active)", hiddingSpeedSetting);
@@ -399,3 +387,39 @@ void RenderPositionDataCustomization(){
         OnSettingsChanged();
     }
 }
+
+
+#if DEPENDENCY_ULTIMATEMEDALSEXTENDED
+[SettingsTab name="Ultimate Medals Extended" icon="Circle" order="10"]
+void RenderUMESettings(){
+    if(!UserCanUseThePlugin()){
+        UI::Text("You don't have the required permissions to use this plugin. You need a paid subscription.");
+        return;
+    }
+
+    bool tmpExportToUME = exportToUME;
+    bool tmpUsePositionDataForUME = usePositionDataForUME;
+
+    if(UI::Button("Reset to default")){
+        exportToUME = true;
+        usePositionDataForUME = true;
+    }
+
+    UI::TextWrapped("This tab allows you to customize the way Ultimate Medals Extended is supported.\n\n");
+
+    exportToUME = UI::Checkbox("Export positions to Ultimate Medals Extended", exportToUME);
+
+    UI::BeginDisabled(!exportToUME);
+
+    usePositionDataForUME = UI::Checkbox("Use position data for Ultimate Medals Extended", usePositionDataForUME);
+
+    UI::EndDisabled();
+
+    bool changed = false;
+    changed = changed || (tmpExportToUME != exportToUME);
+    changed = changed || (tmpUsePositionDataForUME != usePositionDataForUME);
+    if(UI::Button("Refresh Ultimate Medals Extended") || changed){
+        RefreshUME(true);
+    }
+}
+#endif

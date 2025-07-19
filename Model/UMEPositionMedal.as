@@ -7,20 +7,20 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
     int position;
     PositionData@ positionData;
     int offset;
-    bool usePreviousUME;
 
     PositionMedal(int position, PositionData@ positionData, int offset = 0) {
         this.position = position;
         @this.positionData = positionData;
         this.offset = offset;
-        this.usePreviousUME = !usePositionDataForUME;
     }
 
     UltimateMedalsExtended::Config GetConfig() override {
         UltimateMedalsExtended::Config c;
         c.defaultName = "Top " + this.position;
         c.icon = positionData.GetColorIcon();
-        c.nameColor = positionData.textColor;
+        if(usePositionDataForUME) {
+            c.nameColor = positionData.textColor;
+        }
         c.sortPriority = 191 - offset; // 191 is the default for position medals, after that a worse position is below (so 191 beats 190)
         bool latestUsePreviousUME = !usePositionDataForUME; // we don't use the internal value to be sure to be up-to-date with the setting
         c.usePreviousColor = latestUsePreviousUME;
@@ -37,6 +37,7 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
         LeaderboardEntry@ entry = GetEntry();
         return (entry !is null && entry.time > 0);
     }
+
     uint GetMedalTime() override {
         LeaderboardEntry@ entry = GetEntry();
         return uint(entry.time);
@@ -68,13 +69,17 @@ void ClearUME() {
 }
 
 
-void RefreshUME() {
+void RefreshUME(bool force = false) {
     if(!exportToUME){
         ClearUME();
         return;
     }
 
     for(int i = UMEMedals.Length - 1; i >= 0; i--){
+        if(force){
+            ClearUME();
+            break;
+        }
         // Remove the medal only if it does not exist anymore
         // This is to ensure that we do not remove medals that are still valid
         auto medal = UMEMedals[i];
@@ -120,11 +125,7 @@ void RefreshUME() {
                 existingMedal.offset = i;
             }
 
-            // We need to batch update the medals if usePositionDataForUME was changed
-            needsUpdate = needsUpdate || (existingMedal.usePreviousUME != !usePositionDataForUME);
-
             if(needsUpdate) {
-                // Update the medal in Ultimate Medals Extended only if it has changed
                 UltimateMedalsExtended::AddMedal(existingMedal);
             }
         }
