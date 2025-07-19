@@ -137,7 +137,13 @@ string lastUsedPluginVersion = "";
 bool exportToUME = true;
 
 [Setting hidden]
-bool usePositionDataForUME = true;
+bool exportIcon = true;
+
+[Setting hidden]
+bool exportIconColor = true;
+
+[Setting hidden]
+bool exportTextColor = true;
 #endif
 
 // ----------------------------- DEPRECATED SETTINGS -----------------------------

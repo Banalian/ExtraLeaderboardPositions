@@ -398,11 +398,15 @@ void RenderUMESettings(){
     }
 
     bool tmpExportToUME = exportToUME;
-    bool tmpUsePositionDataForUME = usePositionDataForUME;
+    bool tmpExportIcon = exportIcon;
+    bool tmpExportIconColor = exportIconColor;
+    bool tmpExportTextColor = exportTextColor;
 
     if(UI::Button("Reset to default")){
         exportToUME = true;
-        usePositionDataForUME = true;
+        exportIcon = true;
+        exportIconColor = true;
+        exportTextColor = true;
     }
 
     UI::TextWrapped("This tab allows you to customize the way Ultimate Medals Extended is supported.\n\n");
@@ -411,13 +415,17 @@ void RenderUMESettings(){
 
     UI::BeginDisabled(!exportToUME);
 
-    usePositionDataForUME = UI::Checkbox("Use position data for Ultimate Medals Extended", usePositionDataForUME);
+    exportIcon = UI::Checkbox("Use icon", exportIcon);
+    exportIconColor = UI::Checkbox("Use icon color", exportIconColor);
+    exportTextColor = UI::Checkbox("Use text color", exportTextColor);
 
     UI::EndDisabled();
 
     bool changed = false;
     changed = changed || (tmpExportToUME != exportToUME);
-    changed = changed || (tmpUsePositionDataForUME != usePositionDataForUME);
+    changed = changed || (tmpExportIcon != exportIcon);
+    changed = changed || (tmpExportIconColor != exportIconColor);
+    changed = changed || (tmpExportTextColor != exportTextColor);
     if(UI::Button("Refresh Ultimate Medals Extended") || changed){
         RefreshUME(true);
     }

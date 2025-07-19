@@ -17,16 +17,30 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
     UltimateMedalsExtended::Config GetConfig() override {
         UltimateMedalsExtended::Config c;
         c.defaultName = "Top " + this.position;
-        c.icon = positionData.GetColorIcon();
-        if(usePositionDataForUME) {
+
+        if(exportIcon && exportIconColor) {
+            c.icon = positionData.GetColorIcon();
+        } else if (exportIcon) {
+            c.icon = greyColor1 + positionData.icon;
+        } else if (exportIconColor) {
+            c.icon = positionData.color + Icons::Kenney::PodiumAlt;
+        } else {
+            c.icon = greyColor1 + Icons::Kenney::PodiumAlt;;
+        }
+
+        if(exportTextColor) {
             c.nameColor = positionData.textColor;
         }
+
         c.sortPriority = 191 - offset; // 191 is the default for position medals, after that a worse position is below (so 191 beats 190)
-        bool latestUsePreviousUME = !usePositionDataForUME; // we don't use the internal value to be sure to be up-to-date with the setting
-        c.usePreviousColor = latestUsePreviousUME;
-        c.usePreviousIcon = latestUsePreviousUME;
-        c.usePreviousOverlayColor = latestUsePreviousUME;
-        c.usePreviousOverlayIcon = latestUsePreviousUME;
+
+        // If neither icon nor icon color are exported, use the overlay icon
+        bool useOverlay = !(exportIcon || exportIconColor);
+        c.usePreviousColor = !exportIconColor;
+        c.usePreviousIcon = !exportIcon;
+        c.usePreviousOverlayColor = useOverlay;
+        c.usePreviousOverlayIcon = useOverlay;
+
         c.shareIcon = false;
         return c;
     }
