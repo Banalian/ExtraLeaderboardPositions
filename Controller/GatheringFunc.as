@@ -164,9 +164,10 @@ void AddMedalPosition(bool showMedal, int medalTime, const string &in desc, Posi
         if ((medalTime != 0) && (medalTime < currentPbEntry.time || currentPbEntry.time == -1)) {
             auto position = GetSpecificPositionEntry(medalTime);
             position.desc = desc;
+            position.time = medalTime; // Force the time to be the medal time, not the one returned by the API
             position.entryType = EnumLeaderboardEntryType::MEDAL;
             position.positionData = positionData;
-            if (isAValidMedalTime(position)) {
+            if (IsAValidMedalTime(position)) {
                 tmpArray.InsertLast(position);
             }
         }
