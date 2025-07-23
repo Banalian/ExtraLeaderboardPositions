@@ -43,7 +43,12 @@ namespace ClubLeaderboardAPI
         }
 
         // get the json object from the response
-        Json::Value@ response = Json::Parse(req.String())["top"];
+        Json::Value@ response = Json::Parse(req.String());
+        if (response is null || response.GetType() != Json::Type::Object || !response.HasKey("top")) {
+            warn("Invalid response from club leaderboard API: " + req.String());
+            return Json::Array();
+        }
+        response = response["top"];
         array<string> playerIds = {};
         for (uint i = 0; i < response.Length; i++) {
             playerIds.InsertLast(string(response[i]["accountId"]));
