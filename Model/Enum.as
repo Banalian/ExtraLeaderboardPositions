@@ -31,7 +31,8 @@ enum EnumLeaderboardEntryType
     MEDAL,
     POSITION,
     TIME,
-    EXTERNAL // To be potentially used by other plugins wishing to add their own entries
+    EXTERNAL, // To be potentially used by other plugins wishing to add their own entries
+    CLUB
 };
 
 enum MedalType

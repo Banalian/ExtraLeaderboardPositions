@@ -85,6 +85,9 @@ string medalsPositionDataStringSave = "";
 
 // unsaved counterparts variables are in the data file;
 
+[Setting hidden]
+string clubsDataStringSave = "";
+
 #if DEPENDENCY_SBVILLECAMPAIGNCHALLENGES
 [Setting hidden]
 string sbVillePositionDataStringSave = "";

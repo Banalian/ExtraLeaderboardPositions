@@ -121,6 +121,31 @@ void RefreshLeaderboard(){
             return;
         }
 
+        array<string> processedAccountIds = {};
+        array<LeaderboardEntry@> clubEntries;
+        string currentUserId = cast<CTrackMania@>(GetApp()).LocalPlayerInfo.WebServicesUserId;
+        // Insert the club leaderboard entries
+        for(uint i = 0; i < allClubData.Length; i++){
+            Json::Value@ clubLeaderboard = ClubLeaderboardAPI::GetClubLeaderboard(allClubData[i].position, currentMapUid);
+            for (int j = 0; j < clubLeaderboard.Length; j++) {
+                if (clubLeaderboard[j]["accountId"] == currentUserId) {
+                    continue;
+                }
+                LeaderboardEntry@ tmpEntry = LeaderboardEntry();
+                tmpEntry.time = clubLeaderboard[j]["score"];
+                tmpEntry.desc = clubLeaderboard[j]["username"];
+                tmpEntry.entryType = EnumLeaderboardEntryType::CLUB;
+                tmpEntry.positionData = allClubData[i];
+
+                if (processedAccountIds.Find(clubLeaderboard[j]["accountId"]) != -1) {
+                    continue;
+                }
+                req.scores.InsertLast(tmpEntry.time);
+                processedAccountIds.InsertLast(clubLeaderboard[j]["accountId"]);
+                clubEntries.InsertLast(tmpEntry);
+            }
+        }
+
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
 
         // We extract the times from the response if there's any
@@ -200,6 +225,17 @@ void RefreshLeaderboard(){
                     alreadyHandled = medalFound[medalIndex];
                 }
             }
+
+            // Update positions for club members
+            for (uint j = 0; j < clubEntries.Length; j++) {
+                if (clubEntries[j].time == resp.positions[i].time) {
+                    resp.positions[i].positionData = clubEntries[j].positionData;
+                    resp.positions[i].desc = clubEntries[j].desc;
+                    alreadyHandled = true;
+                    break;
+                }
+            }
+
             // every special cases should be handled before this point
             // now, we match the remaining entries with their position data
             for(uint j = 0; j< allPositionData.Length; j++){
