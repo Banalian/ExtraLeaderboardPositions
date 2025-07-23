@@ -387,7 +387,7 @@ void RenderPositionDataCustomization(){
     UI::Text("Club settings");
 
     if(UI::Button("Reset clubs to default")){
-        clubsDataStringSave = "";
+        allClubData.RemoveRange(0, allClubData.Length);
     }
 
     if(UI::Button("+ : Add a club")){
