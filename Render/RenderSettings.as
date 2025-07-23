@@ -383,6 +383,28 @@ void RenderPositionDataCustomization(){
     changed = GetPositionData("S314ke Medal", 10008, s314keMedalPositionData) || changed;
 #endif
 
+    UI::Separator();
+    UI::Text("Club settings");
+
+    if(UI::Button("Reset clubs to default")){
+        clubsDataStringSave = "";
+    }
+
+    if(UI::Button("+ : Add a club")){
+        allClubData.InsertLast(PositionData(1));
+        OnSettingsChanged();
+    }
+    if(UI::Button("- : Remove a club")){
+        if(allClubData.Length > 0){
+            allClubData.RemoveAt(allClubData.Length - 1);
+            OnSettingsChanged();
+        }
+    }
+
+    for(uint i = 0; i < allClubData.Length; i++){
+        changed == GetPositionData("Club id " + (i+1), -i, allClubData[i], true) || changed;
+    }
+
     if(changed){
         OnSettingsChanged();
     }

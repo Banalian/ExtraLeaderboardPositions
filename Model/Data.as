@@ -154,3 +154,5 @@ bool failedRefresh = false;
 EnumCurrentMode currentMode = EnumCurrentMode::INVALID;
 
 bool forceRefreshAfterSurroundFail = false;
+
+array<PositionData> allClubData = {};
