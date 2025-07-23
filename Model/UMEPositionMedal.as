@@ -18,26 +18,26 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
         UltimateMedalsExtended::Config c;
         c.defaultName = "Top " + this.position;
 
-        if(exportIcon && exportIconColor) {
+        if(exportIconUME && exportIconColorUME) {
             c.icon = positionData.GetColorIcon();
-        } else if (exportIcon) {
+        } else if (exportIconUME) {
             c.icon = greyColor1 + positionData.icon;
-        } else if (exportIconColor) {
+        } else if (exportIconColorUME) {
             c.icon = positionData.color + Icons::Kenney::PodiumAlt;
         } else {
             c.icon = greyColor1 + Icons::Kenney::PodiumAlt;;
         }
 
-        if(exportTextColor) {
+        if(exportTextColorUME) {
             c.nameColor = positionData.textColor;
         }
 
         c.sortPriority = 191 - offset; // 191 is the default for position medals, after that a worse position is below (so 191 beats 190)
 
         // If neither icon nor icon color are exported, use the overlay icon
-        bool useOverlay = !(exportIcon || exportIconColor);
-        c.usePreviousColor = !exportIconColor;
-        c.usePreviousIcon = !exportIcon;
+        bool useOverlay = !(exportIconUME || exportIconColorUME);
+        c.usePreviousColor = !exportIconColorUME;
+        c.usePreviousIcon = !exportIconUME;
         c.usePreviousOverlayColor = useOverlay;
         c.usePreviousOverlayIcon = useOverlay;
 

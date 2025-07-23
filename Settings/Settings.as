@@ -132,19 +132,19 @@ bool showPlayerCount = true;
 [Setting hidden]
 string lastUsedPluginVersion = "";
 
-#if DEPENDENCY_ULTIMATEMEDALSEXTENDED
+// Ultimate Medals Extended
 [Setting hidden]
 bool exportToUME = true;
 
 [Setting hidden]
-bool exportIcon = true;
+bool exportIconUME = true;
 
 [Setting hidden]
-bool exportIconColor = true;
+bool exportIconColorUME = true;
 
 [Setting hidden]
-bool exportTextColor = true;
-#endif
+bool exportTextColorUME = true;
+// --------------------------
 
 // ----------------------------- DEPRECATED SETTINGS -----------------------------
 // Can't be removed because they're needed for the migration process
