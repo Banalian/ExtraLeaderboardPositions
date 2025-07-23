@@ -48,6 +48,10 @@ class PositionMedal : UltimateMedalsExtended::IMedal {
     void UpdateMedal(const string &in uid) override {}
 
     bool HasMedalTime(const string &in uid) override {
+        // Don't return an entry if somehow our data isn't for the same map
+        if(currentMapUid != uid) {
+            return false;
+        }
         LeaderboardEntry@ entry = GetEntry();
         return (entry !is null && entry.time > 0);
     }
