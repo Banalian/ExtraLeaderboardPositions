@@ -1,0 +1,5 @@
+build.bat
+test.bat
+.git\
+.idea\
+exclude.txt
