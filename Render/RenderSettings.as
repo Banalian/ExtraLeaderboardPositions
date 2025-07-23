@@ -398,15 +398,15 @@ void RenderUMESettings(){
     }
 
     bool tmpExportToUME = exportToUME;
-    bool tmpExportIcon = exportIcon;
-    bool tmpExportIconColor = exportIconColor;
-    bool tmpExportTextColor = exportTextColor;
+    bool tmpExportIcon = exportIconUME;
+    bool tmpExportIconColor = exportIconColorUME;
+    bool tmpExportTextColor = exportTextColorUME;
 
     if(UI::Button("Reset to default")){
         exportToUME = true;
-        exportIcon = true;
-        exportIconColor = true;
-        exportTextColor = true;
+        exportIconUME = true;
+        exportIconColorUME = true;
+        exportTextColorUME = true;
     }
 
     UI::TextWrapped("This tab allows you to customize the way Ultimate Medals Extended is supported.\n\n");
@@ -415,17 +415,17 @@ void RenderUMESettings(){
 
     UI::BeginDisabled(!exportToUME);
 
-    exportIcon = UI::Checkbox("Use icon", exportIcon);
-    exportIconColor = UI::Checkbox("Use icon color", exportIconColor);
-    exportTextColor = UI::Checkbox("Use text color", exportTextColor);
+    exportIconUME = UI::Checkbox("Use icon", exportIconUME);
+    exportIconColorUME = UI::Checkbox("Use icon color", exportIconColorUME);
+    exportTextColorUME = UI::Checkbox("Use text color", exportTextColorUME);
 
     UI::EndDisabled();
 
     bool changed = false;
     changed = changed || (tmpExportToUME != exportToUME);
-    changed = changed || (tmpExportIcon != exportIcon);
-    changed = changed || (tmpExportIconColor != exportIconColor);
-    changed = changed || (tmpExportTextColor != exportTextColor);
+    changed = changed || (tmpExportIcon != exportIconUME);
+    changed = changed || (tmpExportIconColor != exportIconColorUME);
+    changed = changed || (tmpExportTextColor != exportTextColorUME);
     if(UI::Button("Refresh Ultimate Medals Extended") || changed){
         RefreshUME(true);
     }
