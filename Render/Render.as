@@ -177,7 +177,7 @@ bool RenderInfoTab(){
 /**
  * Render the refresh icon if we're refreshing
  */
- void RenderRefreshIcon(){
+void RenderRefreshIcon(){
     auto remainingTime = Time::Format(int(Math::Ceil((updateFrequency - timer) / 1000)) * 1000);
     remainingTime = remainingTime.SubStr(0 , remainingTime.Length - 4);
 
@@ -311,7 +311,7 @@ void RenderTab(bool showRefresh = false){
 
         //------------TIME/SCORE-----------------
         UI::TableNextColumn();
-        UI::Text(displayString + formatTimeScore(leaderboardArray[i].time));
+        UI::Text(displayString + FormatTimeScore(leaderboardArray[i].time));
 
         //------------HAS DESC-------------
         UI::TableNextColumn();
@@ -337,7 +337,7 @@ void RenderTab(bool showRefresh = false){
                 //still keeping the if in case we want to print/add something here
             }else{
                 int timeDifference = leaderboardArray[i].time - timeDifferenceEntry.time;
-                string timeDifferenceString = formatTimeScore(Math::Abs(timeDifference));
+                string timeDifferenceString = FormatTimeScore(Math::Abs(timeDifference));
 
                 if(inverseTimeDiffSign){
                     if(timeDifference < 0){

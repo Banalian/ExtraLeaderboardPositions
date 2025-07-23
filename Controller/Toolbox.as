@@ -1,13 +1,9 @@
 // File containing various unrelated functions that are general enough.
 
-// used as a representation of a call to a optional dependency to request a medal time
-funcdef uint MedalTimeFunc();
-
-
 /**
  * Check if the current LeaderboardEntry is a valid medal time or not, for the "normal" mode if the user has a better time than the medal
  */
-bool isAValidMedalTime(LeaderboardEntry@ time) {
+bool IsAValidMedalTime(LeaderboardEntry@ time) {
     if(time.position == -1 && time.time == -1) {
         return false;
     }
@@ -98,6 +94,21 @@ string TimeString(int scoreTime, bool showSign = false) {
 
 
 /**
+ * Format the score based on the current mode
+ */
+string FormatTimeScore(int score) {
+    switch(currentMode){
+        case EnumCurrentMode::RACE:
+            return TimeString(score);
+        case EnumCurrentMode::STUNT:
+            return NumberToString(score);
+        default:
+            return "" + score;
+    }
+}
+
+
+/**
  * Format the time for logging with both integer value and readable string representation
  */
 string TimeLogString(int time) {
@@ -111,7 +122,7 @@ string TimeLogString(int time) {
 /**
  * Check if the new time is a new PB
  */
-bool newPBSet(int timePbLocal) {
+bool NewPBSet(int timePbLocal) {
     if(!validMap){
         return false;
     }

@@ -9,21 +9,6 @@ enum EnumDisplayMode
 };
 
 
-enum EnumDisplayMedal
-{
-    NORMAL,
-    IN_GREY
-};
-
-
-enum EnumDisplayPersonalBest
-{
-    NORMAL,
-    IN_GREY,
-    IN_GREEN
-};
-
-
 enum EnumLeaderboardEntryType
 {
     UNKNOWN,
@@ -34,6 +19,7 @@ enum EnumLeaderboardEntryType
     EXTERNAL, // To be potentially used by other plugins wishing to add their own entries
     CLUB
 };
+
 
 enum MedalType
 {
@@ -57,10 +43,29 @@ enum MedalType
     COUNT
 };
 
+
 enum EnumCurrentMode
 {
     INVALID,
     RACE,
     STUNT,
     PLATFORM
+};
+
+
+// ----------------------------- DEPRECATED ENUMS -----------------------------
+// Can't be removed because they're needed for the migration process
+
+enum EnumDisplayMedal
+{
+    NORMAL,
+    IN_GREY
+};
+
+
+enum EnumDisplayPersonalBest
+{
+    NORMAL,
+    IN_GREY,
+    IN_GREEN
 };
