@@ -122,29 +122,9 @@ void RefreshLeaderboard(){
             return;
         }
 
-        array<string> processedAccountIds = {};
-        array<LeaderboardEntry@> clubEntries;
-        string currentUserId = cast<CTrackMania@>(GetApp()).LocalPlayerInfo.WebServicesUserId;
-        // Insert the club leaderboard entries
-        for(uint i = 0; i < allClubData.Length; i++){
-            Json::Value@ clubLeaderboard = ClubLeaderboardAPI::GetClubLeaderboard(allClubData[i].position, currentMapUid);
-            for (int j = 0; j < clubLeaderboard.Length; j++) {
-                if (clubLeaderboard[j]["accountId"] == currentUserId) {
-                    continue;
-                }
-                LeaderboardEntry@ tmpEntry = LeaderboardEntry();
-                tmpEntry.time = clubLeaderboard[j]["score"];
-                tmpEntry.desc = clubLeaderboard[j]["username"];
-                tmpEntry.entryType = EnumLeaderboardEntryType::CLUB;
-                tmpEntry.positionData = allClubData[i];
-
-                if (processedAccountIds.Find(clubLeaderboard[j]["accountId"]) != -1) {
-                    continue;
-                }
-                req.scores.InsertLast(tmpEntry.time);
-                processedAccountIds.InsertLast(clubLeaderboard[j]["accountId"]);
-                clubEntries.InsertLast(tmpEntry);
-            }
+        array<LeaderboardEntry@> clubEntries = ClubLeaderboardAPI::GetClubLeaderboardMembers(req.mapId);
+        for (int i = 0; i < clubEntries.Length; i++) {
+            req.scores.InsertLast(clubEntries[i].time);
         }
 
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
