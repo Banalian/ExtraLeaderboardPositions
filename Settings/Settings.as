@@ -127,6 +127,9 @@ bool shorterNumberRepresentation = false;
 uint shortenAbove = 100000;
 
 [Setting hidden]
+uint clubMembersToRetrieve = 15;
+
+[Setting hidden]
 bool useExternalAPI = false;
 
 [Setting hidden]
