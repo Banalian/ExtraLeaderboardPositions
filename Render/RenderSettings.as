@@ -402,7 +402,7 @@ void RenderPositionDataCustomization(){
     }
 
     for(uint i = 0; i < allClubData.Length; i++){
-        changed == GetPositionData("Club id " + (i+1), -i, allClubData[i], true) || changed;
+        changed == GetPositionData("Club id " + (i+1), i + 20000, allClubData[i], true) || changed;
     }
 
     if(changed){
