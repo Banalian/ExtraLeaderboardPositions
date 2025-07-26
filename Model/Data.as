@@ -102,6 +102,7 @@ float updateFrequencyOPConfig = 30*60*1000; // = minutes * One minute in sec * 1
 bool refreshOPConfig = false;
 
 array<PositionData> allPositionData = {};
+array<PositionData> allClubData = {};
 
 // all data to save, counterparts are in the settings file
 PositionData currentPbPositionData = PositionData(0, pbGreenColor, Icons::User, pbGreenColor);
@@ -154,5 +155,3 @@ bool failedRefresh = false;
 EnumCurrentMode currentMode = EnumCurrentMode::INVALID;
 
 bool forceRefreshAfterSurroundFail = false;
-
-array<PositionData> allClubData = {};
