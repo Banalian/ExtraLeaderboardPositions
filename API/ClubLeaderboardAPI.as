@@ -8,7 +8,7 @@ namespace ClubLeaderboardAPI
         array<string> processedUsers = {};
 
         for(uint i = 0; i < allClubData.Length; i++){
-            Json::Value@ clubLeaderboard = GetClubLeaderboardData(allClubData[i].position, mapUid, 100);
+            Json::Value@ clubLeaderboard = GetClubLeaderboardData(allClubData[i].position, mapUid);
             for (int j = 0; j < clubLeaderboard.Length; j++) {
                 LeaderboardEntry@ entry = ParseJsonToLeaderboardEntry(clubLeaderboard[j], allClubData[i]);
                 if (entry.desc != CurrentUserId && processedUsers.Find(entry.desc) == -1) {
@@ -23,13 +23,13 @@ namespace ClubLeaderboardAPI
         return result;
     }
     
-    Json::Value@ GetClubLeaderboardData(uint clubID, string mapUID, int length) {
+    Json::Value@ GetClubLeaderboardData(uint clubID, string mapUID) {
         if (clubID == 0 || mapUID == "") {
             warn("Invalid parameters for club leaderboard data retrieval");
             return Json::Array();
         }
 
-        auto req = NadeoServices::Get("NadeoLiveServices", GenerateUrl(clubID, mapUID, length));
+        auto req = NadeoServices::Get("NadeoLiveServices", GenerateUrl(clubID, mapUID, clubMembersToRetrieve));
 
         req.Start();
         while(!req.Finished()){
