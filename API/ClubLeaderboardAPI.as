@@ -1,29 +1,35 @@
 namespace ClubLeaderboardAPI 
 {
-    int counterTriesAPI = 0;
-    int maxTriesAPI = 3;
-    bool failedAPI = false;
 
-    Json::Value@ GetClubLeaderboard(uint clubID, string mapUID, int length = 100){
-        if(!useExternalAPI){
-            warn("External club API is disabled by user");
-            return null;
-        }
-        if(failedAPI){
-            warn("External club API failed too many times, disabling it for the rest of the session");
-            return null;
-        }
-        if(clubID == 0){
-            warn("Request is null");
-            return null;
-        }
-        if(mapUID == ""){
-            warn("No map selected");
-            return null;
+    string CurrentUserId = cast<CTrackMania@>(GetApp()).LocalPlayerInfo.WebServicesUserId;
+
+    array<LeaderboardEntry@> GetClubLeaderboardMembers(string mapUid) {
+        array<LeaderboardEntry@> result = {};
+        array<string> processedUsers = {};
+
+        for(uint i = 0; i < allClubData.Length; i++){
+            Json::Value@ clubLeaderboard = GetClubLeaderboardData(allClubData[i].position, mapUid, 100);
+            for (int j = 0; j < clubLeaderboard.Length; j++) {
+                LeaderboardEntry@ entry = ParseJsonToLeaderboardEntry(clubLeaderboard[j], allClubData[i]);
+                if (entry.desc != CurrentUserId && processedUsers.Find(entry.desc) == -1) {
+                    processedUsers.InsertLast(entry.desc);
+                    entry.positionData = allClubData[i];
+                    result.InsertLast(entry);
+                } 
+            }
         }
 
-        while (!NadeoServices::IsAuthenticated("NadeoLiveServices")) yield();
-        auto req = NadeoServices::Get("NadeoLiveServices", "https://live-services.trackmania.nadeo.live/api/token/leaderboard/group/Personal_Best/map/" + mapUID + "/club/" + clubID + "/top?length=" + length + "&offset=0");
+        RequestUsernames(result);
+        return result;
+    }
+    
+    Json::Value@ GetClubLeaderboardData(uint clubID, string mapUID, int length) {
+        if (clubID == 0 || mapUID == "") {
+            warn("Invalid parameters for club leaderboard data retrieval");
+            return Json::Array();
+        }
+
+        auto req = NadeoServices::Get("NadeoLiveServices", GenerateUrl(clubID, mapUID, length));
 
         req.Start();
         while(!req.Finished()){
@@ -31,16 +37,8 @@ namespace ClubLeaderboardAPI
         }
         if(req.ResponseCode() != 200){
             warn("Error calling API at url ' " + req.Url + "' : " + req.ResponseCode() + " - " + req.Error());
-            counterTriesAPI++;
-            if(counterTriesAPI >= maxTriesAPI){
-                failedAPI = true;
-                warn("Too many tries, disabling club API for the rest of the session");
-            }
-            return null;
-        } else {
-            counterTriesAPI = 0;
-            failedAPI = false;
-        }
+            return Json::Array();
+        } 
 
         // get the json object from the response
         Json::Value@ response = Json::Parse(req.String());
@@ -48,30 +46,46 @@ namespace ClubLeaderboardAPI
             warn("Invalid response from club leaderboard API: " + req.String());
             return Json::Array();
         }
-        response = response["top"];
+        return response["top"];
+    }
+
+    LeaderboardEntry@ ParseJsonToLeaderboardEntry(Json::Value@ json, PositionData@ clubPositionData) {
+        if (json is null || json.GetType() != Json::Type::Object) {
+            warn("Invalid JSON object for leaderboard entry");
+            return null;
+        }
+
+        LeaderboardEntry@ entry = LeaderboardEntry();
+        entry.time = json["score"];
+        entry.desc = json["accountId"];
+        entry.entryType = EnumLeaderboardEntryType::CLUB;
+        entry.positionData = clubPositionData;
+
+        return entry;
+    }
+
+    void RequestUsernames(array<LeaderboardEntry@> entries) {
         array<string> playerIds = {};
-        for (uint i = 0; i < response.Length; i++) {
-            playerIds.InsertLast(string(response[i]["accountId"]));
+        for (uint i = 0; i < entries.Length; i++) {
+            playerIds.InsertLast(entries[i].desc);
         }
 
         dictionary usernames = NadeoServices::GetDisplayNamesAsync(playerIds);
-        for (uint i = 0; i < playerIds.Length; i++)
-        {
-            response[i]["username"] = string(usernames[response[i]["accountId"]]);
+        for (uint i = 0; i < entries.Length; i++) {
+            if (usernames.Exists(entries[i].desc)) {
+                entries[i].desc = string(usernames[entries[i].desc]);
+            } else {
+                warn("Username not found for ID: " + entries[i].desc);
+            }
         }
-        return response;
     }
 
-    MwId GetMainUserId() {
-    auto app = cast<CTrackMania>(GetApp());
-    if (app.ManiaPlanetScriptAPI.UserMgr.MainUser !is null) {
-        return app.ManiaPlanetScriptAPI.UserMgr.MainUser.Id;
+    string GenerateUrl(uint clubID, string mapUID, int length) {
+        if (clubID == 0 || mapUID == "") {
+            warn("Invalid parameters for URL generation");
+            return "";
+        }
+        return NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/" + mapUID + "/club/" + clubID + "/top?length=" + length + "&offset=0";
     }
-    if (app.ManiaPlanetScriptAPI.UserMgr.Users.Length >= 1) {
-        return app.ManiaPlanetScriptAPI.UserMgr.Users[0].Id;
-    } else {
-        return MwId();
-    }
-}
 
 }
