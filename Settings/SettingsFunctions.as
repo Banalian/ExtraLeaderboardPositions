@@ -55,6 +55,15 @@ void OnSettingsSave(Settings::Section& section){
     }
     section.SetString("allPositionDataStringSave", allPositionDataStringSave);
 
+    clubsDataStringSave = "";
+    for(int i = 0; i < allClubData.Length; i++){
+        clubsDataStringSave += allClubData[i].Serialize();
+        if(i < allClubData.Length - 1){
+            clubsDataStringSave += ";";
+        }
+    }
+    section.SetString("clubsDataStringSave", clubsDataStringSave);
+
     medalsPositionDataStringSave = "";
     medalsPositionDataStringSave += currentPbPositionData.Serialize() + ";";
     medalsPositionDataStringSave += atPositionData.Serialize() + ";";
@@ -103,6 +112,13 @@ void OnSettingsLoad(Settings::Section& section){
         //else for this case, the array is empty per user choice, don't insert anything
         allPositionDataStringSave = "";
         nbSizePositionDataArray = 0;
+    }
+
+    array<string> clubsDataTmp = section.GetString("clubsDataStringSave").Split(";");
+    for (int i = 0; i < clubsDataTmp.Length; i++){
+        if(clubsDataTmp[i] != ""){
+            allClubData.InsertLast(PositionData(clubsDataTmp[i]));
+        }
     }
 
     medalsPositionDataStringSave = section.GetString("medalsPositionDataStringSave");

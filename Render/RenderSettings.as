@@ -19,6 +19,7 @@ void RenderSettingsCustomization(){
         currentComboChoice = -1;
         shorterNumberRepresentation = false;
         shortenAbove = 100000;
+        clubMembersToRetrieve = 15;
         useExternalAPI = false;
     }
 
@@ -111,6 +112,9 @@ void RenderSettingsCustomization(){
     }
 
     UI::EndDisabled();
+
+    UI::Text("\n\tClub settings");
+    clubMembersToRetrieve = Math::Max(Math::Min(UI::InputInt("Number of club members to retrieve per club", clubMembersToRetrieve), 100), 0);
 
 }
 
@@ -382,6 +386,28 @@ void RenderPositionDataCustomization(){
 #if DEPENDENCY_S314KEMEDALS
     changed = GetPositionData("S314ke Medal", 10008, s314keMedalPositionData) || changed;
 #endif
+
+    UI::Separator();
+    UI::Text("Club settings");
+
+    if(UI::Button("Reset clubs to default")){
+        allClubData.RemoveRange(0, allClubData.Length);
+    }
+
+    if(UI::Button("+ : Add a club")){
+        allClubData.InsertLast(PositionData(1));
+        OnSettingsChanged();
+    }
+    if(UI::Button("- : Remove a club")){
+        if(allClubData.Length > 0){
+            allClubData.RemoveAt(allClubData.Length - 1);
+            OnSettingsChanged();
+        }
+    }
+
+    for(uint i = 0; i < allClubData.Length; i++){
+        changed == GetPositionData("Club id " + (i+1), i + 20000, allClubData[i], true) || changed;
+    }
 
     if(changed){
         OnSettingsChanged();

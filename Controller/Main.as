@@ -122,6 +122,11 @@ void RefreshLeaderboard(){
             return;
         }
 
+        array<LeaderboardEntry@> clubEntries = ClubLeaderboardAPI::GetClubLeaderboardMembers(req.mapId);
+        for (int i = 0; i < clubEntries.Length; i++) {
+            req.scores.InsertLast(clubEntries[i].time);
+        }
+
         ExtraLeaderboardAPI::ExtraLeaderboardAPIResponse@ resp = ExtraLeaderboardAPI::GetExtraLeaderboard(req);
 
         // We extract the times from the response if there's any
@@ -209,6 +214,17 @@ void RefreshLeaderboard(){
                     alreadyHandled = medalFound[medalIndex];
                 }
             }
+
+            // Update positions for club members
+            for (uint j = 0; j < clubEntries.Length; j++) {
+                if (clubEntries[j].time == resp.positions[i].time) {
+                    resp.positions[i].positionData = clubEntries[j].positionData;
+                    resp.positions[i].desc = clubEntries[j].desc;
+                    alreadyHandled = true;
+                    break;
+                }
+            }
+
             // every special cases should be handled before this point
             // now, we match the remaining entries with their position data
             for(uint j = 0; j< allPositionData.Length; j++){
