@@ -221,6 +221,7 @@ void RefreshLeaderboard(){
                     resp.positions[i].positionData = clubEntries[j].positionData;
                     resp.positions[i].desc = clubEntries[j].desc;
                     alreadyHandled = true;
+                    clubEntries.RemoveAt(j);
                     break;
                 }
             }
