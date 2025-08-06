@@ -11,6 +11,16 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.7.0
+- Added support for Club Leaderboards! (Thanks to FabianvZ for their PR!)
+    - You can now add clubs to follow. After adding a club by its ID, you can see the top X players of that club on the map you're currently playing
+    - This add a new setting to choose the number of players from clubs to show
+    - Please report any issue you might find either on the plugin's OpenPlanet Discord thread or on the Github issues page
+- Added support for the plugin [Ultimate Medals Extended](https://openplanet.dev/plugin/ultimatemedalsextended)
+- Made secret maps show correct times (positions will still be somewhat broken for now)
+- Fixed an issue where the entry settings would go back to the top when changing a setting.
+- Internal changes to address OP changes as well as better prepare future updates.
+
 ## 2.6.5
 - Reworked the hide when driving option to have less flickering when accelerating then reversing. (Thanks to DropKickDrum for the PR!)
 - Internal refactors to cleanup code.
