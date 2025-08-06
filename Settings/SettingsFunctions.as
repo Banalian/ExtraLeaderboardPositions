@@ -64,6 +64,9 @@ void OnSettingsSave(Settings::Section& section){
     }
     section.SetString("clubsDataStringSave", clubsDataStringSave);
 
+    // Limit the number of club members to retrieve to 0 - 100
+    section.SetInt("clubMembersToRetrieve", Math::Max(Math::Min(clubMembersToRetrieve, 100), 0));
+
     medalsPositionDataStringSave = "";
     medalsPositionDataStringSave += currentPbPositionData.Serialize() + ";";
     medalsPositionDataStringSave += atPositionData.Serialize() + ";";
