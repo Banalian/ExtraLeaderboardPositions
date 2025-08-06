@@ -114,7 +114,7 @@ void RenderSettingsCustomization(){
     UI::EndDisabled();
 
     UI::Text("\n\tClub settings");
-    clubMembersToRetrieve = Math::Max(Math::Min(UI::InputInt("Number of club members to retrieve per club", clubMembersToRetrieve), 100), 0);
+    clubMembersToRetrieve = UI::InputInt("Number of club members to retrieve per club", clubMembersToRetrieve);
 
 }
 
