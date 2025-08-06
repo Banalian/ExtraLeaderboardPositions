@@ -248,8 +248,12 @@ void RefreshLeaderboard(){
             auto timeEntryFunc = startnew(SpecificTimeEntryCoroutine, Integer(allPositionData[i].position));
             coroutines.InsertLast(timeEntryFunc);
         }
+
         auto medalEntryFunc = startnew(AddMedalsEntriesCoroutine);
         coroutines.InsertLast(medalEntryFunc);
+
+        auto clubEntryFunc = startnew(AddClubEntriesCoroutine);
+        coroutines.InsertLast(clubEntryFunc);
 
         await(coroutines);
     }
@@ -339,6 +343,18 @@ void AddMedalsEntriesCoroutine(){
     for(uint i = 0; i< entries.Length; i++){
         if(entries[i] !is null && entries[i].isValid()){
             leaderboardArrayTmp.InsertLast(entries[i]);
+        }
+    }
+}
+
+void AddClubEntriesCoroutine(){
+    array<LeaderboardEntry@> entries = ClubLeaderboardAPI::GetClubLeaderboardMembers(currentMapUid);
+    for(uint i = 0; i< entries.Length; i++){
+        if (entries[i].time < currentPbEntry.time) {
+            entries[i].position = GetSpecificPositionEntry(entries[i].time).position; 
+            if(entries[i] !is null && entries[i].isValid()){
+                leaderboardArrayTmp.InsertLast(entries[i]);
+            }
         }
     }
 }
