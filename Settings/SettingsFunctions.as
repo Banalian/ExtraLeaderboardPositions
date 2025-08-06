@@ -56,7 +56,7 @@ void OnSettingsSave(Settings::Section& section){
     section.SetString("allPositionDataStringSave", allPositionDataStringSave);
 
     clubsDataStringSave = "";
-    for(int i = 0; i < allClubData.Length; i++){
+    for(uint i = 0; i < allClubData.Length; i++){
         clubsDataStringSave += allClubData[i].Serialize();
         if(i < allClubData.Length - 1){
             clubsDataStringSave += ";";
@@ -118,7 +118,7 @@ void OnSettingsLoad(Settings::Section& section){
     }
 
     array<string> clubsDataTmp = section.GetString("clubsDataStringSave").Split(";");
-    for (int i = 0; i < clubsDataTmp.Length; i++){
+    for (uint i = 0; i < clubsDataTmp.Length; i++){
         if(clubsDataTmp[i] != ""){
             allClubData.InsertLast(PositionData(clubsDataTmp[i]));
         }

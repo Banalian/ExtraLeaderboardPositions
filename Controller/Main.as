@@ -123,7 +123,7 @@ void RefreshLeaderboard(){
         }
 
         array<LeaderboardEntry@> clubEntries = ClubLeaderboardAPI::GetClubLeaderboardMembers(req.mapId);
-        for (int i = 0; i < clubEntries.Length; i++) {
+        for (uint i = 0; i < clubEntries.Length; i++) {
             req.scores.InsertLast(clubEntries[i].time);
         }
 
