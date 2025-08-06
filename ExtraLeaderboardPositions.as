@@ -24,6 +24,8 @@ void Main(){
         }
         print("Permission granted!");
     }
+
+    LoadCustomData();
     HandleMigration();
     startupEnded = true;
     // Add the audiences you need
@@ -38,8 +40,6 @@ void Main(){
     ExtraLeaderboardAPI::LoadURLConfig();
 
     LoadOPConfig();
-
-    LoadCustomData();
 
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);

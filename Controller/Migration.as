@@ -90,6 +90,25 @@ void HandleMigration() {
     }
     // ---------- END OF 2.6.1 MIGRATION ----------
 
+    // ---------- MIGRATION FROM 2.6.2+ TO 2.7.0 ----------
+    if (major == 2 && minor == 6 && patch < 5) {
+        UI::ShowNotification(pluginName, "Settings migration in progress (2.6.2+)...");
+        migrationNeeded = true;
+        // Fix potentially broken custom medal colors because of uninitialized colors
+#if DEPENDENCY_CHAMPIONMEDALS
+        if (championMedalPositionData.color == "" || championMedalPositionData.color == whiteColor) {
+            championMedalPositionData.color = championColor;
+        }
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+        if (warriorMedalPositionData.color == "" || warriorMedalPositionData.color == whiteColor) {
+            print("Setting warrior medal color to: " + warriorColor + " color: " + warriorMedalPositionData.color);
+            warriorMedalPositionData.color = warriorColor;
+        }
+#endif
+    }
+    // ---------- END OF 2.7.0 MIGRATION ----------
+    
     if (migrationNeeded) {
         UI::ShowNotification(pluginName, "Settings migration completed! Feel free to check the settings for new options!", 15000);
     }
