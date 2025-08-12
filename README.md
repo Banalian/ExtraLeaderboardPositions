@@ -11,6 +11,9 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.7.1
+- Fixed an issue on boot where the plugin would incorrectly call GetApp during global variables initialization.
+
 ## 2.7.0
 - Added support for Club Leaderboards! (Thanks to FabianvZ for their PR!)
     - You can now add clubs to follow. After adding a club by its ID, you can see the top X players of that club on the map you're currently playing
