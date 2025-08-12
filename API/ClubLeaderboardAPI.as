@@ -1,8 +1,6 @@
 namespace ClubLeaderboardAPI 
 {
 
-    string CurrentUserId = cast<CTrackMania@>(GetApp()).LocalPlayerInfo.WebServicesUserId;
-
     array<LeaderboardEntry@> GetClubLeaderboardMembers(const string &in mapUid) {
         array<LeaderboardEntry@> result = {};
         array<string> processedUsers = {};
@@ -11,7 +9,7 @@ namespace ClubLeaderboardAPI
             Json::Value@ clubLeaderboard = GetClubLeaderboardData(allClubData[i].position, mapUid);
             for (uint j = 0; j < clubLeaderboard.Length; j++) {
                 LeaderboardEntry@ entry = ParseJsonToLeaderboardEntry(clubLeaderboard[j], allClubData[i]);
-                if (entry.desc != CurrentUserId && processedUsers.Find(entry.desc) == -1) {
+                if (entry.desc != GetCurrentUserId() && processedUsers.Find(entry.desc) == -1) {
                     processedUsers.InsertLast(entry.desc);
                     entry.positionData = allClubData[i];
                     result.InsertLast(entry);
@@ -86,5 +84,10 @@ namespace ClubLeaderboardAPI
             return "";
         }
         return NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/" + mapUID + "/club/" + clubID + "/top?length=" + length + "&offset=0";
+    }
+
+    string GetCurrentUserId() {
+        auto app = GetApp();
+        return app.LocalPlayerInfo.WebServicesUserId;
     }
 }
