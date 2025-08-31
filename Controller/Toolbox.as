@@ -29,7 +29,17 @@ bool IsAValidMedalTime(LeaderboardEntry@ time) {
 bool MapHasNadeoLeaderboard(const string &in mapId){
     auto info = FetchEndpoint(NadeoServices::BaseURLLive() + "/api/token/map/" + mapId);
 
-    return info.GetType() == Json::Type::Object;
+    bool isJSONObject = info.GetType() == Json::Type::Object;
+
+    if(!isJSONObject) {
+        return false;
+    }
+
+    if(info.HasKey("error")) {
+        return false;
+    }
+
+    return true;
 }
 
 
