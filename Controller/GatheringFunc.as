@@ -144,7 +144,6 @@ array<LeaderboardEntry@> GetMedalsEntries(){
     // We get the medals time
     auto app = cast<CTrackMania>(GetApp());
     auto network = cast<CTrackManiaNetwork>(app.Network);
-    auto map = app.RootMap;
 
     if(network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null){
         for(int i = MedalType::NONE + 1; i < MedalType::COUNT; i++){

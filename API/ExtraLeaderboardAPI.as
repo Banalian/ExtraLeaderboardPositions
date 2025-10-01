@@ -147,9 +147,6 @@ namespace ExtraLeaderboardAPI
 bool ShouldRequestMedal(MedalType medal){
     if(!showMedals) return false;
 
-    auto app = GetApp();
-    auto map = app.RootMap;
-
     auto medalHandler = GetMedalHandler(medal);
     bool shouldShow = medalHandler.ShouldShowMedal();
     int medalTime = medalHandler.GetMedalTime();

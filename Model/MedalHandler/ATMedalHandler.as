@@ -11,6 +11,9 @@ class ATMedalHandler: MedalHandler {
     int GetMedalTime() override{
         auto app = cast<CTrackMania>(GetApp());
         auto map = app.RootMap;
+        if(map is null){
+            return -1;
+        }
         return map.TMObjective_AuthorTime;
     }
 
