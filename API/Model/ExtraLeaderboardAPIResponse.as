@@ -64,25 +64,28 @@ namespace ExtraLeaderboardAPI
                 response.bronzeTime = mapInfo.Get("bronzeTime");
             }
 
-            auto positions = input.Get("positions");
-
             response.positions = {};
-            for(uint i = 0; i < positions.Length; i++){
-                LeaderboardEntry entry;
-                entry.time = positions[i].Get("time");
-                entry.position = positions[i].Get("rank");
-                string type = positions[i].Get("entryType");
-                if(type == "MEDAL"){
-                    entry.entryType = EnumLeaderboardEntryType::MEDAL;
-                } else if(type == "TIME"){
-                    entry.entryType = EnumLeaderboardEntryType::TIME;
-                } else if(type == "POSITION"){
-                    entry.entryType = EnumLeaderboardEntryType::POSITION;
-                } else{
-                    entry.entryType = EnumLeaderboardEntryType::UNKNOWN;
+            if(input.HasKey("positions")){
+                auto positions = input.Get("positions");
+
+                for(uint i = 0; i < positions.Length; i++){
+                    LeaderboardEntry entry;
+                    entry.time = positions[i].Get("time");
+                    entry.position = positions[i].Get("rank");
+                    string type = positions[i].Get("entryType");
+                    if(type == "MEDAL"){
+                        entry.entryType = EnumLeaderboardEntryType::MEDAL;
+                    } else if(type == "TIME"){
+                        entry.entryType = EnumLeaderboardEntryType::TIME;
+                    } else if(type == "POSITION"){
+                        entry.entryType = EnumLeaderboardEntryType::POSITION;
+                    } else{
+                        entry.entryType = EnumLeaderboardEntryType::UNKNOWN;
+                    }
+                    response.positions.InsertLast(entry);
                 }
-                response.positions.InsertLast(entry);
             }
+
             return response;
         }
 
