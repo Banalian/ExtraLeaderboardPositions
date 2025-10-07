@@ -11,6 +11,11 @@ Please open an issue if you see any trouble.
 Openplanet link : [plugin](https://openplanet.dev/plugin/extraleaderboardpositions)
 
 # Changelog
+## 2.7.2
+- Fixed an issue where the plugin would incorrectly try to get a leaderboard for a map that didn't have one
+- Fixed an issue where when exiting a map, the plugin would still try to access some cleared data
+- Fixed an issue where if the external API returned no positions, the plugin would fail to refresh the leaderboard
+
 ## 2.7.1
 - Fixed an issue on boot where the plugin would incorrectly call GetApp during global variables initialization.
 
