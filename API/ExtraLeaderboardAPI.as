@@ -101,8 +101,7 @@ namespace ExtraLeaderboardAPI
     ExtraLeaderboardAPIRequest@ PrepareRequest(bool getPlayerCount = false, bool getMapInfo = false){
         ExtraLeaderboardAPIRequest@ request = ExtraLeaderboardAPIRequest();
         if(currentMapUid == ""){
-            warn("No map selected");
-            return null;
+            throw("No map selected");
         }
         request.mapId = currentMapUid;
         request.getPlayerCount = getPlayerCount;
