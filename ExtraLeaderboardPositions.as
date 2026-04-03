@@ -82,11 +82,11 @@ void Main(){
 void LoadCustomData(){
 #if DEPENDENCY_CHAMPIONMEDALS
     championColor = "\\$f47";
-    possibleColors.InsertLast(championColor);
+    possibleColors["Champion"] = championColor;
 #endif
 #if DEPENDENCY_WARRIORMEDALS
     warriorColor =  WarriorMedals::GetColorStr();
-    possibleColors.InsertLast(warriorColor);
+    possibleColors["Warrior"] = warriorColor;
 #endif
 }
 
