@@ -228,15 +228,25 @@ bool GetPositionData(const string &in positionName, int uniqueId, PositionData& 
     }
 
     UI::TableNextColumn();
-    if(UI::BeginCombo("Icon Color", positionData.color + Icons::Square)){
-        for(uint i = 0; i < possibleColors.Length; i++){
-            string label = i == 0 ? "Custom" : possibleColors[i] + Icons::Square;
-            if(UI::Selectable(label, positionData.color == possibleColors[i])){
+    if(UI::BeginCombo("Icon Color", positionData.color + Icons::Square + " " + whiteColor + positionData.colorName)){
+        foreach(auto value, string colorName : possibleColors){
+            string colorValue = string(value);
+
+            string label;
+            if(colorName == "Custom"){
+                label = "Custom";
+            } else {
+                label = colorValue + Icons::Square + " " + whiteColor + colorName;
+            }
+            
+            if(UI::Selectable(label, positionData.color == colorValue)){
                 UI::SetItemDefaultFocus();
-                if(i==0){
+                if(colorName == "Custom"){
                     positionData.color = "Custom" + positionData.color;
+                    positionData.colorName = "";
                 } else {
-                    positionData.color = possibleColors[i];
+                    positionData.color = colorValue;
+                    positionData.colorName = colorName;
                 }
             }
         }
@@ -244,15 +254,25 @@ bool GetPositionData(const string &in positionName, int uniqueId, PositionData& 
     }
 
     UI::TableNextColumn();
-    if(UI::BeginCombo("Text Color", positionData.textColor + Icons::Square)){
-        for(uint i = 0; i < possibleColors.Length; i++){
-            string label = i == 0 ? "Custom" : possibleColors[i] + Icons::Square;
-            if(UI::Selectable(label, positionData.textColor == possibleColors[i])){
+    if(UI::BeginCombo("Text Color", positionData.textColor + Icons::Square + " " + whiteColor + positionData.textColorName)){
+        foreach(auto value, string colorName : possibleColors){
+            string colorValue = string(value);
+
+            string label;
+            if(colorName == "Custom"){
+                label = "Custom";
+            } else {
+                label = colorValue + Icons::Square + " " + whiteColor + colorName;
+            }
+            
+            if(UI::Selectable(label, positionData.textColor == colorValue)){
                 UI::SetItemDefaultFocus();
-                if(i==0){
+                if(colorName == "Custom"){
                     positionData.textColor = "Custom" + positionData.textColor;
+                    positionData.textColorName = "";
                 } else {
-                    positionData.textColor = possibleColors[i];
+                    positionData.textColor = colorValue;
+                    positionData.textColorName = colorName;
                 }
             }
         }

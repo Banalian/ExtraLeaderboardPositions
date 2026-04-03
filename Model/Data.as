@@ -23,38 +23,43 @@ const array<string> possibleIcons = {
 
 /**
  * List of available colors for leaderboard customisation
- * Don't forget to change the named counterparts if you change the order of the colors
  */
-array<string> possibleColors = {
-    "Custom", // Custom color
-    "\\$071", // AT green
-    "\\$db4", // gold
-    "\\$899", // silver
-    "\\$964", // bronze
-    "\\$444", // grey
-    "\\$777", // bright grey
-    "\\$888", // grey (used for the leaderboard rows)
-    "\\$aaa", // another bright grey (used for the map author)
-    "\\$77f", // blue
-    "\\$9f9", // PB green
-    "\\$f77", // red
-    "\\$fff"  // white
+dictionary possibleColors = {
+    {"Custom", ""}, // Custom color
+    {"AT Green", "\\$071"}, // AT green
+    {"Gold", "\\$db4"}, // gold
+    {"Silver", "\\$899"}, // silver
+    {"Bronze", "\\$964"}, // bronze
+    {"Dark Grey", "\\$444"}, // grey
+    {"Grey", "\\$777"}, // bright grey
+    {"Bright Grey", "\\$888"}, // grey (used for the leaderboard rows)
+    {"Brightest Grey", "\\$aaa"}, // another bright grey (used for the map author)
+    {"Blue", "\\$77f"}, // blue
+    {"PB Green", "\\$9f9"}, // PB green
+    {"Red", "\\$f77"}, // red
+    {"White", "\\$fff"} // white
+#if DEPENDENCY_CHAMPIONMEDALS
+    , {"Champion", "\\$f47"} // champion medal color
+#endif
+#if DEPENDENCY_WARRIORMEDALS
+    , {"Warrior", "\\$000"} // warrior medal color, black since I don't know the color at compile time
+#endif
 };
 
 // named counterparts for the possibleColors array (for easier reference in the code)
 const string resetColor = "\\$z";
-const string atGreenColor = possibleColors[1];
-const string goldColor = possibleColors[2];
-const string silverColor = possibleColors[3];
-const string bronzeColor = possibleColors[4];
-const string greyColor1 = possibleColors[5];
-const string greyColor2 = possibleColors[6];
-const string greyColor3 = possibleColors[7];
-const string greyColor4 = possibleColors[8];
-const string blueColor = possibleColors[9];
-const string pbGreenColor = possibleColors[10];
-const string redColor = possibleColors[11];
-const string whiteColor = possibleColors[12];
+const string atGreenColor = string(possibleColors["AT Green"]);
+const string goldColor = string(possibleColors["Gold"]);
+const string silverColor = string(possibleColors["Silver"]);
+const string bronzeColor = string(possibleColors["Bronze"]);
+const string greyColor1 = string(possibleColors["Dark Grey"]);
+const string greyColor2 = string(possibleColors["Grey"]);
+const string greyColor3 = string(possibleColors["Bright Grey"]);
+const string greyColor4 = string(possibleColors["Brightest Grey"]);
+const string blueColor = string(possibleColors["Blue"]);
+const string pbGreenColor = string(possibleColors["PB Green"]);
+const string redColor = string(possibleColors["Red"]);
+const string whiteColor = string(possibleColors["White"]);
 #if DEPENDENCY_CHAMPIONMEDALS
 string championColor = "";
 #endif
