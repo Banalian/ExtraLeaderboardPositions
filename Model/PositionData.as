@@ -12,12 +12,11 @@ class PositionData {
 
     PositionData() {
         position = 0;
-        color = string(possibleColors["Dark Grey"]);
+        color = greyColor1;
         icon = Icons::Kenney::PodiumAlt;
-        textColor = string(possibleColors["White"]);
+        textColor = whiteColor;
 
-        colorName = "Dark Grey";
-        textColorName = "White";
+        RetrieveColorNames();
     }
 
     PositionData(uint position, const string &in color = greyColor1, const string &in icon = Icons::Kenney::PodiumAlt, const string &in textColor = whiteColor) {
