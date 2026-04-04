@@ -26,6 +26,15 @@ class PositionData {
         this.icon = icon;
         this.textColor = textColor;
 
+        RetrieveColorNames();
+    }
+
+    PositionData(const string &in data) {
+        Deserialize(data);
+        RetrieveColorNames();
+    }
+
+    void RetrieveColorNames() {
         foreach (auto value, string colorName : possibleColors){
             string colorValue = string(value);
             if(colorValue == color){
@@ -43,16 +52,8 @@ class PositionData {
         }
     }
 
-    PositionData(const string &in data) {
-        Deserialize(data);
-    }
-
-    string Serialize() {
-        // names can have a space, replace them with underscores
-        string cName = colorName.Replace(" ", "_");
-        string tcName = textColorName.Replace(" ", "_");
-        
-        return color + " " + position + " " + icon + " " + textColor + " " + cName + " " + tcName;
+    string Serialize() {        
+        return color + " " + position + " " + icon + " " + textColor;
     }
 
     void Deserialize(const string &in data) {
@@ -61,15 +62,6 @@ class PositionData {
         position = Text::ParseInt(split[1]);
         icon = split[2];
         textColor = split[3];
-
-        // older users might not have the color names saved
-        // can maybe be removed in a future update
-        if(split.Length > 4){
-            colorName = split[4];
-            colorName = colorName.Replace("_", " ");
-            textColorName = split[5];
-            textColorName = textColorName.Replace("_", " ");
-        }
     }
 
     string GetColorIcon() {
